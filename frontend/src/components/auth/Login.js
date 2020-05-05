@@ -11,29 +11,28 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="ui one column center aligned grid">
-        <div className="ui segment">
-          <LoginForm onSubmit={this.submit} />
-          <div className="ui horizontal divider">Or</div>
-          <div className="ui one column center aligned grid">
-            <div className="column twelve wide">
-              <div className="ui twitter button">
-                <i className="twitter icon"></i>
-                Continue with Twitter
+      <div className="container col-sm-6 offset-sm-3 mt-3 block-content-borders">
+        <div className="row">
+          <div className="col">
+            <LoginForm onSubmit={this.submit} />
+          </div>
+        </div>
+        <hr data-content="OR" className="hr-text"></hr>
+        <div className="row">
+          <div className="col">
+            <div className="row justify-content-center mb-2 mt-1">
+              <div className="btn btn-sm btn-tw">
+                <i className="fa fa-twitter"></i> Continue with Twitter
               </div>
             </div>
-            <div className="column twelve wide">
-              <div className="ui google plus button">
-                <i className="google icon"></i>
-                Continue with Google
+            <div className="row justify-content-center">
+              <div className="btn btn-sm btn-go">
+                <i className="fa fa-google"></i> Continue with Google
               </div>
             </div>
           </div>
         </div>
       </div>
-      // <div>
-      //   <LoginForm onSubmit={this.submit} />
-      // </div>
     );
   }
 }

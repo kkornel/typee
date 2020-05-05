@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import validator from 'validator';
-import passwordValidator from 'password-validator';
+
+import passwordValidator from '../../utils/passwordValidator';
 
 class RegisterForm extends Component {
   onSubmit = (formValues) => {
@@ -11,23 +11,23 @@ class RegisterForm extends Component {
 
   renderError(touched, error) {
     if (touched && error) {
-      return (
-        // <div className="ui error message">
-        //   <div className="header">{error}</div>
-        // </div>
-        <div className="ui pointing red basic label">{error}</div>
-      );
+      return <div className="invalid-feedback">{error}</div>;
     }
   }
 
   renderField = ({ input, label, type, meta: { touched, error } }) => {
-    const className = `field ${touched && error ? 'error' : ''}`;
+    const className = `form-control ${touched && error ? 'is-invalid' : ''}`;
 
     return (
-      <div className={className}>
+      <div className="form-group">
         <label>{label}</label>
         <div>
-          <input {...input} placeholder={label} type={type} />
+          <input
+            {...input}
+            placeholder={label}
+            type={type}
+            className={className}
+          />
           {this.renderError(touched, error)}
         </div>
       </div>
@@ -36,67 +36,43 @@ class RegisterForm extends Component {
 
   render() {
     return (
-      <form
-        className="ui form error"
-        onSubmit={this.props.handleSubmit(this.onSubmit)}
-      >
-        <h2 className="ui dividing header">Create new account!</h2>
-        <Field
-          type="email"
-          name="email"
-          component={this.renderField}
-          label="Email"
-        />
-        <Field
-          type="text"
-          name="username"
-          component={this.renderField}
-          label="Username"
-        />
-        <Field
-          type="password"
-          name="password1"
-          component={this.renderField}
-          label="Password"
-        />
-        <Field
-          type="password"
-          name="password2"
-          component={this.renderField}
-          label="Confirm password"
-        />
-        <div className="ui one column stackable center aligned page grid">
-          <div className="column twelve wide">
-            <button className="ui teal button" type="submit">
+      <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+        <fieldset className="form-group mb-1">
+          <legend className="border-bottom mb-3 pb-1">Join Today!</legend>
+          <Field
+            type="email"
+            name="email"
+            component={this.renderField}
+            label="Email"
+          />
+          <Field
+            type="text"
+            name="username"
+            component={this.renderField}
+            label="Username"
+          />
+          <Field
+            type="password"
+            name="password1"
+            component={this.renderField}
+            label="Password"
+          />
+          <Field
+            type="password"
+            name="password2"
+            component={this.renderField}
+            label="Confirm password"
+          />
+          <div className="row justify-content-center">
+            <button type="submit" className="btn btn-primary">
               Sign Up
             </button>
           </div>
-        </div>
+        </fieldset>
       </form>
     );
   }
 }
-// Create a schema
-const passwordSchema = new passwordValidator();
-
-// Add properties to it
-passwordSchema
-  .is()
-  .min(8) // Minimum length 8
-  .is()
-  .max(100) // Maximum length 100
-  .has()
-  .uppercase() // Must have uppercase letters
-  .has()
-  .lowercase() // Must have lowercase letters
-  .has()
-  .digits() // Must have digits
-  .has()
-  .not()
-  .spaces() // Should not have spaces
-  .is()
-  .not()
-  .oneOf(['Passw0rd', 'Password123']); // Blacklist these values
 
 const validate = ({ email, username, password1, password2 }) => {
   const errors = {};
@@ -113,8 +89,8 @@ const validate = ({ email, username, password1, password2 }) => {
 
   if (!password1) {
     errors.password1 = 'Required';
-  } else if (!passwordSchema.validate(password1)) {
-    console.log(passwordSchema.validate(password1, { list: true }));
+  } else if (!passwordValidator.validate(password1)) {
+    console.log(passwordValidator.validate(password1, { list: true }));
     errors.password1 = 'Must has 8 chars, upper, lower, digits';
   }
 

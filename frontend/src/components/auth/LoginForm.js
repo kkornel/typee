@@ -9,23 +9,23 @@ class LoginForm extends Component {
 
   renderError(touched, error) {
     if (touched && error) {
-      return (
-        // <div className="ui error message">
-        //   <div className="header">{error}</div>
-        // </div>
-        <div className="ui pointing red basic label">{error}</div>
-      );
+      return <div className="invalid-feedback">{error}</div>;
     }
   }
 
   renderField = ({ input, label, type, meta: { touched, error } }) => {
-    const className = `field ${touched && error ? 'error' : ''}`;
+    const className = `form-control ${touched && error ? 'is-invalid' : ''}`;
 
     return (
-      <div className={className}>
+      <div className="form-group">
         <label>{label}</label>
         <div>
-          <input {...input} placeholder={label} type={type} />
+          <input
+            {...input}
+            placeholder={label}
+            type={type}
+            className={className}
+          />
           {this.renderError(touched, error)}
         </div>
       </div>
@@ -34,30 +34,27 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <form
-        className="ui form error"
-        onSubmit={this.props.handleSubmit(this.onSubmit)}
-      >
-        <h2 className="ui dividing header">Create new account!</h2>
-        <Field
-          type="email"
-          name="email"
-          component={this.renderField}
-          label="Email"
-        />
-        <Field
-          type="password"
-          name="password"
-          component={this.renderField}
-          label="Password"
-        />
-        <div className="ui one column stackable center aligned page grid">
-          <div className="column twelve wide">
-            <button className="ui button" type="submit">
+      <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+        <fieldset className="form-group mb-1">
+          <legend className="border-bottom mb-3 pb-1">Join Today!</legend>
+          <Field
+            type="email"
+            name="email"
+            component={this.renderField}
+            label="Email"
+          />
+          <Field
+            type="password"
+            name="password"
+            component={this.renderField}
+            label="Password"
+          />
+          <div className="row justify-content-center">
+            <button type="submit" className="btn btn-primary">
               Log In
             </button>
           </div>
-        </div>
+        </fieldset>
       </form>
     );
   }

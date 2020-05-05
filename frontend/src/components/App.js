@@ -8,12 +8,14 @@ import Register from './auth/Register';
 class App extends Component {
   render() {
     return (
-      <div className="ui container">
+      <div className="container">
         <BrowserRouter>
           <Header />
-          <Route exact path="/" component={null} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+          <div className="row">
+            <Route exact path="/" component={null} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+          </div>
         </BrowserRouter>
       </div>
     );
