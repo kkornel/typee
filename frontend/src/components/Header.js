@@ -5,7 +5,7 @@ class Header extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="/">
           Navbar
         </a>
         <button
@@ -23,19 +23,19 @@ class Header extends Component {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <a className="nav-link" href="#">
+              <a className="nav-link" href="/">
                 Home <span className="sr-only">(current)</span>
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a className="nav-link" href="/">
                 Link
               </a>
             </li>
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
-                href="#"
+                href="/"
                 id="navbarDropdown"
                 role="button"
                 data-toggle="dropdown"
@@ -45,14 +45,14 @@ class Header extends Component {
                 Dropdown
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a className="dropdown-item" href="#">
+                <a className="dropdown-item" href="/">
                   Action
                 </a>
-                <a className="dropdown-item" href="#">
+                <a className="dropdown-item" href="/">
                   Another action
                 </a>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="#">
+                <a className="dropdown-item" href="/">
                   Something else here
                 </a>
               </div>
@@ -60,7 +60,7 @@ class Header extends Component {
             <li className="nav-item">
               <a
                 className="nav-link disabled"
-                href="#"
+                href="/"
                 tabIndex="-1"
                 aria-disabled="true"
               >
@@ -82,6 +82,12 @@ class Header extends Component {
               Search
             </button>
           </form>
+          <Link to="/login">
+            <div className="btn btn-outline-success my-2 my-sm-0">Log in</div>
+          </Link>
+          <Link to="/register">
+            <div className="btn btn-outline-success my-2 my-sm-0">Sign up</div>
+          </Link>
         </div>
       </nav>
     );

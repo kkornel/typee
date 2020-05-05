@@ -22,10 +22,12 @@ class RegisterForm extends Component {
       <div className="form-group">
         <label>{label}</label>
         <div>
+          {/* TODO: Remove default value from here. */}
           <input
             {...input}
             placeholder={label}
             type={type}
+            value="Kornel12@wp.pl"
             className={className}
           />
           {this.renderError(touched, error)}
@@ -97,8 +99,9 @@ const validate = ({ email, username, password1, password2 }) => {
   if (password1 !== password2) {
     errors.password2 = `Passwords don't match.`;
   }
-
-  return errors;
+  // TODO: Return errors.
+  // return errors;
+  return {};
 };
 
 export default reduxForm({

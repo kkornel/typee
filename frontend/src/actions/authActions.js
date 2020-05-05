@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { SIGN_UP_WITH_EMAIL } from './types';
-import localhost from '../apis/localhost';
 
 export const signUpWithEmail = (formValues) => async (dispatch) => {
   console.log(formValues);

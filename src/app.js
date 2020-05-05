@@ -6,8 +6,9 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/signup', (req, res) => {
+app.post('/signup', (req, res) => {
   console.log(req);
+  res.send('s');
 });
 
 module.exports = app;

@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import RegisterForm from './RegisterForm';
+import { signUpWithEmail } from '../../actions/authActions';
 
 class Register extends Component {
   submit = (formValues) => {
     console.log(formValues);
-    // this.props.signUpWithEmail(formValues);
+    this.props.signUpWithEmail(formValues);
   };
 
   render() {
@@ -24,4 +25,4 @@ class Register extends Component {
   }
 }
 
-export default connect(null, {})(Register);
+export default connect(null, { signUpWithEmail })(Register);
