@@ -14,7 +14,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.9.11"
+    "mongoose": "^5.9.11",
+    "password-validator": "^5.0.3",
+    "validator": "^13.0.0"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",

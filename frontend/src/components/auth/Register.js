@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import RegisterForm from './RegisterForm';
 import { signUpWithEmail } from '../../actions/authActions';
@@ -8,7 +9,8 @@ import { signUpWithEmail } from '../../actions/authActions';
 class Register extends Component {
   submit = (formValues) => {
     console.log(formValues);
-    this.props.signUpWithEmail(formValues);
+    const { email, username, password1 } = formValues;
+    this.props.signUpWithEmail({ email, username, password: password1 });
   };
 
   render() {

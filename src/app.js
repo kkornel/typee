@@ -1,14 +1,13 @@
 const express = require('express');
 
 require('dotenv').config();
+require('./db/mongoose');
+
+const authRouter = require('./routers/authRouter');
 
 const app = express();
 
 app.use(express.json());
-
-app.post('/signup', (req, res) => {
-  console.log(req);
-  res.send('s');
-});
+app.use(authRouter);
 
 module.exports = app;
