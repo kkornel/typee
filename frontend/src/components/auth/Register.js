@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
 
 import RegisterForm from './RegisterForm';
 import { signUpWithEmail } from '../../actions/authActions';
 
 class Register extends Component {
   submit = (formValues) => {
-    console.log(formValues);
     const { email, username, password1 } = formValues;
-    this.props.signUpWithEmail({ email, username, password: password1 });
+    try {
+      this.props.signUpWithEmail({ email, username, password: password1 });
+    } catch (error) {
+      console.log('object');
+    }
   };
 
   render() {
@@ -27,4 +29,10 @@ class Register extends Component {
   }
 }
 
-export default connect(null, { signUpWithEmail })(Register);
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+
+export default connect(mapStateToProps, { signUpWithEmail })(Register);
