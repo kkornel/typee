@@ -6,29 +6,35 @@ import validator from 'validator';
 import passwordValidator from '../../utils/passwordValidator';
 
 class RegisterForm extends Component {
+  state = { error: null };
+  constructor(props) {
+    super(props);
+
+    this.errorRef = React.createRef();
+    this.errorRef2 = React.createRef();
+  }
+
   onSubmit = (formValues) => {
     this.props.onSubmit(formValues);
   };
 
-  err = () => {
-    console.log('!!!!!!!', this.props);
-    return <div className="invalid-feedback">das</div>;
-  };
-
   renderError(touched, error) {
     if (touched && error) {
-      return <div className="invalid-feedback">{error}</div>;
+      // return <div className="invalid-feedback" ref={this.errorRef}>{error}</div>;
     }
-  }
-
-  componentDidUpdate() {
-    console.log('3');
-    this.err();
+    let msg = this.props.auth.error ? this.props.error.msg : '';
+    console.log('msg', msg);
+    return (
+      <div className="invalid-feedback" ref={this.errorRef}>
+        {this.state.error}
+      </div>
+    );
   }
 
   renderField = ({ input, label, type, meta: { touched, error } }) => {
     const className = `form-control ${touched && error ? 'is-invalid' : ''}`;
     console.log('2');
+    console.log(input);
     return (
       <div className="form-group">
         <label>{label}</label>
@@ -39,19 +45,26 @@ class RegisterForm extends Component {
             placeholder={label}
             type={type}
             className={className}
+            ref={this.errorRef2}
           />
-          {touched && error ? this.renderError(touched, error) : this.err()}
+          {this.renderError(touched, error)}
         </div>
       </div>
     );
   };
 
+  componentDidUpdate() {
+    if (this.props.auth.error) {
+      console.log('huston', this.errorRef.current);
+      this.errorRef.current.value = 'dasdasdasd';
+      console.log(this.state);
+      this.errorRef2.current.class = 'form-control is-invalid';
+      console.log('this.errorRef2.current', this.errorRef2.current);
+    }
+  }
+
   render() {
     console.log('1');
-
-    if (this.props.auth) {
-      return this.err();
-    }
 
     return (
       <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
