@@ -29,6 +29,7 @@ router.post('/auth/signup', async (req, res) => {
     res.status(400).send({
       code: 400,
       field: _.keys(error.keyPattern)[0],
+      value: req.body[_.keys(error.keyPattern)[0]],
       message: 'duplicate key error',
     });
   }

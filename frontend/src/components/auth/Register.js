@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import RegisterForm from './RegisterForm2';
+import RegisterForm from './RegisterForm';
 import { signUpWithEmail } from '../../actions/authActions';
 
 class Register extends Component {
