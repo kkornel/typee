@@ -3,23 +3,43 @@ import { connect } from 'react-redux';
 
 class LoginForm extends Component {
   state = {
-    email: { value: '', error: '', touched: false },
-    password: { value: '', error: null, touched: false },
+    email: { value: '', previousValue: '', error: null, touched: false },
+    password: { value: '', previousValue: '', error: null, touched: false },
   };
 
   onSubmit = (event) => {
     event.preventDefault();
 
-    const formValues = {
-      email: this.state.email.value,
-      password: this.state.password.value,
-    };
+    const email = this.state.email.value;
+    const password = this.state.password.value;
+
+    if (!email || !password) {
+      return;
+    }
+
+    const formValues = { email, password };
+
+    this.setState({
+      email: {
+        ...this.state.email,
+        previousValue: email,
+      },
+      password: {
+        ...this.state.password,
+        previousValue: password,
+      },
+    });
 
     this.props.onSubmit(formValues);
   };
 
   handleBlur(name) {
-    this.setState({ [name]: { ...this.state[name], touched: true } });
+    this.setState({
+      [name]: {
+        ...this.state[name],
+        touched: true,
+      },
+    });
   }
 
   validateForm = () => {
@@ -38,30 +58,20 @@ class LoginForm extends Component {
     return errors;
   };
 
-  renderError = (error) => {
+  renderError = (errors, field) => {
+    const error = errors[field];
+
     if (error) {
       // Rendering client-side error, like 'Required'
       return <div className="invalid-feedback">{error}</div>;
     } else if (this.props.auth.error) {
-      // const { message} = this.props.auth.error;
-
-      // if (this.state[field].value !== value) {
-      //   return;
-      // }
-
-      // if (field === 'email') {
-      //   return <div className="invalid-feedback">{message}</div>;
-      // }
-
-      // TODO Test and delete later, probably.
-      // Should never appear. Need testing  with different data.
       return (
         <div className="invalid-feedback">{this.props.auth.error.message}</div>
       );
     }
   };
 
-  renderField = (name, label, type) => {
+  renderField = (name, label, type, renderError) => {
     const errors = this.validateForm();
 
     const shouldMarkError = (field) => {
@@ -71,15 +81,22 @@ class LoginForm extends Component {
       const touched = this.state[field].touched;
 
       // If there is a server-side error, but client-side is fine
-      if (this.props.auth.error && !hasError) {
+      if (this.props.auth.error && !hasError && renderError) {
         hasError = true;
       }
 
       return hasError && touched;
     };
 
+    let inputChanged = false;
+    if (this.props.auth.error) {
+      inputChanged =
+        this.state.email.value !== this.state.email.previousValue ||
+        this.state.password.value !== this.state.password.previousValue;
+    }
+
     const className = `form-control ${
-      shouldMarkError(name) ? 'is-invalid' : ''
+      shouldMarkError(name) && !inputChanged ? 'is-invalid' : ''
     }`;
 
     return (
@@ -100,7 +117,7 @@ class LoginForm extends Component {
               })
             }
           />
-          {this.renderError(errors[name])}
+          {this.renderError(errors, name)}
         </div>
       </div>
     );
@@ -111,8 +128,8 @@ class LoginForm extends Component {
       <form onSubmit={this.onSubmit}>
         <fieldset className="form-group mb-1">
           <legend className="border-bottom mb-3 pb-1">Sign In</legend>
-          {this.renderField('email', 'Email', 'email')}
-          {this.renderField('password', 'Password', 'password')}
+          {this.renderField('email', 'Email', 'email', true)}
+          {this.renderField('password', 'Password', 'password', false)}
           <div className="row justify-content-center">
             <button type="submit" className="btn btn-primary">
               Log In

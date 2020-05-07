@@ -7,10 +7,16 @@ import {
   LOGIN_WITH_EMAIL_ERROR,
 } from './types';
 
+import history from '../history';
+
 export const signUpWithEmail = (formValues) => async (dispatch) => {
   try {
     const response = await axios.post('/api/auth/signup', formValues);
     dispatch({ type: SIGN_UP_WITH_EMAIL, payload: response.data });
+    history.push({
+      pathname: '/login',
+      state: { detail: response.data },
+    });
   } catch (error) {
     console.log(error.response);
 
@@ -28,6 +34,7 @@ export const loginWithEmail = (formValues) => async (dispatch) => {
     const response = await axios.post('/api/auth/login', formValues);
     console.log(response.data);
     dispatch({ type: LOGIN_WITH_EMAIL, payload: response.data });
+    history.push('/');
   } catch (error) {
     console.log(error.response.data);
     dispatch({

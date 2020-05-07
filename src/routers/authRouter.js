@@ -127,6 +127,10 @@ router.post('/api/auth/login', async (req, res) => {
           code: 401,
           status: 'NOT_VERIFIED',
           message: 'Account has not been verified.',
+          details: {
+            field: 'email',
+            value: email,
+          },
         },
       });
     }
@@ -141,6 +145,10 @@ router.post('/api/auth/login', async (req, res) => {
         code: 400,
         status: 'BAD_REQUEST',
         message: error.message,
+        details: {
+          field: 'email',
+          value: email,
+        },
       },
     });
   }
