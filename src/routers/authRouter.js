@@ -121,7 +121,7 @@ router.post('/api/auth/login', async (req, res) => {
   try {
     const user = await User.findByCredentials(email, password);
 
-    if (user.active) {
+    if (!user.active) {
       return res.status(401).send({
         error: {
           code: 401,

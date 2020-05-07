@@ -72,20 +72,14 @@ class RegisterForm extends Component {
       return <div className="invalid-feedback">{error}</div>;
     } else if (this.props.auth.error) {
       // Rendering server side error, like 'Email already in use' (duplicate key error)
-
-      console.log('czy tu dochodzi', this.props.auth.error.details);
       const { field, value } = this.props.auth.error.details;
-      console.log('czy tu dochodzi', field, value);
 
       // If the value in input changed (is different than server error value) return.
       // There were a bug, where after submitting form, the error was received and even,
       // after changing value in form and RE-submitting FOR THE TIME error message didn't disappear.
       if (this.state[field].value !== value) {
-        console.log('asdas');
         return;
       }
-
-      console.log('field', field);
 
       if (field === 'email') {
         return (
@@ -154,7 +148,7 @@ class RegisterForm extends Component {
     return (
       <form onSubmit={this.onSubmit}>
         <fieldset className="form-group mb-1">
-          <legend className="border-bottom mb-3 pb-1">Join Today!</legend>
+          <legend className="border-bottom mb-3 pb-1">Sign Up</legend>
           {this.renderField('email', 'Email', 'email')}
           {this.renderField('username', 'Username', 'text')}
           {this.renderField('password1', 'Password', 'password')}
