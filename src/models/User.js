@@ -4,8 +4,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
+const config = require('../config/config');
 const passwordValidator = require('../utils/passwordValidator');
-const { sendEmailAsync, sendEmailSync } = require('../services/email');
+const { sendEmailAsync } = require('../services/email');
 const verificationTemplate = require('../services/emailTemplates/verificationTemplate');
 const Token = require('./Token');
 
@@ -74,10 +75,9 @@ const userSchema = new Schema(
 
 userSchema.pre('save', async function (next) {
   const user = this;
-  const rounds = 8;
 
   if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, rounds);
+    user.password = await bcrypt.hash(user.password, config.hashRounds);
   }
 
   next();
@@ -99,9 +99,9 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-// TODO: Generate auth token
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
+
   // Need to call toString(), because _id is stored as ObjectID
   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
 
@@ -111,52 +111,29 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-//
 userSchema.methods.generateToken = function (expiresIn) {
   const payload = {
     userId: this._id.toString(),
     token: crypto.randomBytes(20).toString('hex'),
-    expiresIn: expiresIn,
+    expiresIn,
   };
 
   return new Token(payload);
 };
 
-// TODO: Send confirmation link
 userSchema.methods.sendVerificationEmail = async function () {
   const user = this;
 
   const token = user.generateToken(60 * 60);
-
   await token.save();
 
-  console.log(token);
+  const url = `${process.env.REDIRECT_DOMAIN}/api/auth/verify/${token.token}`;
 
-  // const token = jwt.sign(
-  //   {
-  //     _id: user._id.toString(),
-  //   },
-  //   process.env.JWT_SECRET,
-  //   {
-  //     expiresIn: '1h',
-  //   }
-  // );
-
-  const url = `${process.env.REDIRECT_DOMAIN}/auth/verify/${token}`;
-
-  // async email (quicker response to user)
   sendEmailAsync(
     user.email,
     'Confirm your email',
     verificationTemplate(user.username, url)
   );
-
-  // sync email (longer)
-  // await sendEmailSync(
-  //   user.email,
-  //   'Confirm your email',
-  //   verificationTemplate(user.username, url)
-  // );
 };
 
 const User = mongoose.model('User', userSchema);

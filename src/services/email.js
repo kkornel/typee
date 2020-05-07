@@ -2,6 +2,10 @@ const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+/**
+ * Sending async email (quicker response to user).
+ * Doesn't wait for response.
+ */
 const sendEmailAsync = (to, subject, html) => {
   const msg = {
     to: to,
@@ -13,6 +17,10 @@ const sendEmailAsync = (to, subject, html) => {
   sgMail.send(msg);
 };
 
+/**
+ * Sending sync email (longer).
+ * Waits for response from Sendgrid.
+ */
 const sendEmailSync = async (to, subject, html) => {
   const msg = {
     to: to,
@@ -20,8 +28,6 @@ const sendEmailSync = async (to, subject, html) => {
     subject: subject,
     html: html,
   };
-
-  console.log(msg);
 
   try {
     const response = await sgMail.send(msg);

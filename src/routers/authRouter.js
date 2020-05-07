@@ -3,18 +3,19 @@ const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
+const Token = require('../models/Token');
 
 const router = new Router();
 
-router.post('/auth/signup', async (req, res) => {
+router.post('/api/auth/signup', async (req, res) => {
   const { email, username, password } = req.body;
 
   const emailTaken = await User.findOne({ email });
 
   if (emailTaken) {
-    // Google uses 409
-    // 409 ALREADY_EXISTS The resource that a client tried to create already exists.
-    res.status(409).send({
+    // Google uses 409 for ALREADY_EXISTS:
+    // The resource that a client tried to create already exists.
+    return res.status(409).send({
       error: {
         code: 409,
         status: 'ALREADY_EXISTS',
@@ -30,7 +31,7 @@ router.post('/auth/signup', async (req, res) => {
   const usernameTaken = await User.findOne({ username });
 
   if (usernameTaken) {
-    res.status(409).send({
+    return res.status(409).send({
       error: {
         code: 409,
         status: 'ALREADY_EXISTS',
@@ -50,40 +51,68 @@ router.post('/auth/signup', async (req, res) => {
 
     user.sendVerificationEmail();
 
-    res.send(user);
-  } catch (error) {
-    // Here error.keyPattern contains an object with name of
-    // the document field that caused an error.
-    // E.g. user sends an email that is already in db,
-    // so the error.keyPattern: { email: 1 }, which means
-    // that email is in use.
-    // If user send an email and username that are both in use,
-    // the error will be thrown after first duplicated key found.
-    // So it won't contains { username: 1 }.
-    // That's why taking only first element from _.keys(error.keyPattern).
-    console.log(error);
-    res.status(400).send({
-      code: 400,
-      field: _.keys(error.keyPattern)[0],
-      value: req.body[_.keys(error.keyPattern)[0]],
-      message: 'duplicate key error',
+    res.status(201).json({
+      user,
+      message:
+        'Account has been created. An email has been sent to ' +
+        user.email +
+        '.',
     });
+    // res.send(user);
+  } catch (error) {
+    res.status(500).send({ error: { code: 500, message: error.message } });
   }
 });
 
-router.get('/auth/verify/:token', async (req, res) => {
-  try {
-    const hmm = jwt.verify(req.params.token, process.env.JWT_SECRET);
-    console.log(hmm);
-    const { _id } = hmm;
-    await User.findByIdAndUpdate(_id, { active: true });
-  } catch (error) {
-    console.log(error);
-    res.status(401).send({ error: { code: 401, message: 'Token expired.' } });
+router.get('/api/auth/verify/:token', async (req, res) => {
+  if (!req.params.token) {
+    // 400 INVALID_ARGUMENT
+    // Client specified an invalid argument. Check error message and error details for more information.
+    return res.status(400).send({
+      error: {
+        code: 400,
+        status: 'INVALID_ARGUMENT',
+        message: 'No token provided.',
+      },
+    });
   }
 
-  console.log(req.params);
-  res.redirect(`${process.env.REDIRECT_DOMAIN}/login`);
+  try {
+    const token = await Token.findOne({ token: req.params.token });
+
+    if (!token) {
+      return res.status(400).send({
+        error: {
+          code: 400,
+          status: 'INVALID_ARGUMENT',
+          message: 'Invalid token.',
+        },
+      });
+    }
+
+    const elapsedSeconds = (Date.now() - token.createdAt.getTime()) / 1000;
+    const expired = elapsedSeconds > token.expiresIn;
+
+    if (expired) {
+      return res.status(400).send({
+        error: {
+          code: 400,
+          status: 'BAD_REQUEST',
+          message: 'Token expired.',
+        },
+      });
+    }
+
+    await User.findByIdAndUpdate(token.userId, { active: true });
+    await token.delete();
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: { code: 500, message: error.message } });
+  }
+
+  res.status(200).send({
+    message: 'The account has been verified. Please log in.',
+  });
 });
 
 // export const tryLogin = async (email, password, models, SECRET, SECRET_2) => {
