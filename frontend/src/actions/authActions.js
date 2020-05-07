@@ -9,7 +9,7 @@ export const signUpWithEmail = (formValues) => async (dispatch) => {
   } catch (error) {
     console.log(error.response);
 
-    if (error.response.data.error.code === 400) {
+    if (error.response.data.error.code === 409) {
       dispatch({
         type: SIGN_UP_WITH_EMAIL_ERROR,
         payload: error.response.data.error,
