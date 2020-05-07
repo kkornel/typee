@@ -76,7 +76,7 @@ class RegisterForm extends Component {
 
       // If the value in input changed (is different than server error value) return.
       // There were a bug, where after submitting form, the error was received and even,
-      // after changing value in form and RE-submitting FOR THE TIME error message didn't disappear.
+      // after changing value in form and RE-submitting FOR THE FIRST TIME error message didn't disappear.
       if (this.state[field].value !== value) {
         return;
       }

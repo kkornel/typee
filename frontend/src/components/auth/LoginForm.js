@@ -32,7 +32,7 @@ class LoginForm extends Component {
     }
 
     if (!password.value) {
-      password.value = 'Required!';
+      errors.password = 'Required!';
     }
 
     return errors;
@@ -43,15 +43,15 @@ class LoginForm extends Component {
       // Rendering client-side error, like 'Required'
       return <div className="invalid-feedback">{error}</div>;
     } else if (this.props.auth.error) {
-      const { field, value, message } = this.props.auth.error.details;
+      // const { message} = this.props.auth.error;
 
-      if (this.state[field].value !== value) {
-        return;
-      }
+      // if (this.state[field].value !== value) {
+      //   return;
+      // }
 
-      if (field === 'email') {
-        return <div className="invalid-feedback">{message}</div>;
-      }
+      // if (field === 'email') {
+      //   return <div className="invalid-feedback">{message}</div>;
+      // }
 
       // TODO Test and delete later, probably.
       // Should never appear. Need testing  with different data.
@@ -72,7 +72,7 @@ class LoginForm extends Component {
 
       // If there is a server-side error, but client-side is fine
       if (this.props.auth.error && !hasError) {
-        hasError = this.props.auth.error.details.field === field;
+        hasError = true;
       }
 
       return hasError && touched;
