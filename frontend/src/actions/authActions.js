@@ -17,3 +17,12 @@ export const signUpWithEmail = (formValues) => async (dispatch) => {
     }
   }
 };
+
+export const loginWithEmail = (formValues) => async (dispatch) => {
+  try {
+    const response = await axios.post('/api/auth/login', formValues);
+    console.log(response.data);
+  } catch (error) {
+    console.log(error.response.data);
+  }
+};

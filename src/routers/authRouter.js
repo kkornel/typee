@@ -115,6 +115,37 @@ router.get('/api/auth/verify/:token', async (req, res) => {
   });
 });
 
+router.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findByCredentials(email, password);
+
+    if (user.active) {
+      return res.status(401).send({
+        error: {
+          code: 401,
+          status: 'NOT_VERIFIED',
+          message: 'Account has not been verified.',
+        },
+      });
+    }
+
+    const token = await user.generateAuthToken();
+
+    res.status(200).send({ token, user });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      error: {
+        code: 400,
+        status: 'BAD_REQUEST',
+        message: error.message,
+      },
+    });
+  }
+});
+
 // export const tryLogin = async (email, password, models, SECRET, SECRET_2) => {
 //   const user = await models.User.findOne({ where: { email }, raw: true });
 //   if (!user) {

@@ -84,16 +84,16 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.statics.findByCredentials = async (email, password) => {
-  const user = User.findOne({ email });
+  const user = await User.findOne({ email });
 
   if (!user) {
-    throw new Error('Unable to login');
+    throw new Error('Unable to login.');
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    throw new Error('Unable to login');
+    throw new Error('Unable to login.');
   }
 
   return user;
@@ -105,7 +105,7 @@ userSchema.methods.generateAuthToken = async function () {
   // Need to call toString(), because _id is stored as ObjectID
   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
 
-  user.tokens.push(token);
+  user.tokens.push({ token });
   await user.save();
 
   return token;

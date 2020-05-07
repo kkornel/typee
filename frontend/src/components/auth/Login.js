@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import LoginForm from './LoginForm';
+import { loginWithEmail } from '../../actions/authActions';
 
 class Login extends Component {
   submit = (formValues) => {
     console.log(formValues);
-    // this.props.loginWithEmail(formValues);
+    this.props.loginWithEmail(formValues);
   };
 
   render() {
@@ -37,4 +38,4 @@ class Login extends Component {
   }
 }
 
-export default connect(null, {})(Login);
+export default connect(null, { loginWithEmail })(Login);
