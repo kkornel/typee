@@ -10,10 +10,10 @@ class RegisterForm extends Component {
   // Fields on updating component (changing state), so there is no way to
   // change input class to is-invalid
   state = {
-    email: { value: '', error: null, touched: false },
-    username: { value: '', error: null, touched: false },
-    password1: { value: '', error: null, touched: false },
-    password2: { value: '', error: null, touched: false },
+    email: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
+    username: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
+    password1: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
+    password2: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
   };
 
   onSubmit = (event) => {
@@ -72,14 +72,20 @@ class RegisterForm extends Component {
       return <div className="invalid-feedback">{error}</div>;
     } else if (this.props.auth.error) {
       // Rendering server side error, like 'Email already in use' (duplicate key error)
-      const { field, value } = this.props.auth.error;
+
+      console.log('czy tu dochodzi', this.props.auth.error.details);
+      const { field, value } = this.props.auth.error.details;
+      console.log('czy tu dochodzi', field, value);
 
       // If the value in input changed (is different than server error value) return.
       // There were a bug, where after submitting form, the error was received and even,
       // after changing value in form and RE-submitting FOR THE TIME error message didn't disappear.
       if (this.state[field].value !== value) {
+        console.log('asdas');
         return;
       }
+
+      console.log('field', field);
 
       if (field === 'email') {
         return (
@@ -110,7 +116,7 @@ class RegisterForm extends Component {
 
       // If there is a server-side error, but client-side is fine
       if (this.props.auth.error && !hasError) {
-        hasError = this.props.auth.error.field === field;
+        hasError = this.props.auth.error.details.field === field;
       }
 
       return hasError && touched;

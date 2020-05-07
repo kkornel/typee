@@ -13,6 +13,7 @@ export default (state = INITIAL_STATE, action) => {
       // TODO:
       return { ...state, error: null };
     case SIGN_UP_WITH_EMAIL_ERROR:
+      console.log(action.payload);
       return { isSignedIn: null, userId: null, error: action.payload };
     default:
       return state;
