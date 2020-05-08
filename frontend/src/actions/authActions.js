@@ -12,7 +12,7 @@ import history from '../history';
 
 export const signUpWithEmail = (formValues) => async (dispatch) => {
   try {
-    const response = await axios.post('/api/auth/signup', formValues);
+    const response = await axios.post('/api/auth/register', formValues);
     dispatch({ type: SIGN_UP_WITH_EMAIL, payload: response.data });
     history.push('/login');
   } catch (error) {

@@ -8,7 +8,8 @@ const config = require('../config/config');
 
 const router = new Router();
 
-router.post('/api/auth/signup', async (req, res) => {
+router.post('/api/auth/register', async (req, res) => {
+  console.log('register', req.body);
   const { email, username, password } = req.body;
 
   const emailTaken = await User.findOne({ email });
@@ -55,17 +56,24 @@ router.post('/api/auth/signup', async (req, res) => {
 
     user.sendVerificationEmail(token.token);
 
-    res.status(201).json({
+    res.status(201).send({
       user,
-      message: 'A verification email has been sent to ' + user.email + '',
+      message: `A verification email has been sent to ${user.email}`,
     });
-    // res.send(user);
   } catch (error) {
-    res.status(500).send({ error: { code: 500, message: error.message } });
+    console.log(error);
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
+      },
+    });
   }
 });
 
 router.get('/api/auth/verify/:token', async (req, res) => {
+  console.log('verify', req.body);
   if (!req.params.token) {
     // 400 INVALID_ARGUMENT
     // Client specified an invalid argument. Check error message and error details for more information.
@@ -110,15 +118,22 @@ router.get('/api/auth/verify/:token', async (req, res) => {
     await token.delete();
   } catch (error) {
     console.log(error);
-    res.status(500).send({ error: { code: 500, message: error.message } });
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
+      },
+    });
   }
 
   res.status(200).send({
-    message: 'The account has been verified. Please log in.',
+    message: 'The account has been verified.',
   });
 });
 
 router.post('/api/auth/login', async (req, res) => {
+  console.log('login', req.body);
   const { email, password } = req.body;
 
   try {
@@ -143,6 +158,7 @@ router.post('/api/auth/login', async (req, res) => {
     res.status(200).send({ token, user });
   } catch (error) {
     console.log(error);
+
     res.status(400).send({
       error: {
         code: 400,
@@ -158,6 +174,7 @@ router.post('/api/auth/login', async (req, res) => {
 });
 
 router.post('/api/auth/password/reset', async (req, res) => {
+  console.log('reset', req.body);
   try {
     const { email } = req.body;
 
@@ -168,7 +185,7 @@ router.post('/api/auth/password/reset', async (req, res) => {
         error: {
           code: 400,
           status: 'BAD_REQUEST',
-          message: `'The email address ${email} is not associated with any account.`,
+          message: `The email address ${email} is not associated with any account.`,
         },
       });
     }
@@ -186,7 +203,6 @@ router.post('/api/auth/password/reset', async (req, res) => {
     res.status(500).send({
       code: 500,
       status: 'INTERNAL_SERVER_ERROR',
-      message: error.message,
     });
   }
 });
