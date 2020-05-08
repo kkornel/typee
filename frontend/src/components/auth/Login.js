@@ -5,17 +5,23 @@ import LoginForm from './LoginForm';
 import { loginWithEmail } from '../../actions/authActions';
 
 class Login extends Component {
+  state = { componentDidMountForFirstTime: true };
+
   submit = (formValues) => {
-    console.log(formValues);
     this.props.loginWithEmail(formValues);
+    this.setState({ componentDidMountForFirstTime: false });
   };
 
   renderMessage = () => {
-    if (this.props && this.props.history.location.state) {
+    if (
+      this.props.auth &&
+      this.props.auth.message &&
+      this.state.componentDidMountForFirstTime
+    ) {
       return (
         <div className="just">
           <div className="alert alert-success" role="alert">
-            {this.props.history.location.state.detail.message}
+            {this.props.auth.message}
           </div>
         </div>
       );
@@ -53,4 +59,10 @@ class Login extends Component {
   }
 }
 
-export default connect(null, { loginWithEmail })(Login);
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+
+export default connect(mapStateToProps, { loginWithEmail })(Login);

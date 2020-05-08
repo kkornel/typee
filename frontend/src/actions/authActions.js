@@ -13,10 +13,7 @@ export const signUpWithEmail = (formValues) => async (dispatch) => {
   try {
     const response = await axios.post('/api/auth/signup', formValues);
     dispatch({ type: SIGN_UP_WITH_EMAIL, payload: response.data });
-    history.push({
-      pathname: '/login',
-      state: { detail: response.data },
-    });
+    history.push('/login');
   } catch (error) {
     console.log(error.response);
 

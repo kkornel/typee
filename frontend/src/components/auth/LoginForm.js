@@ -5,7 +5,21 @@ class LoginForm extends Component {
   state = {
     email: { value: '', previousValue: '', error: null, touched: false },
     password: { value: '', previousValue: '', error: null, touched: false },
+    componentDidMountForFirstTime: true,
   };
+
+  componentDidMount() {
+    if (this.props.auth && this.props.auth.user) {
+      console.log(this.props.auth.user.email);
+      this.setState({
+        email: {
+          ...this.state.email,
+          value: this.props.auth.user.email,
+          touched: true,
+        },
+      });
+    }
+  }
 
   onSubmit = (event) => {
     event.preventDefault();
@@ -28,6 +42,7 @@ class LoginForm extends Component {
         ...this.state.password,
         previousValue: password,
       },
+      componentDidMountForFirstTime: false,
     });
 
     this.props.onSubmit(formValues);
@@ -108,7 +123,8 @@ class LoginForm extends Component {
     if (name === 'email') {
       className = `form-control ${
         (shouldMarkError(name) && !inputChanged) ||
-        this.state.email.value === ''
+        (this.state.email.value === '' &&
+          !this.state.componentDidMountForFirstTime)
           ? 'is-invalid'
           : ''
       }`;
