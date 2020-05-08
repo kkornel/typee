@@ -11,7 +11,7 @@ class Register extends Component {
     try {
       this.props.signUpWithEmail({ email, username, password: password1 });
     } catch (error) {
-      console.log('object');
+      console.log(error);
     }
   };
 

@@ -51,3 +51,17 @@ export const passwordResetRequest = (email) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const updatePassword = (newPassword) => async (dispatch) => {
+  try {
+    const response = await axios.post('/api/auth/password/reset/new', {
+      newPassword,
+    });
+
+    // TODO:
+    console.log(response.data);
+    dispatch({ type: PASSWORD_RESET_REQUEST, payload: response.data });
+  } catch (error) {
+    console.log(error);
+  }
+};

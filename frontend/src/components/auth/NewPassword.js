@@ -3,17 +3,15 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import NewPasswordForm from './NewPasswordForm';
-import { signUpWithEmail } from '../../actions/authActions';
+import { updatePassword } from '../../actions/authActions';
 
 class NewPassword extends Component {
   submit = (formValues) => {
-    const { password1 } = formValues;
+    const { password1: newPassword } = formValues;
     try {
-      // TODO: change
-      // this.props.signUpWithEmail({ email, username, password: password1 });
-      console.log(password1);
+      this.props.updatePassword(newPassword);
     } catch (error) {
-      console.log('object');
+      console.log(error);
     }
   };
 
@@ -32,4 +30,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { signUpWithEmail })(NewPassword);
+export default connect(mapStateToProps, { updatePassword })(NewPassword);
