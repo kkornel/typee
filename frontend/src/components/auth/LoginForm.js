@@ -2,9 +2,25 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class LoginForm extends Component {
+  // state = {
+  //   email: { value: '', previousValue: '', error: null, touched: false },
+  //   password: { value: '', previousValue: '', error: null, touched: false },
+  //   componentDidMountForFirstTime: true,
+  // };
+  // TODO: Remove initial values
   state = {
-    email: { value: '', previousValue: '', error: null, touched: false },
-    password: { value: '', previousValue: '', error: null, touched: false },
+    email: {
+      value: 'Kornelcodes@gmail.com',
+      previousValue: '',
+      error: null,
+      touched: false,
+    },
+    password: {
+      value: 'Kkorneel1@gmail.com',
+      previousValue: '',
+      error: null,
+      touched: false,
+    },
     componentDidMountForFirstTime: true,
   };
 

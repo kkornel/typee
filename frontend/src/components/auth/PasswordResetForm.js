@@ -3,7 +3,9 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import validator from 'validator';
 
 class ResetPasswordForm extends Component {
-  state = { emailValue: '', touched: false };
+  // state = { emailValue: '', touched: false };
+  // TODO: Remove initial values
+  state = { emailValue: 'Kornelcodes@gmail.com', touched: false };
 
   constructor(props) {
     super(props);
@@ -20,16 +22,17 @@ class ResetPasswordForm extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    if (!this.state.emailValue) {
-      this.emailErrorRef.current.hidden = false;
-    }
+    // TODO: Remove initial values (uncomment all)
+    // if (!this.state.emailValue) {
+    //   this.emailErrorRef.current.hidden = false;
+    // }
 
-    const recaptchaValue = this.recaptchaRef.current.getValue();
+    // const recaptchaValue = this.recaptchaRef.current.getValue();
 
-    if (!recaptchaValue) {
-      this.recaptchaErrorRef.current.hidden = false;
-      return;
-    }
+    // if (!recaptchaValue) {
+    //   this.recaptchaErrorRef.current.hidden = false;
+    //   return;
+    // }
 
     this.props.onSubmit(this.state.emailValue);
   };
@@ -91,7 +94,7 @@ class ResetPasswordForm extends Component {
           </div>
           <div className="row justify-content-center mt-2">
             <button type="submit" className="btn btn-primary">
-              Sign Up
+              Request password reset
             </button>
           </div>
         </fieldset>
