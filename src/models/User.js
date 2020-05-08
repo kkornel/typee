@@ -57,7 +57,7 @@ const userSchema = new Schema(
     // so every connection from every device has different token.
     // Also logging out (deleting token) from one device,
     // will not logout user from another devices.
-    tokens: [
+    jwtTokens: [
       {
         token: {
           type: String,
@@ -73,6 +73,21 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+// Virtual is not data stored in database.
+// It is relationship between two entities.
+// It is for mongoose to know how things are related.
+// Allows to use: await user.populate('tokens').execPopulate(),
+// to get list of all tokens with userId of that user,
+// instead of querying Token collection by his id.
+// It not returns tokens of user! But a user object with tokens property.
+// 'tokens' property is actually not visible when console.log(user),
+// but they are when using console.loge(user.tokens).
+userSchema.virtual('tokens', {
+  ref: 'Token',
+  localField: '_id',
+  foreignField: 'userId',
+});
 
 userSchema.pre('save', async function (next) {
   const user = this;
@@ -106,7 +121,7 @@ userSchema.methods.generateAuthToken = async function () {
   // Need to call toString(), because _id is stored as ObjectID
   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
 
-  user.tokens.push({ token });
+  user.jwtTokens.push({ token });
   await user.save();
 
   return token;
