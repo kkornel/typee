@@ -44,7 +44,7 @@ export const loginWithEmail = (formValues) => async (dispatch) => {
 
 export const passwordResetRequest = (email) => async (dispatch) => {
   try {
-    const response = await axios.post('/api/auth/password/reset', email);
+    const response = await axios.post('/api/auth/password/reset', { email });
     console.log(response.data);
     dispatch({ type: PASSWORD_RESET_REQUEST, payload: response.data });
   } catch (error) {

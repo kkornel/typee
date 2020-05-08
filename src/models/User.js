@@ -8,6 +8,7 @@ const config = require('../config/config');
 const passwordValidator = require('../utils/passwordValidator');
 const { sendEmailAsync } = require('../services/email');
 const verificationTemplate = require('../services/emailTemplates/verificationTemplate');
+const passwordResetTemplate = require('../services/emailTemplates/passwordResetTemplate');
 const Token = require('./Token');
 
 const Schema = mongoose.Schema;
@@ -115,24 +116,35 @@ userSchema.methods.generateToken = function (expiresIn) {
   const payload = {
     userId: this._id.toString(),
     token: crypto.randomBytes(20).toString('hex'),
-    expiresIn,
+    expires: Date.now() + expiresIn,
   };
 
   return new Token(payload);
 };
 
-userSchema.methods.sendVerificationEmail = async function () {
+userSchema.methods.sendVerificationEmail = function (token) {
   const user = this;
 
-  const token = user.generateToken(60 * 60);
-  await token.save();
+  // const token = user.generateToken(60 * 60);
+  // await token.save();
 
-  const url = `${process.env.REDIRECT_DOMAIN}/api/auth/verify/${token.token}`;
+  const url = `${process.env.REDIRECT_DOMAIN}/api/auth/verify/${token}`;
 
   sendEmailAsync(
     user.email,
     'Confirm your email',
     verificationTemplate(user.username, url)
+  );
+};
+
+userSchema.methods.sendPasswordResetEmail = function (token) {
+  const user = this;
+  const url = `${process.env.REDIRECT_DOMAIN}/api/auth/password/reset/${token}`;
+
+  sendEmailAsync(
+    user.email,
+    'Password reset request',
+    passwordResetTemplate(user.username, url)
   );
 };
 

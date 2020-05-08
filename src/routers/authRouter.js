@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 const Token = require('../models/Token');
+const config = require('../config/config');
 
 const router = new Router();
 
@@ -49,7 +50,10 @@ router.post('/api/auth/signup', async (req, res) => {
   try {
     await user.save();
 
-    user.sendVerificationEmail();
+    const token = user.generateToken(config.verificationTokenExpireTime);
+    await token.save();
+
+    user.sendVerificationEmail(token.token);
 
     res.status(201).json({
       user,
@@ -87,8 +91,10 @@ router.get('/api/auth/verify/:token', async (req, res) => {
       });
     }
 
-    const elapsedSeconds = (Date.now() - token.createdAt.getTime()) / 1000;
-    const expired = elapsedSeconds > token.expiresIn;
+    // const elapsedSeconds = (Date.now() - token.createdAt.getTime()) / 1000;
+    // const expired = elapsedSeconds > token.expiresIn;
+
+    const expired = Date.now() > token.expires;
 
     if (expired) {
       return res.status(400).send({
@@ -147,6 +153,40 @@ router.post('/api/auth/login', async (req, res) => {
           value: email,
         },
       },
+    });
+  }
+});
+
+router.post('/api/auth/password/reset', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).send({
+        error: {
+          code: 400,
+          status: 'BAD_REQUEST',
+          message: `'The email address ${email} is not associated with any account.`,
+        },
+      });
+    }
+
+    const token = user.generateToken(config.verificationTokenExpireTime);
+    await token.save();
+
+    user.sendPasswordResetEmail(token.token);
+    res.status(200).send({
+      message: `A reset email has been sent to ${user.email}`,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send({
+      code: 500,
+      status: 'INTERNAL_SERVER_ERROR',
+      message: error.message,
     });
   }
 });
