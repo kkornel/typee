@@ -10,6 +10,6 @@ mongoose.connect(
     useCreateIndex: true,
   },
   () => {
-    mongoose.connection.db.dropDatabase();
+    // mongoose.connection.db.dropDatabase();
   }
 );
