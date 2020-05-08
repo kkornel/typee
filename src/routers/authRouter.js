@@ -233,18 +233,11 @@ router.get('/api/auth/password/reset/:token', async (req, res) => {
       });
     }
 
-    // console.log(token.User);
-    console.log('token', token);
-    const t1 = await token.populate('userId').execPopulate();
-    console.log('t1', t1);
+    await token.populate('userId').execPopulate();
 
-    const user = await User.findById('5eb571e12393fc2c44cf3bf3');
-    console.log('user', user);
-    const u1 = await user.populate('tokens').execPopulate();
-    console.log('u1', u1);
-    console.log('u1.tokens', u1.tokens);
+    const user = token.userId;
 
-    res.user = u1;
+    res.cookie('userId', user._id, { httpOnly: true });
     res.redirect('/password/reset/new');
     // res.render('newPassword');
   } catch (error) {
@@ -259,6 +252,28 @@ router.get('/api/auth/password/reset/:token', async (req, res) => {
   }
 });
 
+router.post('/api/auth/password/reset/new', async (req, res) => {
+  const { userId } = req.cookies;
+  const { newPassword } = req.body;
+  res.clearCookie('userId', {
+    httpOnly: true,
+  });
+  req.cookies = null;
+  res.cookies = null;
+
+  // Can't do here User.findByIdAndUpdate(), because this omits
+  // the middleware used in userSchema like: userSchema.pre().
+  // So the new password would not be hashed.
+  // Have to find, updated and change in three steps.
+  const user = await User.findById(userId);
+  user.password = newPassword;
+
+  try {
+    await user.save();
+  } catch (error) {
+    console.log(error);
+  }
+});
 // export const tryLogin = async (email, password, models, SECRET, SECRET_2) => {
 //   const user = await models.User.findOne({ where: { email }, raw: true });
 //   if (!user) {
