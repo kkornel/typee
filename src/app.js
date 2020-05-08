@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 require('./db/mongoose');
@@ -18,6 +19,7 @@ app.set('view engine', 'pug');
 // Set the directory where the template files are located
 app.set('views', viewsDirectory);
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(authRouter);
 
