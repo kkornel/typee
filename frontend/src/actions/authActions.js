@@ -5,6 +5,7 @@ import {
   SIGN_UP_WITH_EMAIL_ERROR,
   LOGIN_WITH_EMAIL,
   LOGIN_WITH_EMAIL_ERROR,
+  PASSWORD_RESET_REQUEST,
 } from './types';
 
 import history from '../history';
@@ -38,5 +39,15 @@ export const loginWithEmail = (formValues) => async (dispatch) => {
       type: LOGIN_WITH_EMAIL_ERROR,
       payload: error.response.data.error,
     });
+  }
+};
+
+export const passwordResetRequest = (email) => async (dispatch) => {
+  try {
+    const response = await axios.post('/api/auth/password/reset', email);
+    console.log(response.data);
+    dispatch({ type: PASSWORD_RESET_REQUEST, payload: response.data });
+  } catch (error) {
+    console.log(error);
   }
 };
