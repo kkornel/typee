@@ -53,10 +53,7 @@ router.post('/api/auth/signup', async (req, res) => {
 
     res.status(201).json({
       user,
-      message:
-        'Account has been created. An email has been sent to ' +
-        user.email +
-        '.',
+      message: 'A verification email has been sent to ' + user.email + '',
     });
     // res.send(user);
   } catch (error) {
