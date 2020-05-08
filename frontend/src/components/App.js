@@ -6,6 +6,7 @@ import Header from './Header';
 import Login from './auth/Login';
 import Register from './auth/Register';
 import PasswordReset from './auth/PasswordReset';
+import NewPassword from './auth/NewPassword';
 
 class App extends Component {
   render() {
@@ -16,9 +17,10 @@ class App extends Component {
           <div className="row">
             <Switch>
               <Route exact path="/" component={null} />
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
-              <Route path="/password/reset" component={PasswordReset} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/password/reset" component={PasswordReset} />
+              <Route exact path="/password/reset/new" component={NewPassword} />
             </Switch>
           </div>
         </Router>

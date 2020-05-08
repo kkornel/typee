@@ -28,9 +28,14 @@ class Header extends Component {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/">
-                Link
-              </a>
+              <Link className="nav-link" to="/password/reset">
+                /password/reset
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/password/reset/new">
+                /password/reset/new
+              </Link>
             </li>
             <li className="nav-item dropdown">
               <a
