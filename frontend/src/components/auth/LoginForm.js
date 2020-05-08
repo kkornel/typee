@@ -80,14 +80,20 @@ class LoginForm extends Component {
       // Was touched?
       const touched = this.state[field].touched;
 
+      if (hasError && touched) {
+        return true;
+      }
+
       // If there is a server-side error, but client-side is fine
-      if (this.props.auth.error && !hasError && renderError) {
+      // and the field is only email (renderError === true)
+      if (this.props.auth.error && renderError) {
         hasError = true;
       }
 
       return hasError && touched;
     };
 
+    // Did the input values changed since last submission?
     let inputChanged = false;
     if (this.props.auth.error) {
       inputChanged =
@@ -95,9 +101,20 @@ class LoginForm extends Component {
         this.state.password.value !== this.state.password.previousValue;
     }
 
-    const className = `form-control ${
-      shouldMarkError(name) && !inputChanged ? 'is-invalid' : ''
-    }`;
+    let className = '';
+    // Mark error if there is an error either client or server side
+    // also if input hasn't changed since last submission,
+    // or if is empty (couldn't do that in shouldMarkError)
+    if (name === 'email') {
+      className = `form-control ${
+        (shouldMarkError(name) && !inputChanged) ||
+        this.state.email.value === ''
+          ? 'is-invalid'
+          : ''
+      }`;
+    } else {
+      className = `form-control ${shouldMarkError(name) ? 'is-invalid' : ''}`;
+    }
 
     return (
       <div className="form-group">
