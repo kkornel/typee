@@ -207,6 +207,58 @@ router.post('/api/auth/password/reset', async (req, res) => {
   }
 });
 
+router.get('/api/auth/password/reset/:token', async (req, res) => {
+  try {
+    const token = await Token.findOne({ token: req.params.token });
+
+    if (!token) {
+      return res.status(400).send({
+        error: {
+          code: 400,
+          status: 'INVALID_ARGUMENT',
+          message: 'Invalid token.',
+        },
+      });
+    }
+
+    const expired = Date.now() > token.expires;
+
+    if (expired) {
+      return res.status(400).send({
+        error: {
+          code: 400,
+          status: 'BAD_REQUEST',
+          message: 'Token expired.',
+        },
+      });
+    }
+
+    // console.log(token.User);
+    console.log('token', token);
+    const t1 = await token.populate('userId').execPopulate();
+    console.log('t1', t1);
+
+    const user = await User.findById('5eb571e12393fc2c44cf3bf3');
+    console.log('user', user);
+    const u1 = await user.populate('tokens').execPopulate();
+    console.log('u1', u1);
+    console.log('u1.tokens', u1.tokens);
+
+    res.user = u1;
+    res.redirect('/password/reset/new');
+    // res.render('newPassword');
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
+      },
+    });
+  }
+});
+
 // export const tryLogin = async (email, password, models, SECRET, SECRET_2) => {
 //   const user = await models.User.findOne({ where: { email }, raw: true });
 //   if (!user) {
