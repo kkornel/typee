@@ -10,11 +10,17 @@ class RegisterForm extends Component {
   // Fields on updating component (changing state), so there is no way to
   // change input class to is-invalid
   state = {
-    email: { value: 'Kornelcodes@gmail.com', error: null, touched: false },
-    username: { value: 'Kornelcodes@gmail.com', error: null, touched: false },
-    password1: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
-    password2: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
+    email: { value: '', error: null, touched: false },
+    username: { value: '', error: null, touched: false },
+    password1: { value: '', error: null, touched: false },
+    password2: { value: '', error: null, touched: false },
   };
+  // state = {
+  //   email: { value: 'Kornelcodes@gmail.com', error: null, touched: false },
+  //   username: { value: 'Kornelcodes@gmail.com', error: null, touched: false },
+  //   password1: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
+  //   password2: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
+  // };
 
   onSubmit = (event) => {
     event.preventDefault();
