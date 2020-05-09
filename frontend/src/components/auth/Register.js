@@ -7,7 +7,7 @@ import { signUpWithEmail } from '../../actions/authActions';
 
 class Register extends Component {
   submit = (email, username, password) => {
-    this.props.signUpWithEmail({ email, username, password });
+    this.props.signUpWithEmail(email, username, password);
   };
 
   render() {

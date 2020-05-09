@@ -6,6 +6,12 @@ import validator from 'validator';
 import passwordValidator from '../../utils/passwordValidator';
 
 class NewPasswordForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.errorRef = React.createRef();
+  }
+
   // Had to switch to controlled input, because redux-form does not re render
   // Fields on updating component (changing state), so there is no way to
   // change input class to is-invalid
@@ -21,6 +27,7 @@ class NewPasswordForm extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
+    this.errorRef.current.hidden = true;
 
     const newPassword = this.state.password1.value;
     this.props.onSubmit(newPassword);
@@ -56,6 +63,13 @@ class NewPasswordForm extends Component {
   renderError = (error) => {
     if (error) {
       return <div className="invalid-feedback">{error}</div>;
+    }
+  };
+
+  renderServerError = () => {
+    if (this.props.auth.error && this.errorRef.current) {
+      this.errorRef.current.hidden = false;
+      return this.props.auth.error.message;
     }
   };
 
@@ -106,10 +120,18 @@ class NewPasswordForm extends Component {
           <legend className="border-bottom mb-3 pb-1">Set new password</legend>
           {this.renderField('password1', 'Password', 'password')}
           {this.renderField('password2', 'Confirm password', 'password')}
+
           <div className="row justify-content-center">
             <button type="submit" className="btn btn-primary">
               Confirm
             </button>
+          </div>
+          <div
+            className="row justify-content-center text-danger mt-2"
+            ref={this.errorRef}
+            hidden
+          >
+            <h3 className="mb-0">{this.renderServerError()}</h3>
           </div>
         </fieldset>
       </form>
