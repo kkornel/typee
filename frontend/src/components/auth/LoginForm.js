@@ -47,8 +47,6 @@ class LoginForm extends Component {
       return;
     }
 
-    const formValues = { email, password };
-
     this.setState({
       email: {
         ...this.state.email,
@@ -61,7 +59,7 @@ class LoginForm extends Component {
       componentDidMountForFirstTime: false,
     });
 
-    this.props.onSubmit(formValues);
+    this.props.onSubmit(email, password);
   };
 
   handleBlur(name) {

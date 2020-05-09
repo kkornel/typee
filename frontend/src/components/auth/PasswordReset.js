@@ -6,7 +6,6 @@ import { passwordResetRequest } from '../../actions/authActions';
 
 const PasswordReset = (props) => {
   const onSubmit = (email) => {
-    console.log(email);
     props.passwordResetRequest(email);
   };
 

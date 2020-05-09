@@ -7,8 +7,8 @@ import { loginWithEmail } from '../../actions/authActions';
 class Login extends Component {
   state = { componentDidMountForFirstTime: true };
 
-  submit = (formValues) => {
-    this.props.loginWithEmail(formValues);
+  submit = (email, password) => {
+    this.props.loginWithEmail(email, password);
     this.setState({ componentDidMountForFirstTime: false });
   };
 

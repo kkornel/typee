@@ -22,8 +22,10 @@ class ResetPasswordForm extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
+    const email = this.state.emailValue;
+
     // TODO: Remove initial values (uncomment all)
-    // if (!this.state.emailValue) {
+    // if (!email) {
     //   this.emailErrorRef.current.hidden = false;
     // }
 
@@ -34,7 +36,7 @@ class ResetPasswordForm extends Component {
     //   return;
     // }
 
-    this.props.onSubmit(this.state.emailValue);
+    this.props.onSubmit(email);
   };
 
   handleBlur = () => {

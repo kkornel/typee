@@ -22,12 +22,8 @@ class NewPasswordForm extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    const formValues = {
-      password1: this.state.password1.value,
-      password2: this.state.password2.value,
-    };
-
-    this.props.onSubmit(formValues);
+    const newPassword = this.state.password1.value;
+    this.props.onSubmit(newPassword);
   };
 
   // Is invoked when input losses focus (was touched)

@@ -27,9 +27,9 @@ export const signUpWithEmail = (formValues) => async (dispatch) => {
   }
 };
 
-export const loginWithEmail = (formValues) => async (dispatch) => {
+export const loginWithEmail = (email, password) => async (dispatch) => {
   try {
-    const response = await axios.post('/api/auth/login', formValues);
+    const response = await axios.post('/api/auth/login', { email, password });
     console.log(response.data);
     dispatch({ type: LOGIN_WITH_EMAIL, payload: response.data });
     history.push('/');

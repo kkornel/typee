@@ -8,6 +8,8 @@ const config = require('../config/config');
 
 const router = new Router();
 
+// TODO: Use one 'schema' for routes
+
 router.post('/api/auth/register', async (req, res) => {
   console.log('register', req.body);
   const { email, username, password } = req.body;

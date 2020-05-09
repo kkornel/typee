@@ -6,13 +6,8 @@ import NewPasswordForm from './NewPasswordForm';
 import { updatePassword } from '../../actions/authActions';
 
 class NewPassword extends Component {
-  submit = (formValues) => {
-    const { password1: newPassword } = formValues;
-    try {
-      this.props.updatePassword(newPassword);
-    } catch (error) {
-      console.log(error);
-    }
+  submit = (newPassword) => {
+    this.props.updatePassword(newPassword);
   };
 
   render() {

@@ -6,13 +6,8 @@ import RegisterForm from './RegisterForm';
 import { signUpWithEmail } from '../../actions/authActions';
 
 class Register extends Component {
-  submit = (formValues) => {
-    const { email, username, password1 } = formValues;
-    try {
-      this.props.signUpWithEmail({ email, username, password: password1 });
-    } catch (error) {
-      console.log(error);
-    }
+  submit = (email, username, password) => {
+    this.props.signUpWithEmail({ email, username, password });
   };
 
   render() {

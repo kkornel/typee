@@ -26,14 +26,11 @@ class RegisterForm extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    const formValues = {
-      email: this.state.email.value,
-      username: this.state.username.value,
-      password1: this.state.password1.value,
-      password2: this.state.password2.value,
-    };
+    const email = this.state.email.value;
+    const username = this.state.username.value;
+    const password = this.state.password1.value;
 
-    this.props.onSubmit(formValues);
+    this.props.onSubmit(email, username, password);
   };
 
   // Is invoked when input losses focus (was touched)
