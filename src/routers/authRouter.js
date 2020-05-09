@@ -8,7 +8,7 @@ const config = require('../config/config');
 
 const router = new Router();
 
-// TODO: Use one 'schema' for routes
+// TODO: Unify route handling
 
 router.post('/api/auth/register', async (req, res) => {
   console.log('register', req.body);
@@ -239,7 +239,9 @@ router.get('/api/auth/password/reset/:token', async (req, res) => {
 
     const user = token.userId;
 
-    res.cookie('userId', user._id, { httpOnly: true });
+    // TODO: Pass token or userId?
+    // res.cookie('userId', user._id, { httpOnly: true });
+    res.cookie('token', token.token, { httpOnly: true });
     res.redirect('/password/reset/new');
     // res.render('newPassword');
   } catch (error) {
@@ -255,50 +257,34 @@ router.get('/api/auth/password/reset/:token', async (req, res) => {
 });
 
 router.post('/api/auth/password/reset/new', async (req, res) => {
-  const { userId } = req.cookies;
+  console.log('cookies', req.cookies);
+
+  const token = await Token.findOne({ token: req.cookies.token });
+
   const { newPassword } = req.body;
-  res.clearCookie('userId', {
+
+  res.clearCookie('token', {
     httpOnly: true,
   });
   req.cookies = null;
   res.cookies = null;
 
+  await token.populate('userId').execPopulate();
+
   // Can't do here User.findByIdAndUpdate(), because this omits
   // the middleware used in userSchema like: userSchema.pre().
   // So the new password would not be hashed.
   // Have to find, updated and change in three steps.
-  const user = await User.findById(userId);
+  const user = token.userId;
+  console.log('old user', user);
   user.password = newPassword;
 
   try {
     await user.save();
+    console.log('new user', user);
   } catch (error) {
     console.log(error);
   }
 });
-// export const tryLogin = async (email, password, models, SECRET, SECRET_2) => {
-//   const user = await models.User.findOne({ where: { email }, raw: true });
-//   if (!user) {
-//     // user with provided email not found
-//     throw new Error('Invalid login');
-//   }
-
-//   if (!user.confirmed) {
-//     throw new Error('Please confirm your email to login');
-//   }
-
-//   const valid = await bcrypt.compare(password, user.password);
-//   if (!valid) {
-//     // bad password
-//     throw new Error('Invalid login');
-//   }
-
-//   const [token, refreshToken] = await createTokens(user, SECRET, SECRET_2 + user.password);
-
-//   return {
-//     token,
-//     refreshToken,
-//   };
-// };
 
 module.exports = router;
