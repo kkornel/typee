@@ -10,6 +10,7 @@ const router = new Router();
 
 // TODO: Unify route handling
 // TODO: Resend token if expired.
+// TODO: Delete tokens
 
 router.post('/api/auth/register', async (req, res) => {
   console.log('register', req.body);
@@ -59,10 +60,9 @@ router.post('/api/auth/register', async (req, res) => {
 
     user.sendVerificationEmail(token.token);
 
-    res.status(201).send({
-      user,
-      message: `A verification email has been sent to ${user.email}`,
-    });
+    res
+      .status(201)
+      .send({ message: `A verification email has been sent to ${user.email}` });
   } catch (error) {
     console.log(error);
 
@@ -108,7 +108,7 @@ router.get('/api/auth/verify/:token', async (req, res) => {
     const expired = Date.now() > token.expires;
 
     if (expired) {
-      return res.status(400).send({
+      res.status(400).send({
         error: {
           code: 400,
           status: 'BAD_REQUEST',
@@ -201,6 +201,42 @@ router.post('/api/auth/password/reset', async (req, res) => {
     res.status(200).send({
       message: `A reset email has been sent to ${user.email}`,
     });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
+      },
+    });
+  }
+});
+
+router.post('/api/auth/verify', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).send({
+        error: {
+          code: 400,
+          status: 'BAD_REQUEST',
+          message: `The email address ${email} is not associated with any account.`,
+        },
+      });
+    }
+
+    const token = user.generateToken(config.verificationTokenExpireTime);
+    await token.save();
+
+    user.sendVerificationEmail(token.token);
+
+    res
+      .status(201)
+      .send({ message: `A verification email has been sent to ${user.email}` });
   } catch (error) {
     console.log(error);
 

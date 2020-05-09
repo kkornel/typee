@@ -5,23 +5,26 @@ import LoginForm from './LoginForm';
 import { loginWithEmail } from '../../actions/authActions';
 
 class Login extends Component {
-  state = { componentDidMountForFirstTime: true };
-
   submit = (email, password) => {
     this.props.loginWithEmail(email, password);
-    this.setState({ componentDidMountForFirstTime: false });
   };
 
   renderMessage = () => {
-    if (
-      this.props.auth &&
-      this.props.auth.message &&
-      this.state.componentDidMountForFirstTime
-    ) {
+    let message = '';
+    let isError = false;
+    if (this.props.auth.message) {
+      message = this.props.auth.message;
+    } else if (this.props.auth.error) {
+      message = this.props.auth.error.message;
+      isError = true;
+    }
+
+    if (message) {
+      const className = `alert alert-${isError ? 'warning' : 'info'}`;
       return (
         <div className="just">
-          <div className="alert alert-success" role="alert">
-            {this.props.auth.message}
+          <div className={className} role="alert">
+            {message}
           </div>
         </div>
       );

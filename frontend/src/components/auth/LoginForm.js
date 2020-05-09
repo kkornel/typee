@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { resendVerifyEmail } from '../../actions/authActions';
+
 class LoginForm extends Component {
   // state = {
   //   email: { value: '', previousValue: '', error: null, touched: false },
@@ -62,6 +64,10 @@ class LoginForm extends Component {
     this.props.onSubmit(email, password);
   };
 
+  onResendClick = () => {
+    this.props.resendVerifyEmail(this.state.email.value);
+  };
+
   handleBlur(name) {
     this.setState({
       [name]: {
@@ -94,6 +100,16 @@ class LoginForm extends Component {
       // Rendering client-side error, like 'Required'
       return <div className="invalid-feedback">{error}</div>;
     } else if (this.props.auth.error) {
+      if (this.props.auth.error.status === 'NOT_VERIFIED') {
+        return (
+          <div className="invalid-feedback">
+            {this.props.auth.error.message}{' '}
+            <span className="link" onClick={this.onResendClick}>
+              Resend verification email?
+            </span>
+          </div>
+        );
+      }
       return (
         <div className="invalid-feedback">{this.props.auth.error.message}</div>
       );
@@ -194,4 +210,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(LoginForm);
+export default connect(mapStateToProps, { resendVerifyEmail })(LoginForm);

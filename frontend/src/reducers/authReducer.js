@@ -9,7 +9,6 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  isSignedIn: null,
   token: null,
   user: null,
   message: null,
@@ -19,44 +18,19 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SIGN_UP_WITH_EMAIL:
-      // TODO:
-      return { ...action.payload, error: null };
+      return { ...INITIAL_STATE, ...action.payload };
     case SIGN_UP_WITH_EMAIL_ERROR:
-      return { isSignedIn: null, userId: null, error: action.payload };
+      return { ...INITIAL_STATE, ...action.payload };
     case LOGIN_WITH_EMAIL:
-      return {
-        message: null,
-        error: null,
-        ...action.payload,
-      };
+      return { ...INITIAL_STATE, ...action.payload };
     case LOGIN_WITH_EMAIL_ERROR:
-      return {
-        isSignedIn: null,
-        user: null,
-        message: null,
-        error: action.payload,
-      };
+      return { ...INITIAL_STATE, ...action.payload };
     case PASSWORD_RESET_REQUEST:
-      return {
-        isSignedIn: null,
-        user: null,
-        message: action.payload,
-        error: null,
-      };
+      return { ...INITIAL_STATE, ...action.payload };
     case PASSWORD_RESET_REQUEST_SUCCESS:
-      return {
-        isSignedIn: null,
-        user: null,
-        message: action.payload,
-        error: null,
-      };
+      return { ...INITIAL_STATE, ...action.payload };
     case PASSWORD_RESET_REQUEST_FAILED:
-      return {
-        isSignedIn: null,
-        user: null,
-        message: null,
-        error: action.payload,
-      };
+      return { ...INITIAL_STATE, ...action.payload };
     default:
       return state;
   }
