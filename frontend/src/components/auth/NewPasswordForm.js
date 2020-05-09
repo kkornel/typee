@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import validator from 'validator';
 
 import passwordValidator from '../../utils/passwordValidator';
 
@@ -131,7 +130,10 @@ class NewPasswordForm extends Component {
             ref={this.errorRef}
             hidden
           >
-            <h3 className="mb-0">{this.renderServerError()}</h3>
+            <h6 className="mb-0">
+              {this.renderServerError()}{' '}
+              <Link to="/password/reset">Send new reset request?</Link>
+            </h6>
           </div>
         </fieldset>
       </form>
