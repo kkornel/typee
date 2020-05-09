@@ -9,6 +9,7 @@ const config = require('../config/config');
 const router = new Router();
 
 // TODO: Unify route handling
+// TODO: Resend token if expired.
 
 router.post('/api/auth/register', async (req, res) => {
   console.log('register', req.body);
@@ -196,6 +197,7 @@ router.post('/api/auth/password/reset', async (req, res) => {
     await token.save();
 
     user.sendPasswordResetEmail(token.token);
+
     res.status(200).send({
       message: `A reset email has been sent to ${user.email}`,
     });
@@ -203,15 +205,67 @@ router.post('/api/auth/password/reset', async (req, res) => {
     console.log(error);
 
     res.status(500).send({
-      code: 500,
-      status: 'INTERNAL_SERVER_ERROR',
+      error: {
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
+      },
     });
   }
 });
 
 router.get('/api/auth/password/reset/:token', async (req, res) => {
   try {
+    // Note: If here would be the validation after navigating from email link
+    // the user would get raw JSON in the browser with the error.
+    // This way it falls down to the redirect('/password/reset/new');
+    // In that path '/password/reset/new' client side awaits for the response,
+    // so the error can be properly displayed.
+
+    // After a thought, it is better to display error, before displaying
+    // the page with submission form, even if it is raw JSON.
+
     const token = await Token.findOne({ token: req.params.token });
+
+    // if (!token) {
+    //   return res.status(400).send({
+    //     error: {
+    //       code: 400,
+    //       status: 'INVALID_ARGUMENT',
+    //       message: 'Invalid token.',
+    //     },
+    //   });
+    // }
+
+    // const expired = Date.now() > token.expires;
+
+    // if (expired) {
+    //   return res.status(400).send({
+    //     error: {
+    //       code: 400,
+    //       status: 'BAD_REQUEST',
+    //       message: 'Token expired.',
+    //     },
+    //   });
+    // }
+
+    res.cookie('token', token.token, { httpOnly: true });
+    res.redirect('/password/reset/new');
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
+      },
+    });
+  }
+});
+
+router.post('/api/auth/password/reset/new', async (req, res) => {
+  console.log('cookies', req.cookies);
+  try {
+    const token = await Token.findOne({ token: req.cookies.token });
 
     if (!token) {
       return res.status(400).send({
@@ -235,15 +289,28 @@ router.get('/api/auth/password/reset/:token', async (req, res) => {
       });
     }
 
+    const { newPassword } = req.body;
+
+    res.clearCookie('token', {
+      httpOnly: true,
+    });
+    req.cookies = null;
+    res.cookies = null;
+
     await token.populate('userId').execPopulate();
 
+    // Can't do here User.findByIdAndUpdate(), because this omits
+    // the middleware used in userSchema like: userSchema.pre().
+    // So the new password would not be hashed.
+    // Have to find, updated and change in three steps.
     const user = token.userId;
+    console.log('old user', user);
+    user.password = newPassword;
 
-    // TODO: Pass token or userId?
-    // res.cookie('userId', user._id, { httpOnly: true });
-    res.cookie('token', token.token, { httpOnly: true });
-    res.redirect('/password/reset/new');
-    // res.render('newPassword');
+    await user.save();
+    console.log('new user', user);
+
+    res.status(200).send({ message: 'Password has been updated.' });
   } catch (error) {
     console.log(error);
 
@@ -253,37 +320,6 @@ router.get('/api/auth/password/reset/:token', async (req, res) => {
         status: 'INTERNAL_SERVER_ERROR',
       },
     });
-  }
-});
-
-router.post('/api/auth/password/reset/new', async (req, res) => {
-  console.log('cookies', req.cookies);
-
-  const token = await Token.findOne({ token: req.cookies.token });
-
-  const { newPassword } = req.body;
-
-  res.clearCookie('token', {
-    httpOnly: true,
-  });
-  req.cookies = null;
-  res.cookies = null;
-
-  await token.populate('userId').execPopulate();
-
-  // Can't do here User.findByIdAndUpdate(), because this omits
-  // the middleware used in userSchema like: userSchema.pre().
-  // So the new password would not be hashed.
-  // Have to find, updated and change in three steps.
-  const user = token.userId;
-  console.log('old user', user);
-  user.password = newPassword;
-
-  try {
-    await user.save();
-    console.log('new user', user);
-  } catch (error) {
-    console.log(error);
   }
 });
 
