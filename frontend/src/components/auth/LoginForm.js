@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { resendVerifyEmail } from '../../actions/authActions';
+import { resendVerificationEmail } from '../../actions/authActions';
 
 class LoginForm extends Component {
   // state = {
@@ -65,7 +65,7 @@ class LoginForm extends Component {
   };
 
   onResendClick = () => {
-    this.props.resendVerifyEmail(this.state.email.value);
+    this.props.resendVerificationEmail(this.state.email.value);
   };
 
   handleBlur(name) {
@@ -210,4 +210,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { resendVerifyEmail })(LoginForm);
+export default connect(mapStateToProps, { resendVerificationEmail })(LoginForm);

@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import NewPasswordForm from './NewPasswordForm';
-import { updatePassword } from '../../actions/authActions';
+import { resetPassword } from '../../actions/authActions';
 
 class NewPassword extends Component {
   submit = (newPassword) => {
-    this.props.updatePassword(newPassword);
+    this.props.resetPassword(newPassword);
   };
 
   render() {
@@ -25,4 +25,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { updatePassword })(NewPassword);
+export default connect(mapStateToProps, { resetPassword })(NewPassword);
