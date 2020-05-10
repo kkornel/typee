@@ -8,7 +8,7 @@ router.get('/api/testauth', authenticate, async (req, res) => {
   console.log('req.user', req.user);
   console.log('req.token', req.token);
 
-  res.send('WE GUCCI 🐱‍👓');
+  res.send({ message: 'WE GUCCI ✅' });
 });
 
 module.exports = router;

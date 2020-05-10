@@ -2,7 +2,6 @@ const request = require('supertest');
 const bcrypt = require('bcrypt');
 
 const app = require('../src/app');
-const config = require('../src/config/config');
 
 const User = require('../src/models/User');
 const Token = require('../src/models/Token');
