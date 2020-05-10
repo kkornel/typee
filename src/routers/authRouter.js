@@ -10,9 +10,8 @@ const router = new Router();
 
 router.post('/api/auth/register', async (req, res) => {
   console.log('register', req.body);
+  const { email, username, password } = req.body;
   try {
-    const { email, username, password } = req.body;
-
     const emailTaken = await User.findOne({ email });
 
     if (emailTaken) {
@@ -73,9 +72,8 @@ router.post('/api/auth/register', async (req, res) => {
 
 router.post('/api/auth/login', async (req, res) => {
   console.log('login', req.body);
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-
     const user = await User.findByCredentials(email, password);
 
     if (!user.active) {
@@ -182,7 +180,7 @@ router.post('/api/auth/verify', async (req, res) => {
     user.sendVerificationEmail(token.token);
 
     res
-      .status(201)
+      .status(200)
       .send({ message: `A verification email has been sent to ${user.email}` });
   } catch (error) {
     console.log(error);
@@ -330,11 +328,9 @@ router.post('/api/auth/password/reset/new', async (req, res) => {
     // So the new password would not be hashed.
     // Have to find, updated and change in three steps.
     const user = token.userId;
-    console.log('old user', user);
     user.password = newPassword;
 
     await user.save();
-    console.log('new user', user);
 
     res.status(200).send({ message: 'Password has been updated.' });
   } catch (error) {
