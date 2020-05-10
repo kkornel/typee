@@ -7,6 +7,7 @@ import Login from './auth/Login';
 import Register from './auth/Register';
 import PasswordReset from './auth/PasswordReset';
 import NewPassword from './auth/NewPassword';
+import TestAuth from './users/TestAuth';
 
 class App extends Component {
   render() {
@@ -21,6 +22,7 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/password/reset" component={PasswordReset} />
               <Route exact path="/password/reset/new" component={NewPassword} />
+              <Route exact path="/testauth" component={TestAuth} />
             </Switch>
           </div>
         </Router>

@@ -6,6 +6,7 @@ require('dotenv').config();
 require('./db/mongoose');
 
 const authRouter = require('./routers/authRouter');
+const userRouter = require('./routers/userRouter');
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.set('views', viewsDirectory);
 
 app.use(cookieParser());
 app.use(express.json());
+
 app.use(authRouter);
+app.use(userRouter);
 
 module.exports = app;
