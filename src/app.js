@@ -8,6 +8,11 @@ require('./db/mongoose');
 const authRouter = require('./routers/authRouter');
 const userRouter = require('./routers/userRouter');
 
+const api = require('./api');
+
+const notFound = require('./middleware/notFound');
+const errorHandler = require('./middleware/errorHandler');
+
 const app = express();
 
 // Paths for Express config
@@ -23,7 +28,12 @@ app.set('views', viewsDirectory);
 app.use(cookieParser());
 app.use(express.json());
 
-app.use(authRouter);
-app.use(userRouter);
+// app.use(authRouter);
+// app.use(userRouter);
+
+app.use('/api/v1', api);
+
+app.use(notFound);
+app.use(errorHandler);
 
 module.exports = app;

@@ -8,4 +8,4 @@ function errorHandler(error, req, res, next) {
   });
 }
 
-module.exports = { errorHandler };
+module.exports = errorHandler;

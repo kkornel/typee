@@ -22,10 +22,10 @@ const {
 
 beforeEach(setupDatabase);
 
-describe('POST /api/auth/register', () => {
+describe('POST /api/v1/auth/register', () => {
   it('should signup a new user', async () => {
     const response = await request(app)
-      .post('/api/auth/register')
+      .post('/api/v1/auth/register')
       .send(newUser)
       .expect('Content-Type', /json/)
       .expect(201);
@@ -52,7 +52,7 @@ describe('POST /api/auth/register', () => {
 
   it('should respond with 409 for a email taken', async () => {
     const response = await request(app)
-      .post('/api/auth/register')
+      .post('/api/v1/auth/register')
       .send(newUserEmailTaken)
       .expect('Content-Type', /json/)
       .expect(409);
@@ -79,7 +79,7 @@ describe('POST /api/auth/register', () => {
 
   it('should respond with 409 for a username taken', async () => {
     const response = await request(app)
-      .post('/api/auth/register')
+      .post('/api/v1/auth/register')
       .send(newUserUsernameTaken)
       .expect('Content-Type', /json/)
       .expect(409);
@@ -106,7 +106,7 @@ describe('POST /api/auth/register', () => {
 
   // it('should break', async () => {
   //   const response = await request(app)
-  //     .post('/api/auth/register')
+  //     .post('/api/v1/auth/register')
   //     .send({
   //       em: '',
   //       username: '',
@@ -116,10 +116,10 @@ describe('POST /api/auth/register', () => {
   // });
 });
 
-describe('POST /api/auth/login', () => {
+describe('POST /api/v1/auth/login', () => {
   it('should log in existing user', async () => {
     const response = await request(app)
-      .post('/api/auth/login')
+      .post('/api/v1/auth/login')
       .send({ email: userOne.email, password: userOne.password })
       .expect('Content-Type', /json/)
       .expect(200);
@@ -131,7 +131,7 @@ describe('POST /api/auth/login', () => {
 
   it('should respond with 401 for not verified user', async () => {
     const response = await request(app)
-      .post('/api/auth/login')
+      .post('/api/v1/auth/login')
       .send({
         email: userNotVerified.email,
         password: userNotVerified.password,
@@ -157,7 +157,7 @@ describe('POST /api/auth/login', () => {
 
   it('should respond with 400 for invalid login credentials', async () => {
     const response = await request(app)
-      .post('/api/auth/login')
+      .post('/api/v1/auth/login')
       .send({
         email: userOne.email,
         password: 'invalidPassword',
@@ -179,11 +179,11 @@ describe('POST /api/auth/login', () => {
   });
 });
 
-describe('GET /api/auth/verify/:token', () => {
+describe('GET /api/v1/auth/verify/:token', () => {
   it('should respond with 400 for invalid token', async () => {
     const invalidToken = '12InvAliDtOk3ns21';
     const response = await request(app)
-      .get(`/api/auth/verify/${invalidToken}`)
+      .get(`/api/v1/auth/verify/${invalidToken}`)
       .expect('Content-Type', /json/)
       .expect(400);
 
@@ -201,7 +201,7 @@ describe('GET /api/auth/verify/:token', () => {
 
   it('should respond with 400 for expired token', async () => {
     const response = await request(app)
-      .get(`/api/auth/verify/${expiredToken.token}`)
+      .get(`/api/v1/auth/verify/${expiredToken.token}`)
       .expect('Content-Type', /json/)
       .expect(400);
 
@@ -226,7 +226,7 @@ describe('GET /api/auth/verify/:token', () => {
     expect(token).not.toBeNull();
 
     const response = await request(app)
-      .get(`/api/auth/verify/${validToken.token}`)
+      .get(`/api/v1/auth/verify/${validToken.token}`)
       .expect('Content-Type', /json/)
       .expect(200);
 
@@ -243,11 +243,11 @@ describe('GET /api/auth/verify/:token', () => {
   });
 });
 
-describe('POST /api/auth/verify', () => {
+describe('POST /api/v1/auth/verify', () => {
   it('should respond with 400 for nonexisting email', async () => {
     const nonExistingEmail = 'nonExistingEmail@mail.com';
     const response = await request(app)
-      .post('/api/auth/verify')
+      .post('/api/v1/auth/verify')
       .send({ email: nonExistingEmail })
       .expect('Content-Type', /json/)
       .expect(400);
@@ -267,7 +267,7 @@ describe('POST /api/auth/verify', () => {
   it('should respond with 200 for successful verification email sending', async () => {
     const email = userNotVerified.email.toLowerCase();
     const response = await request(app)
-      .post('/api/auth/verify')
+      .post('/api/v1/auth/verify')
       .send({ email })
       .expect('Content-Type', /json/)
       .expect(200);
@@ -284,11 +284,11 @@ describe('POST /api/auth/verify', () => {
   });
 });
 
-describe('GET /api/auth/password/reset/:token', () => {
+describe('GET /api/v1/auth/password/reset/:token', () => {
   it('should respond with 400 for invalid token', async () => {
     const invalidToken = '12InvAliDtOk3ns21';
     const response = await request(app)
-      .get(`/api/auth/password/reset/${invalidToken}`)
+      .get(`/api/v1/auth/password/reset/${invalidToken}`)
       .expect('Content-Type', /json/)
       .expect(400);
 
@@ -306,7 +306,7 @@ describe('GET /api/auth/password/reset/:token', () => {
 
   it('should respond with 400 for expired token', async () => {
     const response = await request(app)
-      .get(`/api/auth/password/reset/${expiredToken.token}`)
+      .get(`/api/v1/auth/password/reset/${expiredToken.token}`)
       .expect('Content-Type', /json/)
       .expect(400);
 
@@ -328,7 +328,7 @@ describe('GET /api/auth/password/reset/:token', () => {
     expect(token).not.toBeNull();
 
     const response = await request(app)
-      .get(`/api/auth/password/reset/${validToken.token}`)
+      .get(`/api/v1/auth/password/reset/${validToken.token}`)
       .expect('Content-Type', /text/)
       .expect(302, 'Found. Redirecting to /password/reset/new');
 
@@ -341,11 +341,11 @@ describe('GET /api/auth/password/reset/:token', () => {
   });
 });
 
-describe('POST /api/auth/password/reset', () => {
+describe('POST /api/v1/auth/password/reset', () => {
   it('should respond with 400 for nonexisting email', async () => {
     const nonExistingEmail = 'nonExistingEmail@mail.com';
     const response = await request(app)
-      .post('/api/auth/password/reset')
+      .post('/api/v1/auth/password/reset')
       .send({ email: nonExistingEmail })
       .expect('Content-Type', /json/)
       .expect(400);
@@ -365,7 +365,7 @@ describe('POST /api/auth/password/reset', () => {
   it('should respond with 200 for successful verification email sending', async () => {
     const email = userNotVerified.email.toLowerCase();
     const response = await request(app)
-      .post('/api/auth/verify')
+      .post('/api/v1/auth/verify')
       .send({ email })
       .expect('Content-Type', /json/)
       .expect(200);
@@ -382,12 +382,12 @@ describe('POST /api/auth/password/reset', () => {
   });
 });
 
-describe('POST /api/auth/password/reset/new', () => {
+describe('POST /api/v1/auth/password/reset/new', () => {
   it('should respond with 400 for invalid token', async () => {
     const invalidToken = '1nVaL!Dt0k3N';
 
     const response = await request(app)
-      .post('/api/auth/password/reset/new')
+      .post('/api/v1/auth/password/reset/new')
       .set('Cookie', [`token=${invalidToken}`])
       .send({ newPassword: 'N3wPassw0rd!@' })
       .expect(400);
@@ -403,7 +403,7 @@ describe('POST /api/auth/password/reset/new', () => {
 
   it('should respond with 400 for token expired', async () => {
     const response = await request(app)
-      .post('/api/auth/password/reset/new')
+      .post('/api/v1/auth/password/reset/new')
       .set('Cookie', [`token=${expiredToken.token}`])
       .send({ newPassword: 'N3wPassw0rd!@' })
       .expect(400);
@@ -427,7 +427,7 @@ describe('POST /api/auth/password/reset/new', () => {
     expect(isMatch).toBe(false);
 
     const response = await request(app)
-      .post('/api/auth/password/reset/new')
+      .post('/api/v1/auth/password/reset/new')
       .set('Cookie', [`token=${validToken.token}`])
       .send({ newPassword })
       .expect(200);

@@ -21,10 +21,10 @@ const {
 
 beforeEach(setupDatabase);
 
-describe('GET /api/testauth', () => {
+describe('GET /api/v1/users/testauth', () => {
   it('should respond with 401 for unauthenticated request', async () => {
     const response = await request(app)
-      .get('/api/testauth')
+      .get('/api/v1/users/testauth')
       .expect('Content-Type', /json/)
       .expect(401);
 
@@ -35,7 +35,7 @@ describe('GET /api/testauth', () => {
 
   it('should respond with 200 for authenticated request', async () => {
     const response = await request(app)
-      .get('/api/testauth')
+      .get('/api/v1/users/testauth')
       .set('Authorization', `Bearer ${userOne.jwtTokens[0].token}`)
       .expect('Content-Type', /json/)
       .expect(200);
