@@ -1,3 +1,7 @@
+require('dotenv').config({
+  path: '.env.test',
+});
+
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -81,6 +85,11 @@ const setupDatabase = async () => {
   await new Token(validToken).save();
 };
 
+const clearDatabase = async () => {
+  await User.deleteMany();
+  await Token.deleteMany();
+};
+
 module.exports = {
   userOneId,
   userOne,
@@ -94,4 +103,5 @@ module.exports = {
   expiredToken,
   validToken,
   setupDatabase,
+  clearDatabase,
 };

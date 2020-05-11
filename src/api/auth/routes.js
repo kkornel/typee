@@ -117,7 +117,7 @@ router.post('/logout', authenticate, async (req, res) => {
     );
     await req.user.save();
 
-    res.status(200).send();
+    res.status(200).send({});
   } catch (error) {
     console.log(error);
 
@@ -136,7 +136,7 @@ router.post('/logout/all', authenticate, async (req, res) => {
     req.user.jwtTokens = [];
     await req.user.save();
 
-    res.status(200).send();
+    res.status(200).send({});
   } catch (error) {
     console.log(error);
 

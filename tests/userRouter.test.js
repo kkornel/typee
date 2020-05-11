@@ -1,3 +1,7 @@
+require('dotenv').config({
+  path: '.env.test',
+});
+
 const request = require('supertest');
 
 const app = require('../src/app');
@@ -17,9 +21,11 @@ const {
   expiredToken,
   validToken,
   setupDatabase,
+  clearDatabase,
 } = require('./fixtures/db');
 
 beforeEach(setupDatabase);
+afterEach(clearDatabase);
 
 describe('GET /api/v1/users/testauth', () => {
   it('should respond with 401 for unauthenticated request', async () => {

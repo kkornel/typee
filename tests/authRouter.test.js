@@ -1,3 +1,7 @@
+require('dotenv').config({
+  path: '.env.test',
+});
+
 const request = require('supertest');
 const bcrypt = require('bcrypt');
 
@@ -18,9 +22,11 @@ const {
   expiredToken,
   validToken,
   setupDatabase,
+  clearDatabase,
 } = require('./fixtures/db');
 
 beforeEach(setupDatabase);
+afterEach(clearDatabase);
 
 describe('POST /api/v1/auth/register', () => {
   it('should signup a new user', async () => {
@@ -445,5 +451,60 @@ describe('POST /api/v1/auth/password/reset/new', () => {
     expect(response.headers['set-cookie'][0].includes(validToken.token)).toBe(
       false
     );
+  });
+});
+
+describe('POST /api/v1/auth/logout', () => {
+  it('should respond with 401 for unauthenticated request', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/logout')
+      .expect('Content-Type', /json/)
+      .expect(401);
+
+    expect(response.body).toMatchObject({
+      error: { message: 'Please authenticate.' },
+    });
+  });
+
+  it('should respond with 200 and logout user', async () => {
+    let user = await User.findById(userOneId);
+    const token = user.jwtTokens[0];
+    expect(user.jwtTokens).toContain(token);
+
+    const response = await request(app)
+      .post('/api/v1/auth/logout')
+      .set('Authorization', `Bearer ${token.token}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    user = await User.findById(userOneId);
+    expect(user.jwtTokens).not.toContain(token);
+  });
+});
+
+describe('POST /api/v1/auth/logout/all', () => {
+  it('should respond with 401 for unauthenticated request', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/logout/all')
+      .expect('Content-Type', /json/)
+      .expect(401);
+
+    expect(response.body).toMatchObject({
+      error: { message: 'Please authenticate.' },
+    });
+  });
+
+  it('should respond with 200 and logout user', async () => {
+    let user = await User.findById(userOneId);
+    expect(user.jwtTokens).toHaveLength(1);
+
+    const response = await request(app)
+      .post('/api/v1/auth/logout/all')
+      .set('Authorization', `Bearer ${user.jwtTokens[0].token}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    user = await User.findById(userOneId);
+    expect(user.jwtTokens).toHaveLength(0);
   });
 });
