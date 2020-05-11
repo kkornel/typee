@@ -3,6 +3,7 @@ const Router = require('express').Router;
 const User = require('../../models/User');
 const Token = require('../../models/Token');
 const config = require('../../config/config');
+const authenticate = require('../../middleware/authenticate');
 
 const router = new Router();
 
@@ -103,6 +104,46 @@ router.post('/login', async (req, res) => {
           field: 'email',
           value: email,
         },
+      },
+    });
+  }
+});
+
+router.post('/logout', authenticate, async (req, res) => {
+  console.log('/logout', req.body);
+  try {
+    req.user.jwtTokens = req.user.jwtTokens.filter(
+      (token) => token.token !== req.token
+    );
+    await req.user.save();
+
+    res.status(200).send();
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
+      },
+    });
+  }
+});
+
+router.post('/logout/all', authenticate, async (req, res) => {
+  console.log('/logoutAll', req.body);
+  try {
+    req.user.jwtTokens = [];
+    await req.user.save();
+
+    res.status(200).send();
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
       },
     });
   }

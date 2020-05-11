@@ -3,9 +3,18 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import RegisterForm from './RegisterForm';
-import { signUpWithEmail } from '../../actions/authActions';
+import {
+  signUpWithEmail,
+  resetMessageAndError,
+} from '../../actions/authActions';
 
 class Register extends Component {
+  constructor(props) {
+    super(props);
+
+    this.props.resetMessageAndError();
+  }
+
   submit = (email, username, password) => {
     this.props.signUpWithEmail(email, username, password);
   };
@@ -30,4 +39,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { signUpWithEmail })(Register);
+export default connect(mapStateToProps, {
+  signUpWithEmail,
+  resetMessageAndError,
+})(Register);

@@ -7,6 +7,8 @@ import {
   PASSWORD_RESET_REQUEST,
   PASSWORD_RESET_REQUEST_SUCCESS,
   RESEND_VERIFICATION_EMAIL,
+  LOGOUT,
+  RESET_MESSAGE_AND_ERROR,
 } from './types';
 
 import history from '../history';
@@ -56,7 +58,67 @@ export const loginWithEmail = (email, password) => async (dispatch) => {
     // response.data = { token, user }
     dispatch({ type: LOGIN_WITH_EMAIL, payload: response.data });
 
-    history.push('/');
+    // history.push('/');
+  } catch (error) {
+    console.log('ERROR:', error.response.data);
+
+    dispatch({
+      type: REQUEST_ERROR,
+      payload: error.response.data,
+    });
+  }
+};
+
+/**
+ * Posts data to: /api/auth/logout
+ *
+ * Dispatches an action with type: LOGOUT.
+ */
+export const logout = () => async (dispatch, getState) => {
+  try {
+    const AuthStr = 'Bearer '.concat(getState().auth.token);
+
+    const response = await axios.post(
+      '/api/auth/logout',
+      {},
+      {
+        headers: { Authorization: AuthStr },
+      }
+    );
+
+    console.log('logout', response.data);
+
+    dispatch({ type: LOGOUT });
+  } catch (error) {
+    console.log('ERROR:', error.response.data);
+
+    dispatch({
+      type: REQUEST_ERROR,
+      payload: error.response.data,
+    });
+  }
+};
+
+/**
+ * Posts data to: /api/auth/logout/all
+ *
+ * Dispatches an action with type: LOGOUT.
+ */
+export const logoutAll = () => async (dispatch, getState) => {
+  try {
+    const AuthStr = 'Bearer '.concat(getState().auth.token);
+
+    const response = await axios.post(
+      '/api/auth/logout/all',
+      {},
+      {
+        headers: { Authorization: AuthStr },
+      }
+    );
+
+    console.log('logoutAll', response.data);
+
+    dispatch({ type: LOGOUT });
   } catch (error) {
     console.log('ERROR:', error.response.data);
 
@@ -143,4 +205,16 @@ export const resendVerificationEmail = (email) => async (dispatch) => {
       payload: error.response.data,
     });
   }
+};
+
+/**
+ * After sending incorrect login data and server and getting back message:
+ * Unable to login, after navigating to /register page the message was showed.
+ * This prevents that, because in constructors of components, this is called,
+ * so the message and error is cleared.
+ *
+ * Dispatches an action with type: RESET_MESSAGE_AND_ERROR.
+ */
+export const resetMessageAndError = () => {
+  return { type: RESET_MESSAGE_AND_ERROR };
 };

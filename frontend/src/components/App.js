@@ -3,11 +3,13 @@ import { Router, Route, Switch } from 'react-router-dom';
 
 import history from '../history';
 import Header from './Header';
+import PrivateRoute from './auth/PrivateRoute';
 import Login from './auth/Login';
 import Register from './auth/Register';
 import PasswordReset from './auth/PasswordReset';
 import NewPassword from './auth/NewPassword';
 import TestAuth from './users/TestAuth';
+import Private from './Private';
 
 class App extends Component {
   render() {
@@ -17,6 +19,7 @@ class App extends Component {
           <Header />
           <div className="row">
             <Switch>
+              <PrivateRoute path="/private" component={Private} />
               <Route exact path="/" component={null} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />

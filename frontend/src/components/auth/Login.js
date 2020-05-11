@@ -1,10 +1,24 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import LoginForm from './LoginForm';
-import { loginWithEmail } from '../../actions/authActions';
+import {
+  loginWithEmail,
+  resetMessageAndError,
+} from '../../actions/authActions';
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+
+    console.log('test');
+
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    this.from = from;
+    this.props.resetMessageAndError();
+  }
+
   submit = (email, password) => {
     this.props.loginWithEmail(email, password);
   };
@@ -32,6 +46,10 @@ class Login extends Component {
   };
 
   render() {
+    if (this.props.auth.isSignedIn) {
+      return <Redirect to={this.from} />;
+    }
+
     return (
       <div className="container col-sm-12">
         {this.renderMessage()}
@@ -63,9 +81,10 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
+  return { auth: state.auth };
 };
 
-export default connect(mapStateToProps, { loginWithEmail })(Login);
+export default connect(mapStateToProps, {
+  loginWithEmail,
+  resetMessageAndError,
+})(Login);
