@@ -60,7 +60,7 @@ class RegisterForm extends Component {
 
   componentDidUpdate() {
     if (this.props.auth.error) {
-      this.errorRef.current.value = 'dasdasdasd';
+      this.errorRef.current.value = 'ERROR!';
       this.errorRef2.current.class = 'form-control is-invalid';
     }
   }

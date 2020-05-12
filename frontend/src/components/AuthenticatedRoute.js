@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
-function PrivateRoute({ auth, component: Component, ...rest }) {
+function AuthenticatedRoute({ auth, component: Component, ...rest }) {
   return (
     <Route
       {...rest}
@@ -26,4 +26,4 @@ const mapStateToProps = (state) => {
   return { auth: state.auth };
 };
 
-export default connect(mapStateToProps)(PrivateRoute);
+export default connect(mapStateToProps)(AuthenticatedRoute);

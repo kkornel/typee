@@ -70,9 +70,8 @@ class LoginForm extends Component {
   }
 
   validateForm = () => {
-    const { email, password } = this.state;
-
     const errors = {};
+    const { email, password } = this.state;
 
     if (!email.value) {
       errors.email = 'Required!';

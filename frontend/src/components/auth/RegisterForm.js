@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import validator from 'validator';
 
 import passwordValidator from '../../utils/passwordValidator';
-
 import InvalidFeedback from '../ui/InvalidFeedback';
 import RowJustifiedCentered from '../ui/RowJustifiedCentered';
 import Legend from '../ui/forms/Legend';
@@ -49,8 +48,8 @@ class RegisterForm extends Component {
 
   // Client-side validation
   validateForm = () => {
-    const { email, username, password1, password2 } = this.state;
     const errors = {};
+    const { email, username, password1, password2 } = this.state;
 
     if (!email.value) {
       errors.email = 'Required.';

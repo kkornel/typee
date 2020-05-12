@@ -11,6 +11,7 @@ import AlertMessage from '../ui/AlertMessage';
 import FormContainer from '../ui/FormContainer';
 import BodyContainer from '../ui/BodyContainer';
 import HorizontalDivider from '../ui/HorizontalDivider';
+import RowJustifiedCentered from '../ui/RowJustifiedCentered';
 import GoogleButton from '../ui/buttons/GoogleButton';
 import TwitterButton from '../ui/buttons/TwitterButton';
 import Row from '../ui/bootstrap/Row';
@@ -52,12 +53,12 @@ class Login extends Component {
           <HorizontalDivider text="OR" />
           <Row>
             <Column>
-              <div className="row justify-content-center mb-2 mt-1">
+              <RowJustifiedCentered className="mb-2 mt-1">
                 <TwitterButton />
-              </div>
-              <div className="row justify-content-center">
+              </RowJustifiedCentered>
+              <RowJustifiedCentered>
                 <GoogleButton />
-              </div>
+              </RowJustifiedCentered>
             </Column>
           </Row>
         </FormContainer>

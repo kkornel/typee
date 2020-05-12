@@ -46,9 +46,9 @@ function Header({ auth, logout }) {
           </li>
         </ul>
         {auth.isSignedIn ? (
-          <a onClick={logout}>
+          <div onClick={logout}>
             <div className="btn btn-outline-success my-2 my-sm-0">Logout</div>
-          </a>
+          </div>
         ) : (
           <>
             <Link to="/login">

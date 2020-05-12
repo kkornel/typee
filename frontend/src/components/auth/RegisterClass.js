@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import RegisterForm from './RegisterForm';
-import FormContainer from '../ui/FormContainer';
 import {
   signUpWithEmail,
   resetMessageAndError,
 } from '../../actions/authActions';
+import RegisterForm from './RegisterForm';
+import FormContainer from '../ui/FormContainer';
 
 class Register extends Component {
   componentWillUnmount() {
