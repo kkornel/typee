@@ -3,32 +3,34 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import passwordValidator from '../../utils/passwordValidator';
+import InvalidFeedback from '../ui/InvalidFeedback';
+import RowJustifiedCentered from '../ui/RowJustifiedCentered';
+import Legend from '../ui/forms/Legend';
+import Fieldset from '../ui/forms/Fieldset';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
 
 class NewPasswordForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.errorRef = React.createRef();
-  }
-
-  // Had to switch to controlled input, because redux-form does not re render
-  // Fields on updating component (changing state), so there is no way to
-  // change input class to is-invalid
+  // TODO: Remove initial values
   // state = {
   //   password1: { value: '', error: null, touched: false },
   //   password2: { value: '', error: null, touched: false },
   // };
-  // TODO: Remove initial values
   state = {
     password1: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
     password2: { value: 'Kkorneel1@gmail.com', error: null, touched: false },
   };
 
+  constructor(props) {
+    super(props);
+    this.errorRef = React.createRef();
+  }
+
   onSubmit = (event) => {
     event.preventDefault();
-    this.errorRef.current.hidden = true;
 
     const newPassword = this.state.password1.value;
+
+    this.errorRef.current.hidden = true;
     this.props.onSubmit(newPassword);
   };
 
@@ -39,9 +41,8 @@ class NewPasswordForm extends Component {
 
   // Client-side validation
   validateForm = () => {
-    const { password1, password2 } = this.state;
-
     const errors = {};
+    const { password1, password2 } = this.state;
 
     if (!password1.value) {
       errors.password1 = 'Required.';
@@ -59,9 +60,16 @@ class NewPasswordForm extends Component {
     return errors;
   };
 
+  shouldMarkError = (field, errors) => {
+    const touched = this.state[field].touched;
+    let hasError = errors[field];
+
+    return hasError && touched;
+  };
+
   renderError = (error) => {
     if (error) {
-      return <div className="invalid-feedback">{error}</div>;
+      return <InvalidFeedback>{error}</InvalidFeedback>;
     }
   };
 
@@ -75,17 +83,8 @@ class NewPasswordForm extends Component {
   renderField = (name, label, type) => {
     const errors = this.validateForm();
 
-    const shouldMarkError = (field) => {
-      // If client-side validation returned error for field
-      let hasError = errors[field];
-      // Was touched?
-      const touched = this.state[field].touched;
-
-      return hasError && touched;
-    };
-
     const className = `form-control ${
-      shouldMarkError(name) ? 'is-invalid' : ''
+      this.shouldMarkError(name, errors) ? 'is-invalid' : ''
     }`;
 
     return (
@@ -115,16 +114,13 @@ class NewPasswordForm extends Component {
   render() {
     return (
       <form onSubmit={this.onSubmit}>
-        <fieldset className="form-group mb-1">
-          <legend className="border-bottom mb-3 pb-1">Set new password</legend>
+        <Fieldset>
+          <Legend text="Set new password" />
           {this.renderField('password1', 'Password', 'password')}
           {this.renderField('password2', 'Confirm password', 'password')}
-
-          <div className="row justify-content-center">
-            <button type="submit" className="btn btn-primary">
-              Confirm
-            </button>
-          </div>
+          <RowJustifiedCentered>
+            <PrimaryButton text="Confirm" />
+          </RowJustifiedCentered>
           <div
             className="row justify-content-center text-danger mt-2"
             ref={this.errorRef}
@@ -135,16 +131,14 @@ class NewPasswordForm extends Component {
               <Link to="/password/reset">Send new reset request?</Link>
             </h6>
           </div>
-        </fieldset>
+        </Fieldset>
       </form>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
+  return { auth: state.auth };
 };
 
 export default connect(mapStateToProps)(NewPasswordForm);

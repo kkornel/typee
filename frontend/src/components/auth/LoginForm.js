@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { resendVerificationEmail } from '../../actions/authActions';
+import InvalidFeedback from '../ui/InvalidFeedback';
+import RowJustifiedCentered from '../ui/RowJustifiedCentered';
+import Legend from '../ui/forms/Legend';
+import Fieldset from '../ui/forms/Fieldset';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
 
 class LoginForm extends Component {
+  // TODO: Remove initial values
   // state = {
   //   email: { value: '', previousValue: '', error: null, touched: false },
   //   password: { value: '', previousValue: '', error: null, touched: false },
   //   componentDidMountForFirstTime: true,
   // };
-  // TODO: Remove initial values
   state = {
     email: {
       value: 'Kornelcodes@gmail.com',
@@ -25,19 +30,6 @@ class LoginForm extends Component {
     },
     componentDidMountForFirstTime: true,
   };
-
-  componentDidMount() {
-    if (this.props.auth && this.props.auth.user) {
-      console.log(this.props.auth.user.email);
-      this.setState({
-        email: {
-          ...this.state.email,
-          value: this.props.auth.user.email,
-          touched: true,
-        },
-      });
-    }
-  }
 
   onSubmit = (event) => {
     event.preventDefault();
@@ -93,25 +85,45 @@ class LoginForm extends Component {
     return errors;
   };
 
+  shouldMarkError = (field, errors, renderError) => {
+    // Was touched?
+    const touched = this.state[field].touched;
+
+    // If client-side validation returned error for field
+    let hasError = errors[field];
+
+    if (hasError && touched) {
+      return true;
+    }
+
+    // If there is a server-side error, but client-side is fine
+    // and the field is only email (renderError === true)
+    if (this.props.auth.error && renderError) {
+      hasError = true;
+    }
+
+    return hasError && touched;
+  };
+
   renderError = (errors, field) => {
     const error = errors[field];
+    const { error: authError } = this.props.auth;
 
     if (error) {
       // Rendering client-side error, like 'Required'
-      return <div className="invalid-feedback">{error}</div>;
-    } else if (this.props.auth.error) {
-      if (this.props.auth.error.status === 'NOT_VERIFIED') {
-        return (
-          <div className="invalid-feedback">
-            {this.props.auth.error.message}{' '}
+      return <InvalidFeedback>{error}</InvalidFeedback>;
+    } else if (authError) {
+      // Rendering server-side error, like 'NOT_VERIFIED'
+      return (
+        <InvalidFeedback>
+          {authError.message}
+          {authError.status === 'NOT_VERIFIED' && (
             <span className="link" onClick={this.onResendClick}>
+              {' '}
               Resend verification email?
             </span>
-          </div>
-        );
-      }
-      return (
-        <div className="invalid-feedback">{this.props.auth.error.message}</div>
+          )}
+        </InvalidFeedback>
       );
     }
   };
@@ -119,26 +131,7 @@ class LoginForm extends Component {
   renderField = (name, label, type, renderError) => {
     const errors = this.validateForm();
 
-    const shouldMarkError = (field) => {
-      // If client-side validation returned error for field
-      let hasError = errors[field];
-      // Was touched?
-      const touched = this.state[field].touched;
-
-      if (hasError && touched) {
-        return true;
-      }
-
-      // If there is a server-side error, but client-side is fine
-      // and the field is only email (renderError === true)
-      if (this.props.auth.error && renderError) {
-        hasError = true;
-      }
-
-      return hasError && touched;
-    };
-
-    // Did the input values changed since last submission?
+    // Has the input values changed since last submission?
     let inputChanged = false;
     if (this.props.auth.error) {
       inputChanged =
@@ -146,20 +139,22 @@ class LoginForm extends Component {
         this.state.password.value !== this.state.password.previousValue;
     }
 
+    const markError = this.shouldMarkError(name, errors, renderError);
     let className = '';
+
     // Mark error if there is an error either client or server side
     // also if input hasn't changed since last submission,
     // or if is empty (couldn't do that in shouldMarkError)
     if (name === 'email') {
       className = `form-control ${
-        (shouldMarkError(name) && !inputChanged) ||
+        (markError && !inputChanged) ||
         (this.state.email.value === '' &&
           !this.state.componentDidMountForFirstTime)
           ? 'is-invalid'
           : ''
       }`;
     } else {
-      className = `form-control ${shouldMarkError(name) ? 'is-invalid' : ''}`;
+      className = `form-control ${markError ? 'is-invalid' : ''}`;
     }
 
     return (
@@ -189,25 +184,23 @@ class LoginForm extends Component {
   render() {
     return (
       <form onSubmit={this.onSubmit}>
-        <fieldset className="form-group mb-1">
-          <legend className="border-bottom mb-3 pb-1">Sign In</legend>
+        <Fieldset>
+          <Legend text="Sign In" />
           {this.renderField('email', 'Email', 'email', true)}
           {this.renderField('password', 'Password', 'password', false)}
-          <div className="row justify-content-center">
-            <button type="submit" className="btn btn-primary">
-              Log In
-            </button>
-          </div>
-        </fieldset>
+          <RowJustifiedCentered>
+            <PrimaryButton text="Sign In" />
+          </RowJustifiedCentered>
+        </Fieldset>
       </form>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
+  return { auth: state.auth };
 };
 
-export default connect(mapStateToProps, { resendVerificationEmail })(LoginForm);
+export default connect(mapStateToProps, {
+  resendVerificationEmail,
+})(LoginForm);

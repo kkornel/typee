@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import validator from 'validator';
 
+import InvalidFeedback from '../ui/InvalidFeedback';
+import RowJustifiedCentered from '../ui/RowJustifiedCentered';
+import Legend from '../ui/forms/Legend';
+import Fieldset from '../ui/forms/Fieldset';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
+
 class ResetPasswordForm extends Component {
-  // state = { emailValue: '', touched: false };
   // TODO: Remove initial values
+  // state = { emailValue: '', touched: false };
   state = { emailValue: 'Kornelcodes@gmail.com', touched: false };
 
   constructor(props) {
     super(props);
-
     this.recaptchaRef = React.createRef();
     this.recaptchaErrorRef = React.createRef();
     this.emailErrorRef = React.createRef();
@@ -43,9 +48,29 @@ class ResetPasswordForm extends Component {
     this.setState({ touched: true });
   };
 
+  validateForm = () => {
+    const errors = {};
+    const { emailValue } = this.state;
+
+    if (!emailValue) {
+      errors.email = 'Required.';
+    } else if (!validator.isEmail(emailValue)) {
+      errors.email = 'Invalid email.';
+    }
+
+    return errors;
+  };
+
+  shouldMarkError = (errors) => {
+    const touched = this.state.touched;
+    let hasError = errors.email;
+
+    return hasError && touched;
+  };
+
   renderError = (error) => {
     if (error) {
-      return <div className="invalid-feedback">{error}</div>;
+      return <InvalidFeedback>{error}</InvalidFeedback>;
     }
   };
 
@@ -55,19 +80,14 @@ class ResetPasswordForm extends Component {
     }
 
     const errors = this.validateForm();
+    const className = `form-control ${
+      this.shouldMarkError(errors) ? 'is-invalid' : ''
+    }`;
 
-    const shouldMarkError = () => {
-      let hasError = errors.email;
-      const touched = this.state.touched;
-
-      return hasError && touched;
-    };
-
-    const className = `form-control ${shouldMarkError() ? 'is-invalid' : ''}`;
     return (
       <form onSubmit={this.onSubmit}>
-        <fieldset className="form-group mb-1">
-          <legend className="border-bottom mb-3 pb-1">Forgot password?</legend>
+        <Fieldset>
+          <Legend text="Forgot password?" />
           <div className="form-group">
             <label>Email</label>
             <div>
@@ -94,29 +114,14 @@ class ResetPasswordForm extends Component {
           <div className="text-danger" ref={this.recaptchaErrorRef} hidden>
             <small>Fill ReCAPTCHA</small>
           </div>
-          <div className="row justify-content-center mt-2">
-            <button type="submit" className="btn btn-primary">
-              Request password reset
-            </button>
-          </div>
-        </fieldset>
+          <div className="mt-2"></div>
+          <RowJustifiedCentered>
+            <PrimaryButton text="Request password reset" />
+          </RowJustifiedCentered>
+        </Fieldset>
       </form>
     );
   }
-
-  validateForm = () => {
-    const { emailValue } = this.state;
-
-    const errors = {};
-
-    if (!emailValue) {
-      errors.email = 'Required.';
-    } else if (!validator.isEmail(emailValue)) {
-      errors.email = 'Invalid email.';
-    }
-
-    return errors;
-  };
 }
 
 export default ResetPasswordForm;

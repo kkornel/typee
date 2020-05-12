@@ -5,17 +5,26 @@ import validator from 'validator';
 
 import passwordValidator from '../../utils/passwordValidator';
 
+import InvalidFeedback from '../ui/InvalidFeedback';
+import RowJustifiedCentered from '../ui/RowJustifiedCentered';
+import Legend from '../ui/forms/Legend';
+import Fieldset from '../ui/forms/Fieldset';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
+
 class RegisterForm extends Component {
-  // Had to switch to controlled input, because redux-form does not re render
-  // Fields on updating component (changing state), so there is no way to
-  // change input class to is-invalid
+  /*
+   * Had to switch to controlled input, because redux-form
+   * does not re render fields on updating component (changing state),
+   * so there is no way to change input class to 'is-invalid'.
+   */
+
+  // TODO: Remove initial values
   // state = {
   //   email: { value: '', error: null, touched: false },
   //   username: { value: '', error: null, touched: false },
   //   password1: { value: '', error: null, touched: false },
   //   password2: { value: '', error: null, touched: false },
   // };
-  // TODO: Remove initial values
   state = {
     email: { value: 'Kornelcodes@gmail.com', error: null, touched: false },
     username: { value: 'Kornelcodes@gmail.com', error: null, touched: false },
@@ -41,7 +50,6 @@ class RegisterForm extends Component {
   // Client-side validation
   validateForm = () => {
     const { email, username, password1, password2 } = this.state;
-
     const errors = {};
 
     if (!email.value) {
@@ -70,6 +78,21 @@ class RegisterForm extends Component {
     return errors;
   };
 
+  shouldMarkError = (field, errors) => {
+    // Was touched?
+    const touched = this.state[field].touched;
+
+    // If client-side validation returned error for field
+    let hasError = errors[field];
+
+    // If there is a server-side error, but client-side is fine
+    if (this.props.auth.error && !hasError) {
+      hasError = this.props.auth.error.details.field === field;
+    }
+
+    return hasError && touched;
+  };
+
   renderError = (error) => {
     if (error) {
       // Rendering client-side error, like 'Required' or 'Passwords do not match'
@@ -87,41 +110,24 @@ class RegisterForm extends Component {
 
       if (field === 'email') {
         return (
-          <div className="invalid-feedback">
+          <InvalidFeedback>
             Email already in use. <Link to="/"> Forgot password?</Link>
-          </div>
+          </InvalidFeedback>
         );
       } else if (field === 'username') {
-        return <div className="invalid-feedback">Username already in use.</div>;
+        return <InvalidFeedback>Username already in use.</InvalidFeedback>;
       }
 
       // TODO Test and delete later, probably.
       // Should never appear. Need testing  with different data.
-      return (
-        <div className="invalid-feedback">{this.props.auth.error.message}</div>
-      );
+      return <InvalidFeedback>{this.props.auth.error.message}</InvalidFeedback>;
     }
   };
 
   renderField = (name, label, type) => {
     const errors = this.validateForm();
-
-    const shouldMarkError = (field) => {
-      // If client-side validation returned error for field
-      let hasError = errors[field];
-      // Was touched?
-      const touched = this.state[field].touched;
-
-      // If there is a server-side error, but client-side is fine
-      if (this.props.auth.error && !hasError) {
-        hasError = this.props.auth.error.details.field === field;
-      }
-
-      return hasError && touched;
-    };
-
     const className = `form-control ${
-      shouldMarkError(name) ? 'is-invalid' : ''
+      this.shouldMarkError(name, errors) ? 'is-invalid' : ''
     }`;
 
     return (
@@ -151,27 +157,23 @@ class RegisterForm extends Component {
   render() {
     return (
       <form onSubmit={this.onSubmit}>
-        <fieldset className="form-group mb-1">
-          <legend className="border-bottom mb-3 pb-1">Sign Up</legend>
+        <Fieldset>
+          <Legend text="Sign Up" />
           {this.renderField('email', 'Email', 'email')}
           {this.renderField('username', 'Username', 'text')}
           {this.renderField('password1', 'Password', 'password')}
           {this.renderField('password2', 'Confirm password', 'password')}
-          <div className="row justify-content-center">
-            <button type="submit" className="btn btn-primary">
-              Sign Up
-            </button>
-          </div>
-        </fieldset>
+          <RowJustifiedCentered>
+            <PrimaryButton text="Sign Up" />
+          </RowJustifiedCentered>
+        </Fieldset>
       </form>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
+  return { auth: state.auth };
 };
 
 export default connect(mapStateToProps)(RegisterForm);

@@ -1,19 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import FormContainer from '../ui/FormContainer';
 import PasswordResetForm from './PasswordResetForm';
 import { passwordResetRequest } from '../../actions/authActions';
 
-const PasswordReset = (props) => {
-  const onSubmit = (email) => {
-    props.passwordResetRequest(email);
+function PasswordReset({ passwordResetRequest }) {
+  const onFinish = (email) => {
+    passwordResetRequest(email);
   };
 
   return (
-    <div className="container col-sm-6 offset-sm-3 mt-3 block-content-borders">
-      <PasswordResetForm onSubmit={onSubmit} />
-    </div>
+    <FormContainer>
+      <PasswordResetForm onSubmit={onFinish} />
+    </FormContainer>
   );
-};
+}
 
 export default connect(null, { passwordResetRequest })(PasswordReset);

@@ -1,45 +1,38 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import RegisterForm from './RegisterForm';
+import FormContainer from '../ui/FormContainer';
 import {
   signUpWithEmail,
   resetMessageAndError,
 } from '../../actions/authActions';
 
-class Register extends Component {
-  constructor(props) {
-    super(props);
+function Register({ resetMessageAndError, signUpWithEmail }) {
+  useEffect(() => {
+    return function cleanup() {
+      resetMessageAndError();
+    };
+  }, [resetMessageAndError]);
 
-    this.props.resetMessageAndError();
-  }
-
-  submit = (email, username, password) => {
-    this.props.signUpWithEmail(email, username, password);
+  const onFinish = (email, username, password) => {
+    signUpWithEmail(email, username, password);
   };
 
-  render() {
-    return (
-      <div className="container col-sm-6 offset-sm-3 mt-3 block-content-borders">
-        <RegisterForm onSubmit={this.submit} />
-        <div className="border-top text-center mt-2">
-          <small className="text-muted">
-            Already Have An Account? <Link to="/login">Sign In</Link>
-          </small>
-        </div>
+  return (
+    <FormContainer>
+      <RegisterForm onSubmit={onFinish} />
+      <div className="border-top text-center mt-2">
+        <small className="text-muted">
+          Already Have An Account? <Link to="/login">Sign In</Link>
+        </small>
       </div>
-    );
-  }
+    </FormContainer>
+  );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
-};
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   signUpWithEmail,
   resetMessageAndError,
 })(Register);

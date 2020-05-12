@@ -1,28 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
+import FormContainer from '../ui/FormContainer';
 import NewPasswordForm from './NewPasswordForm';
 import { resetPassword } from '../../actions/authActions';
 
-class NewPassword extends Component {
-  submit = (newPassword) => {
-    this.props.resetPassword(newPassword);
+function NewPassword({ resetPassword }) {
+  const onFinish = (newPassword) => {
+    resetPassword(newPassword);
   };
 
-  render() {
-    return (
-      <div className="container col-sm-6 offset-sm-3 mt-3 block-content-borders">
-        <NewPasswordForm onSubmit={this.submit} />
-      </div>
-    );
-  }
+  return (
+    <FormContainer>
+      <NewPasswordForm onSubmit={onFinish} />
+    </FormContainer>
+  );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
-};
-
-export default connect(mapStateToProps, { resetPassword })(NewPassword);
+export default connect(null, { resetPassword })(NewPassword);
