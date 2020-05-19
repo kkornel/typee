@@ -4,4 +4,5 @@ module.exports = {
   passwordResetTokenExpireTime: 1000,
   // verificationTokenExpireTime: 3600000,
   // passwordResetTokenExpireTime: 3600000,
+  googleCallbackUrl: '/api/v1/auth/google/callback',
 };

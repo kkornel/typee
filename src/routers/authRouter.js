@@ -318,8 +318,10 @@ router.post('/api/auth/password/reset/new', async (req, res) => {
     res.clearCookie('token', {
       httpOnly: true,
     });
-    req.cookies = null;
-    res.cookies = null;
+
+    // TODO: is it needed?
+    // req.cookies = null;
+    // res.cookies = null;
 
     await token.populate('userId').execPopulate();
 

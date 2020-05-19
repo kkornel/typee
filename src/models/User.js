@@ -15,10 +15,15 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
+    googleId: {
+      type: String,
+      unique: true,
+    },
+
     email: {
       type: String,
       unique: true,
-      required: true,
+      // required: true,
       trim: true,
       lowercase: true,
       validate(value) {
@@ -31,20 +36,20 @@ const userSchema = new Schema(
     username: {
       type: String,
       unique: true,
-      required: true,
+      // required: true,
       trim: true,
     },
 
     password: {
       type: String,
-      required: true,
-      minlength: 8,
+      // required: true,
+      // minlength: 8,
       trim: true,
       validate(value) {
         if (!passwordValidator.validate(value)) {
           console.log(
             'Password is not valid for: ',
-            passwordValidator.validate(password, { list: true })
+            passwordValidator.validate(value, { list: true })
           );
           throw new Error('Password is invalid');
         }
@@ -143,7 +148,8 @@ userSchema.methods.sendVerificationEmail = function (token) {
   // const token = user.generateToken(60 * 60);
   // await token.save();
 
-  const url = `${process.env.REDIRECT_DOMAIN}/api/auth/verify/${token}`;
+  // const url = `${process.env.REDIRECT_DOMAIN}/api/auth/verify/${token}`;
+  const url = `${process.env.REDIRECT_DOMAIN}/api/v1/auth/verify/${token}`;
 
   sendEmailAsync(
     user.email,
@@ -154,7 +160,8 @@ userSchema.methods.sendVerificationEmail = function (token) {
 
 userSchema.methods.sendPasswordResetEmail = function (token) {
   const user = this;
-  const url = `${process.env.REDIRECT_DOMAIN}/api/auth/password/reset/${token}`;
+  // const url = `${process.env.REDIRECT_DOMAIN}/api/auth/password/reset/${token}`;
+  const url = `${process.env.REDIRECT_DOMAIN}/api/v1/auth/password/reset/${token}`;
 
   sendEmailAsync(
     user.email,

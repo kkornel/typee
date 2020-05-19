@@ -1,4 +1,5 @@
 const Router = require('express').Router;
+const passport = require('passport');
 
 const User = require('../../models/User');
 const Token = require('../../models/Token');
@@ -6,6 +7,20 @@ const config = require('../../config/config');
 const authenticate = require('../../middleware/authenticate');
 
 const router = new Router();
+
+router.get(
+  '/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+router.get('/google/callback', passport.authenticate('google'), (req, res) => {
+  res.redirect('/');
+});
+
+router.get('/user', (req, res) => {
+  console.log('/user', req.user);
+  res.send({ user: req.user });
+});
 
 router.post('/register', async (req, res) => {
   console.log('register', req.body);
@@ -110,7 +125,16 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', authenticate, async (req, res) => {
-  console.log('/logout', req.body);
+  if (!req.token) {
+    // No token on request means that user is authenticated by GoogleStrategy
+    console.log('/logout (using GoogleStrategy)');
+    // Takes the cookie and kills the id inside
+    req.logout();
+    return res.send();
+  }
+
+  console.log('/logout (using JWT)');
+
   try {
     req.user.jwtTokens = req.user.jwtTokens.filter(
       (token) => token.token !== req.token
