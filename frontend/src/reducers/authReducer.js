@@ -7,6 +7,7 @@ import {
   PASSWORD_RESET_REQUEST_SUCCESS,
   RESEND_VERIFICATION_EMAIL,
   RESET_MESSAGE_AND_ERROR,
+  FETCH_USER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -23,6 +24,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...INITIAL_STATE, ...action.payload };
     case SIGN_UP_WITH_EMAIL:
       return { ...INITIAL_STATE, ...action.payload };
+    case FETCH_USER:
+      return { ...INITIAL_STATE, ...action.payload, isSignedIn: true };
     case LOGIN_WITH_EMAIL:
       return { ...INITIAL_STATE, ...action.payload, isSignedIn: true };
     case LOGOUT:

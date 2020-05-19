@@ -9,6 +9,7 @@ import {
   RESEND_VERIFICATION_EMAIL,
   LOGOUT,
   RESET_MESSAGE_AND_ERROR,
+  FETCH_USER,
 } from './types';
 
 import history from '../history';
@@ -22,7 +23,8 @@ export const signUpWithEmail = (email, username, password) => async (
   dispatch
 ) => {
   try {
-    const response = await axios.post('/api/auth/register', {
+    // const response = await axios.post('/api/auth/register', {
+    const response = await axios.post('/api/v1/auth/register', {
       email,
       username,
       password,
@@ -52,7 +54,11 @@ export const signUpWithEmail = (email, username, password) => async (
  */
 export const loginWithEmail = (email, password) => async (dispatch) => {
   try {
-    const response = await axios.post('/api/auth/login', { email, password });
+    // const response = await axios.post('/api/auth/login', { email, password });
+    const response = await axios.post('/api/v1/auth/login', {
+      email,
+      password,
+    });
     console.log('loginWithEmail', response.data);
 
     // response.data = { token, user }
@@ -79,7 +85,8 @@ export const logout = () => async (dispatch, getState) => {
     const AuthStr = 'Bearer '.concat(getState().auth.token);
 
     const response = await axios.post(
-      '/api/auth/logout',
+      '/api/v1/auth/logout',
+      // '/api/auth/logout',
       {},
       {
         headers: { Authorization: AuthStr },
@@ -109,7 +116,8 @@ export const logoutAll = () => async (dispatch, getState) => {
     const AuthStr = 'Bearer '.concat(getState().auth.token);
 
     const response = await axios.post(
-      '/api/auth/logout/all',
+      // '/api/auth/logout/all',
+      '/api/v1/auth/logout/all',
       {},
       {
         headers: { Authorization: AuthStr },
@@ -136,7 +144,8 @@ export const logoutAll = () => async (dispatch, getState) => {
  */
 export const passwordResetRequest = (email) => async (dispatch) => {
   try {
-    const response = await axios.post('/api/auth/password/reset', { email });
+    // const response = await axios.post('/api/auth/password/reset', { email });
+    const response = await axios.post('/api/v1/auth/password/reset', { email });
     console.log('passwordResetRequest', response.data);
 
     // response.data = { message: 'Password has been updated.' }
@@ -160,7 +169,8 @@ export const passwordResetRequest = (email) => async (dispatch) => {
  */
 export const resetPassword = (newPassword) => async (dispatch) => {
   try {
-    const response = await axios.post('/api/auth/password/reset/new', {
+    // const response = await axios.post('/api/auth/password/reset/new', {
+    const response = await axios.post('/api/v1/auth/password/reset/new', {
       newPassword,
     });
     console.log('resetPassword', response.data);
@@ -189,7 +199,8 @@ export const resetPassword = (newPassword) => async (dispatch) => {
  */
 export const resendVerificationEmail = (email) => async (dispatch) => {
   try {
-    const response = await axios.post('/api/auth/verify', { email });
+    // const response = await axios.post('/api/auth/verify', { email });
+    const response = await axios.post('/api/v1/auth/verify', { email });
     console.log('resendVerificationEmail', response.data);
 
     // response.data = { message: `A verification email has been sent to ${user.email}` }
@@ -217,4 +228,10 @@ export const resendVerificationEmail = (email) => async (dispatch) => {
  */
 export const resetMessageAndError = () => {
   return { type: RESET_MESSAGE_AND_ERROR };
+};
+
+export const fetchUserProfile = () => async (dispatch) => {
+  const response = await axios.get('/api/v1/auth/user');
+  console.log('fetchUserProfile', response.data);
+  dispatch({ type: FETCH_USER, payload: response.data });
 };
