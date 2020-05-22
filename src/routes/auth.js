@@ -1,9 +1,5 @@
 const express = require('express');
-const passport = require('passport');
 
-const User = require('../models/User');
-const Token = require('../models/Token');
-const config = require('../config/config');
 const authenticate = require('../middleware/authenticate');
 const AuthController = require('../controllers/auth');
 
