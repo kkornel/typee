@@ -9,6 +9,12 @@ const crypto = require('crypto');
 const User = require('../../src/models/User');
 const Token = require('../../src/models/Token');
 
+const newUserFormValues = {
+  email: 'newUser@mail.com',
+  username: 'newUser',
+  password: 'Strong123!',
+};
+
 const userOneId = new mongoose.Types.ObjectId();
 const userOne = {
   _id: userOneId,
@@ -21,20 +27,6 @@ const userOne = {
       token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET),
     },
   ],
-};
-
-const userTwoId = new mongoose.Types.ObjectId();
-const userTwo = {
-  _id: userTwoId,
-  email: 'usertwo@mail.com',
-  username: 'userTwo',
-  password: 'Strong123!',
-};
-
-const newUser = {
-  email: 'newUser@mail.com',
-  username: 'newUser',
-  password: 'Strong123!',
 };
 
 const newUserEmailTaken = {
@@ -60,7 +52,6 @@ const userNotVerified = {
 };
 
 const expiredTokenId = new mongoose.Types.ObjectId();
-
 const expiredToken = {
   _id: expiredTokenId,
   userId: userOneId.toString(),
@@ -74,6 +65,14 @@ const validToken = {
   userId: userNotVerifiedId.toString(),
   token: crypto.randomBytes(20).toString('hex'),
   expires: Date.now() + 3600000,
+};
+
+const userTwoId = new mongoose.Types.ObjectId();
+const userTwo = {
+  _id: userTwoId,
+  email: 'usertwo@mail.com',
+  username: 'userTwo',
+  password: 'Strong123!',
 };
 
 const setupDatabase = async () => {
@@ -97,7 +96,7 @@ module.exports = {
   userNotVerified,
   userTwoId,
   userTwo,
-  newUser,
+  newUserFormValues,
   newUserEmailTaken,
   newUserUsernameTaken,
   expiredToken,

@@ -1,7 +1,7 @@
 function errorHandler(error, req, res, next) {
   // const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
 
-  console.log('ErrorHandler:\n', error);
+  // console.log('ErrorHandler:\n', error);
 
   const errorResponse = {
     success: false,
@@ -13,7 +13,7 @@ function errorHandler(error, req, res, next) {
 
   error.details ? (errorResponse.details = error.details) : error.details;
 
-  console.log('ErrorHandler:\n', error, errorResponse);
+  // console.log('ErrorHandler:\n', error, errorResponse);
 
   res.status(error.statusCode || 500).json(errorResponse);
   // res.status(statusCode).json({

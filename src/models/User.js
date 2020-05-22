@@ -6,6 +6,7 @@ const crypto = require('crypto');
 
 const config = require('../config/config');
 const passwordValidator = require('../utils/passwordValidator');
+const ErrorResponse = require('../utils/ErrorResponse');
 const { sendEmailAsync } = require('../services/email');
 const verificationTemplate = require('../services/emailTemplates/verificationTemplate');
 const passwordResetTemplate = require('../services/emailTemplates/passwordResetTemplate');
@@ -109,13 +110,13 @@ userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new Error('Unable to login.');
+    throw new ErrorResponse(400, 'Unable to login.');
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    throw new Error('Unable to login.');
+    throw new ErrorResponse(400, 'Unable to login.');
   }
 
   return user;

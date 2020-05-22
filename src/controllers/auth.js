@@ -77,7 +77,7 @@ const login = async (req, res, next) => {
 
     const token = await user.generateAuthToken();
 
-    res.send({ user, token });
+    res.status(200).send({ user, token });
   } catch (error) {
     next(error);
   }
@@ -131,6 +131,13 @@ const handleResendVerificationRequest = async (req, res, next) => {
     }
 
     const user = await User.findOne({ email });
+
+    if (!user) {
+      throw new ErrorResponse(
+        400,
+        `The email address ${email} is not associated with any account.`
+      );
+    }
 
     // Delete existing token, user requested new one
     // so either he didn't receive old or the token expired
@@ -245,7 +252,7 @@ const verifyPasswordResetToken = async (req, res, next) => {
     }
 
     res.cookie('token', token.token, { httpOnly: true });
-    res.redirect('/password-new');
+    res.redirect('/password-reset-new');
   } catch (error) {
     next(error);
   }
@@ -269,6 +276,10 @@ const setNewPassword = async (req, res, next) => {
     }
 
     const { password } = req.body;
+
+    if (!password) {
+      throw new ErrorResponse(400, 'Missing required field(s).');
+    }
 
     res.clearCookie('token', {
       httpOnly: true,
