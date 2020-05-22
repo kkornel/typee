@@ -8,6 +8,8 @@ require('dotenv').config();
 require('./db/mongoose');
 require('./services/passport/googleOath');
 
+const api = require('./routes');
+
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -36,16 +38,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// const authRouter = require('./routers/authRouter');
-// const userRouter = require('./routers/userRouter');
-// app.use(authRouter);
-// app.use(userRouter);
-
-const apis = require('./routes');
-app.use('/api/v1', apis);
-
-// const api = require('./api');
-// app.use('/api/v1', api);
+app.use('/api/v1', api);
 
 app.use(notFound);
 app.use(errorHandler);
