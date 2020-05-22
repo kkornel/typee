@@ -18,6 +18,7 @@ const userSchema = new Schema(
     googleId: {
       type: String,
       unique: true,
+      sparse: true,
     },
 
     email: {
@@ -149,7 +150,7 @@ userSchema.methods.sendVerificationEmail = function (token) {
   // await token.save();
 
   // const url = `${process.env.REDIRECT_DOMAIN}/api/auth/verify/${token}`;
-  const url = `${process.env.REDIRECT_DOMAIN}/api/v1/auth/verify/${token}`;
+  const url = `${process.env.REDIRECT_DOMAIN}/api/v2/auth/verify/${token}`;
 
   sendEmailAsync(
     user.email,
@@ -161,7 +162,7 @@ userSchema.methods.sendVerificationEmail = function (token) {
 userSchema.methods.sendPasswordResetEmail = function (token) {
   const user = this;
   // const url = `${process.env.REDIRECT_DOMAIN}/api/auth/password/reset/${token}`;
-  const url = `${process.env.REDIRECT_DOMAIN}/api/v1/auth/password/reset/${token}`;
+  const url = `${process.env.REDIRECT_DOMAIN}/api/v2/auth/password/reset/${token}`;
 
   sendEmailAsync(
     user.email,
