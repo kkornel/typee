@@ -6,20 +6,15 @@ import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
 function PasswordNew() {
-  const { changePassword } = useAuth();
   const history = useHistory();
+  const { changePassword } = useAuth();
 
-  const { isLoading, isError, isSuccess, data, error, execute } = useAsync();
-
-  if (isSuccess) {
-    console.log('isSuccess');
-  }
+  const { isLoading, isError, error, execute } = useAsync();
 
   const onNewPassword = async (password, setWasErrorShowed) => {
-    console.log('onSubmit');
     const response = await execute(changePassword(password));
     setWasErrorShowed(false);
-    console.log(response);
+    console.log(';lsdfjlksdj', response);
     if (response.success) {
       history.push('/sign-in', { message: response.message });
     }

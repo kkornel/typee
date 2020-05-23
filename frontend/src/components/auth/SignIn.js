@@ -18,17 +18,13 @@ function SignIn(props) {
     state && state.message ? state.message : ''
   );
 
-  const { isLoading, isError, isSuccess, data, error, execute } = useAsync();
+  const { isLoading, isError, error, execute } = useAsync();
 
   React.useEffect(() => {
     isMounted = true;
     setTimeout(() => (isMounted ? setOpen(false) : null), 7000);
     return () => (isMounted = false);
   }, [open]);
-
-  if (isSuccess) {
-    console.log('isSuccess');
-  }
 
   const onSignIn = async (formValues, setWasErrorShowed) => {
     await execute(signIn(formValues));
@@ -42,7 +38,6 @@ function SignIn(props) {
     const response = await resendVerificationEmail(email);
     setAlertMessage(response.message);
     setOpen(true);
-    console.log('onResendEmailClicked response', response);
   };
 
   return (

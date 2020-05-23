@@ -26,7 +26,7 @@ function useSafeDispatch(dispatch) {
     [dispatch]
   );
 
-  return React.useCallback((...args) => dispatch(...args), [dispatch]);
+  // return React.useCallback((...args) => dispatch(...args), [dispatch]);
 }
 
 function reducer(state, action) {

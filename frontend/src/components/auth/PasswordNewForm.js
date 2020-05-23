@@ -80,15 +80,13 @@ function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
   const resetErrorsOnFocus = () => {
     setWasErrorShowed(true);
     if (isError) {
-      clearError(error.details.field);
+      clearError('password');
     }
   };
 
   if (isError && !wasErrorShowed) {
-    setError(error.details.field, error.status, error.message);
+    setError('password', error.status, error.message);
   }
-
-  console.log(errors);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -112,6 +110,7 @@ function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
             name="password"
             label="Password"
             defaultValue="Lenrok12"
+            onFocus={resetErrorsOnFocus}
             error={!!errors.password}
             helperText={!!errors.password ? errors.password.message : null}
             inputRef={register}

@@ -1,4 +1,4 @@
-import { logout } from './auth-client';
+// import { logout } from './auth-client';
 
 const localStorageKey = '__backend_frontend_token__';
 

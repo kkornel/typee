@@ -32,15 +32,12 @@ function AuthProvider(props) {
   }, [execute]);
 
   // Register the user
-  const signUp = React.useCallback(
-    async (formValues) => {
-      // const user = await authClient.signUp(formValues);
-      // setData({ user });
-      const response = await authClient.signUp(formValues);
-      return response;
-    },
-    [setData]
-  );
+  const signUp = React.useCallback(async (formValues) => {
+    // const user = await authClient.signUp(formValues);
+    // setData({ user });
+    const response = await authClient.signUp(formValues);
+    return response;
+  }, []);
 
   // Make a login request
   const signIn = React.useCallback(
@@ -55,7 +52,7 @@ function AuthProvider(props) {
   const logout = React.useCallback(async () => {
     const response = await authClient.logout();
     // setData(null);
-    // setData(null);
+    setData(null);
     return response;
     // authClient.logout();
   }, [setData]);
@@ -70,17 +67,17 @@ function AuthProvider(props) {
     const response = await authClient.resendVerificationEmail(email);
 
     return response;
-  });
+  }, []);
 
   const changePassword = React.useCallback(async (password) => {
     const response = await authClient.changePassword(password);
     return response;
-  });
+  }, []);
 
   const logoutAll = React.useCallback(async () => {
     const response = await authClient.logoutAll();
     return response;
-  });
+  }, []);
 
   console.log('AUTHCONTEXT', data);
   const user = data?.user;

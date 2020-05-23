@@ -62,10 +62,10 @@ function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
   const onSubmit = ({ email, username, password }) => {
     const recaptchaValue = recaptchaRef.current.getValue();
 
-    // if (!recaptchaValue) {
-    //   recaptchaErrorRef.current.hidden = false;
-    //   return;
-    // }
+    if (!recaptchaValue) {
+      recaptchaErrorRef.current.hidden = false;
+      return;
+    }
 
     onPasswordReset(email, setWasErrorShowed);
   };

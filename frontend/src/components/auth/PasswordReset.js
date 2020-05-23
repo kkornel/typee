@@ -6,18 +6,14 @@ import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
 function PasswordReset() {
-  const { resetPassword } = useAuth();
   const history = useHistory();
-  const { isLoading, isError, isSuccess, data, error, execute } = useAsync();
-
-  if (isSuccess) {
-    // history.push('/sign-in', { msg: 'elo' });
-  }
+  const { resetPassword } = useAuth();
+  const { isLoading, isError, error, execute } = useAsync();
 
   const onPasswordReset = async (email, setWasErrorShowed) => {
     const response = await execute(resetPassword(email));
     setWasErrorShowed(false);
-    console.log(response);
+
     if (response.success) {
       history.push('/sign-in', { message: response.message });
     }

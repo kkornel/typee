@@ -10,9 +10,9 @@ function isLoggedIn() {
 
 function handleResponse({ user, token }) {
   // TODO: uncomment
-  // if (token) {
-  //   localStorage.setItem(localStorageKey, token);
-  // }
+  if (token) {
+    localStorage.setItem(localStorageKey, token);
+  }
   return user;
 }
 
@@ -20,9 +20,9 @@ async function getUser() {
   const token = getToken();
 
   // TODO: uncomment
-  // if (!token) {
-  //   return Promise.resolve(null);
-  // }
+  if (!token) {
+    return Promise.resolve(null);
+  }
 
   const response = await client('me');
   console.log('auth-client getUser response', response);
@@ -67,7 +67,7 @@ async function changePassword(password) {
 
 async function logout() {
   const response = await client('auth/logout', { body: {} });
-  // localStorage.removeItem(localStorageKey);
+  localStorage.removeItem(localStorageKey);
   console.log('auth-client logout response', response);
   return response;
 }

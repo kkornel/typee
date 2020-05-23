@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaSpinner } from 'react-icons/fa';
+// import { FaSpinner } from 'react-icons/fa';
 // const Spinner = styled(FaSpinner)({
 //   animation: `${spin} 1s linear infinite`,
 // });
