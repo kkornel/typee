@@ -1,10 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import * as yup from 'yup';
-
-import passwordValidator from '../../utils/passwordValidator';
-
 import {
   Button,
   Box,
@@ -14,6 +10,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+import SignUpSchema from '../../utils/SignUpSchema';
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -44,25 +42,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PasswordNewSchema = yup.object().shape({
-  password: yup
-    .string()
-    .required('Required.')
-    .test(
-      'password-strength',
-      'Must contain at least  8 Characters, 1 Uppercase, 1 Lowercase and 1 Number.',
-      function (value) {
-        return passwordValidator.validate(value);
-      }
-    ),
-  passwordConfirmation: yup
-    .string()
-    .required('Required.')
-    .test('passwords-match', "Passwords don't match.", function (value) {
-      return this.parent.password === value;
-    }),
-});
-
 function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
   const classes = useStyles();
 
@@ -70,7 +49,7 @@ function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
-    validationSchema: PasswordNewSchema,
+    validationSchema: SignUpSchema,
   });
 
   const onSubmit = ({ password }) => {
@@ -109,7 +88,7 @@ function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
             id="password"
             name="password"
             label="Password"
-            defaultValue="Lenrok12"
+            defaultValue="Polska12"
             onFocus={resetErrorsOnFocus}
             error={!!errors.password}
             helperText={!!errors.password ? errors.password.message : null}
@@ -124,7 +103,7 @@ function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
             id="passwordConfirmation"
             name="passwordConfirmation"
             label="Confirm Password"
-            defaultValue="Lenrok12"
+            defaultValue="Polska12"
             error={!!errors.passwordConfirmation}
             helperText={
               !!errors.passwordConfirmation

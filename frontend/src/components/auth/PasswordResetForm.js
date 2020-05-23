@@ -1,7 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import * as yup from 'yup';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import {
@@ -13,6 +12,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+import SignUpSchema from '../../utils/SignUpSchema';
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -43,10 +44,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PasswordResetSchema = yup.object().shape({
-  email: yup.string().required('Required.').email('Invalid email.'),
-});
-
 function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
   const classes = useStyles();
   const recaptchaRef = React.useRef();
@@ -56,7 +53,7 @@ function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
-    validationSchema: PasswordResetSchema,
+    validationSchema: SignUpSchema,
   });
 
   const onSubmit = ({ email, username, password }) => {
@@ -84,8 +81,6 @@ function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
   if (isError && !wasErrorShowed) {
     setError(error.details.field, error.status, error.message);
   }
-
-  console.log(errors);
 
   return (
     <Container component="main" maxWidth="xs">

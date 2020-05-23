@@ -157,7 +157,7 @@ function SignUpForm({ onSignUp, isLoading, isError, error }) {
             id="password"
             name="password"
             label="Password"
-            defaultValue="Lenrok12"
+            defaultValue="Polska12"
             error={!!errors.password}
             helperText={!!errors.password ? errors.password.message : null}
             inputRef={register}
@@ -171,7 +171,7 @@ function SignUpForm({ onSignUp, isLoading, isError, error }) {
             id="passwordConfirmation"
             name="passwordConfirmation"
             label="Confirm Password"
-            defaultValue="Lenrok12"
+            defaultValue="Polska12"
             error={!!errors.passwordConfirmation}
             helperText={
               !!errors.passwordConfirmation

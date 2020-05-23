@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
+import classNames from 'classnames';
+
 import {
   Button,
   Box,
@@ -16,8 +18,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import * as yup from 'yup';
-import classNames from 'classnames';
+import SignInSchema from '../../utils/SignInSchema';
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -92,11 +93,6 @@ const GoogleButton = withStyles((theme) => ({
     },
   },
 }))(Button);
-
-const SignInSchema = yup.object().shape({
-  email: yup.string().required('Required.').email('Invalid email.'),
-  password: yup.string().required('Required.'),
-});
 
 function SignInForm({
   onSignIn,
@@ -199,7 +195,7 @@ function SignInForm({
             id="password"
             name="password"
             label="Password"
-            defaultValue="Lenrok12"
+            defaultValue="Polska12"
             onFocus={resetErrorsOnFocus}
             error={!!errors.password}
             helperText={!!errors.password ? errors.password.message : null}

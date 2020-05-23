@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Box, Container, TextField, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Container, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,31 +41,9 @@ function Dashboard() {
         <Grid item xs={8}>
           <Container maxWidth="xs">
             <Box>
-              <h1>Login Page</h1>
-              <div>
-                <form name="login-form" className={classes.root}>
-                  {/* {username input} */}
-                  <TextField
-                    label="Username"
-                    name="username"
-                    fullWidth
-                    variant="outlined"
-                  />
-
-                  {/* {password input} */}
-                  <TextField
-                    label="Password"
-                    type="password"
-                    name="password"
-                    fullWidth
-                    variant="outlined"
-                  />
-
-                  <Button variant="contained" color="primary" name="login">
-                    Login
-                  </Button>
-                </form>
-              </div>
+              <Typography variant="h1" component="h2">
+                Dashboard
+              </Typography>
             </Box>
           </Container>
         </Grid>
