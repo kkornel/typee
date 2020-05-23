@@ -2,7 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import * as yup from 'yup';
-import ReCAPTCHA from 'react-google-recaptcha';
+
+import passwordValidator from '../../utils/passwordValidator';
 
 import {
   Button,
@@ -43,35 +44,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PasswordResetSchema = yup.object().shape({
-  email: yup.string().required('Required.').email('Invalid email.'),
+const PasswordNewSchema = yup.object().shape({
+  password: yup
+    .string()
+    .required('Required.')
+    .test(
+      'password-strength',
+      'Must contain at least  8 Characters, 1 Uppercase, 1 Lowercase and 1 Number.',
+      function (value) {
+        return passwordValidator.validate(value);
+      }
+    ),
+  passwordConfirmation: yup
+    .string()
+    .required('Required.')
+    .test('passwords-match', "Passwords don't match.", function (value) {
+      return this.parent.password === value;
+    }),
 });
 
-function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
+function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
   const classes = useStyles();
-  const recaptchaRef = React.useRef();
-  const recaptchaErrorRef = React.useRef();
 
   const [wasErrorShowed, setWasErrorShowed] = React.useState(false);
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
-    validationSchema: PasswordResetSchema,
+    validationSchema: PasswordNewSchema,
   });
 
-  const onSubmit = ({ email, username, password }) => {
-    const recaptchaValue = recaptchaRef.current.getValue();
-
-    // if (!recaptchaValue) {
-    //   recaptchaErrorRef.current.hidden = false;
-    //   return;
-    // }
-
-    onPasswordReset(email, setWasErrorShowed);
-  };
-
-  const onChange = () => {
-    recaptchaErrorRef.current.hidden = true;
+  const onSubmit = ({ password }) => {
+    onNewPassword(password, setWasErrorShowed);
   };
 
   const resetErrorsOnFocus = () => {
@@ -96,38 +99,41 @@ function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
         className={classes.mainBox}
       >
         <Typography component="h1" variant="h5" className={classes.title}>
-          Forgot Password?
+          Set New Password
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            autoFocus
             required
             fullWidth
+            type="password"
             margin="normal"
             variant="outlined"
-            id="email"
-            name="email"
-            label="Email"
-            defaultValue="kornelcodes@gmail.com"
-            onFocus={resetErrorsOnFocus}
-            error={!!errors.email}
-            helperText={!!errors.email ? errors.email.message : null}
+            id="password"
+            name="password"
+            label="Password"
+            defaultValue="Lenrok12"
+            error={!!errors.password}
+            helperText={!!errors.password ? errors.password.message : null}
             inputRef={register}
           />
-          <Box display="flex" justifyContent="center">
-            <ReCAPTCHA
-              sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-              onChange={onChange}
-              ref={recaptchaRef}
-            />
-          </Box>
-          <Box
-            ref={recaptchaErrorRef}
-            hidden
-            className={classes.recaptchaError}
-          >
-            Fill ReCAPTCHA
-          </Box>
+          <TextField
+            required
+            fullWidth
+            type="password"
+            margin="normal"
+            variant="outlined"
+            id="passwordConfirmation"
+            name="passwordConfirmation"
+            label="Confirm Password"
+            defaultValue="Lenrok12"
+            error={!!errors.passwordConfirmation}
+            helperText={
+              !!errors.passwordConfirmation
+                ? errors.passwordConfirmation.message
+                : null
+            }
+            inputRef={register}
+          />
           {isLoading && (
             <Box className={classes.spinner}>
               <CircularProgress />
@@ -140,7 +146,7 @@ function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
             variant="contained"
             className={classes.submit}
           >
-            Request Password Reset
+            Set New Password
           </Button>
         </form>
       </Box>
