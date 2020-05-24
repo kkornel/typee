@@ -35,7 +35,7 @@ function SignIn(props) {
   };
 
   const onResendEmailClicked = async (email) => {
-    const response = await resendVerificationEmail(email);
+    const response = await execute(resendVerificationEmail(email));
     setAlertMessage(response.message);
     setOpen(true);
   };

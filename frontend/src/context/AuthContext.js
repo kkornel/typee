@@ -3,7 +3,7 @@ import React from 'react';
 import { useAsync } from '../utils/useAsync';
 import { loadAppData } from '../utils/loadAppData';
 import * as authClient from '../utils/auth-client';
-import FullPageSpinner from '../components/lib';
+import FullPageSpinner from '../components/ui/FullPageSpinner';
 
 const AuthContext = React.createContext();
 
@@ -32,12 +32,10 @@ function AuthProvider(props) {
   }, [execute]);
 
   // Register the user
-  const signUp = React.useCallback(async (formValues) => {
-    // const user = await authClient.signUp(formValues);
-    // setData({ user });
-    const response = await authClient.signUp(formValues);
-    return response;
-  }, []);
+  const signUp = React.useCallback(
+    async (formValues) => await authClient.signUp(formValues),
+    []
+  );
 
   // Make a login request
   const signIn = React.useCallback(
@@ -50,34 +48,29 @@ function AuthProvider(props) {
 
   // Clear the token in the localStorage and the user data
   const logout = React.useCallback(async () => {
-    const response = await authClient.logout();
-    // setData(null);
+    await authClient.logout();
     setData(null);
-    return response;
-    // authClient.logout();
   }, [setData]);
 
-  const resetPassword = React.useCallback(async (email) => {
-    const response = await authClient.resetPassword(email);
-    // setData({ response });
-    return response;
-  }, []);
-
-  const resendVerificationEmail = React.useCallback(async (email) => {
-    const response = await authClient.resendVerificationEmail(email);
-
-    return response;
-  }, []);
-
-  const changePassword = React.useCallback(async (password) => {
-    const response = await authClient.changePassword(password);
-    return response;
-  }, []);
-
   const logoutAll = React.useCallback(async () => {
-    const response = await authClient.logoutAll();
-    return response;
-  }, []);
+    await authClient.logoutAll();
+    setData(null);
+  }, [setData]);
+
+  const resendVerificationEmail = React.useCallback(
+    async (email) => await authClient.resendVerificationEmail(email),
+    []
+  );
+
+  const resetPassword = React.useCallback(
+    async (email) => await authClient.resetPassword(email),
+    []
+  );
+
+  const changePassword = React.useCallback(
+    async (password) => await authClient.changePassword(password),
+    []
+  );
 
   console.log('AUTHCONTEXT', data);
   const user = data?.user;
@@ -88,20 +81,20 @@ function AuthProvider(props) {
       signUp,
       signIn,
       logout,
-      resetPassword,
-      resendVerificationEmail,
-      changePassword,
       logoutAll,
+      resendVerificationEmail,
+      resetPassword,
+      changePassword,
     }),
     [
       user,
       signUp,
       signIn,
       logout,
-      resetPassword,
-      resendVerificationEmail,
-      changePassword,
       logoutAll,
+      resendVerificationEmail,
+      resetPassword,
+      changePassword,
     ]
   );
 
@@ -114,7 +107,8 @@ function AuthProvider(props) {
   }
 
   if (isError) {
-    return <div>{error}</div>;
+    console.log('Error', error);
+    return <div>{error.message}</div>;
   }
 
   if (isSuccess) {

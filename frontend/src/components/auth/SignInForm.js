@@ -228,13 +228,15 @@ function SignInForm({
         <Typography align="center" className={classes.or}>
           OR
         </Typography>
-        <GoogleButton
-          fullWidth
-          variant="contained"
-          startIcon={<FontAwesomeIcon icon={faGoogle} />}
-        >
-          Continue with Google
-        </GoogleButton>
+        <a href="/api/v1/auth/google">
+          <GoogleButton
+            fullWidth
+            variant="contained"
+            startIcon={<FontAwesomeIcon icon={faGoogle} />}
+          >
+            Continue with Google
+          </GoogleButton>
+        </a>
         <Box mt={2}>
           <Divider className={classes.divider} />
           <Box

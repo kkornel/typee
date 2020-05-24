@@ -3,17 +3,16 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { useAuth } from './context/AuthContext';
 import Header from './components/Home/Header';
-import { FullPageSpinner } from './components/lib';
+import FullPageSpinner from './components/ui/FullPageSpinner';
 
 const AuthenticatedApp = React.lazy(() => import('./AuthenticatedApp'));
 const UnauthenticatedApp = React.lazy(() => import('./UnauthenticatedApp'));
 
 function App() {
   const { user } = useAuth();
-  // const user = null;
 
   console.log('App() user', user);
-
+  console.log('do', document.cookie);
   return (
     <BrowserRouter>
       <Header />
