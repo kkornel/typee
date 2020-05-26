@@ -1,16 +1,26 @@
+const { validationResult } = require('express-validator');
+
 const User = require('../models/User');
 const Token = require('../models/Token');
 const config = require('../config/config');
 const ErrorResponse = require('../utils/ErrorResponse');
+const { errorFormatter } = require('../validators/auth');
 
 const register = async (req, res, next) => {
   console.log('/register', req.body);
+
+  const errors = validationResult(req).formatWith(errorFormatter);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.mapped() });
+  }
+
   try {
     const { email, username, password } = req.body;
 
-    if (!email || !username || !password) {
-      throw new ErrorResponse(400, 'Missing required field(s).');
-    }
+    // Will never reach this, because of setting up express-validator.
+    // if (!email || !username || !password) {
+    //   throw new ErrorResponse(400, 'Missing required field(s).');
+    // }
 
     const emailTaken = await User.findOne({ email });
 
