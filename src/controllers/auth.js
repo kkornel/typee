@@ -308,6 +308,11 @@ const setNewPassword = async (req, res, next) => {
   }
 };
 
+const googleCallback = async (req, res) => {
+  console.log('/google/callback');
+  res.redirect('/');
+};
+
 module.exports = {
   register,
   login,
@@ -318,4 +323,5 @@ module.exports = {
   handleResetPasswordRequest,
   verifyPasswordResetToken,
   setNewPassword,
+  googleCallback,
 };

@@ -19,21 +19,10 @@ router.get(
   '/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
-router.get('/google/callback', passport.authenticate('google'), (req, res) => {
-  console.log('/google/callback');
-  console.log(req.sessionID);
-  console.log(req.session);
-  console.log(req.cookies);
-  console.log(req.cookies['connect.sid']);
-  res.redirect('/');
-});
-
-router.get('/v2', authenticate, (req, res) => {
-  console.log(req.sessionID);
-  console.log(req.session);
-  console.log(req.cookies);
-  console.log(req.cookies['connect.sid']);
-  res.send({});
-});
+router.get(
+  '/google/callback',
+  passport.authenticate('google'),
+  AuthController.googleCallback
+);
 
 module.exports = router;

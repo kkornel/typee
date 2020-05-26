@@ -4,8 +4,7 @@ const User = require('../models/User');
 const ErrorResponse = require('../utils/ErrorResponse');
 
 const authenticate = async (req, res, next) => {
-  // if (!req.header('Authorization') && req.user) {
-  if (!req.header('Authorization')) {
+  if (!req.header('Authorization') && req.user) {
     // Already authenticated by GoogleStrategy.
     // For sure the user doesn't use JWT.
     console.log('Authenticating via cookie and Google profile');
