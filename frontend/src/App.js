@@ -10,9 +10,8 @@ const UnauthenticatedApp = React.lazy(() => import('./UnauthenticatedApp'));
 
 function App() {
   const { user } = useAuth();
-
   console.log('App() user', user);
-  console.log('do', document.cookie);
+
   return (
     <BrowserRouter>
       <Header />

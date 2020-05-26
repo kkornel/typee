@@ -21,11 +21,11 @@ function isLoggedIn() {
 }
 
 async function getUser() {
-  const token = getToken();
+  // const token = getToken();
 
-  if (!token) {
-    return Promise.resolve(null);
-  }
+  // if (!token) {
+  //   return Promise.resolve(null);
+  // }
 
   const response = await client('users');
   console.log('auth-client getUser response', response);

@@ -91,13 +91,12 @@ const logout = async (req, res, next) => {
 
     // Takes the cookie and kills the id inside
     req.logout();
-    // TODO: Probably need to send null?
     return res.status(200).send({});
   }
 
-  console.log('Logging out using JWT');
-
   try {
+    console.log('Logging out using JWT');
+
     req.user.jwtTokens = req.user.jwtTokens.filter(
       (token) => token.token !== req.token
     );
@@ -114,6 +113,8 @@ const logoutAll = async (req, res, next) => {
   try {
     req.user.jwtTokens = [];
     await req.user.save();
+
+    req.logout();
 
     res.status(200).send({});
   } catch (error) {
@@ -284,8 +285,8 @@ const setNewPassword = async (req, res, next) => {
     res.clearCookie('token', {
       httpOnly: true,
     });
-    req.cookies = null;
-    res.cookies = null;
+    // req.cookies = null;
+    // res.cookies = null;
 
     await token.populate('userId').execPopulate();
 

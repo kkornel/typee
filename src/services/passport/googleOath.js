@@ -10,12 +10,10 @@ const config = require('../../config/config');
 // This means supplying the user ID when serializing, and querying the user record by ID
 // from the database when deserializing.
 passport.serializeUser((user, done) => {
-  console.log('serializeUser user', user);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log('deserializeUser id', id);
   const user = await User.findById(id);
   done(null, user);
 });
@@ -36,9 +34,9 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const user = await User.findOne({ googleId: profile.id });
 
-      console.log('accessToken', accessToken);
-      console.log('refreshToken', refreshToken);
-      console.log('user', user);
+      // console.log('accessToken', accessToken);
+      // console.log('refreshToken', refreshToken);
+      // console.log('user', user);
 
       if (user) {
         return done(null, user);
