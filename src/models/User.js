@@ -77,6 +77,12 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+
+    rooms: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -95,6 +101,23 @@ userSchema.virtual('tokens', {
   localField: '_id',
   foreignField: 'userId',
 });
+
+userSchema.virtual('messages', {
+  ref: 'Message',
+  localField: '_id',
+  foreignField: 'userId',
+});
+
+userSchema.virtual('roomsDocuments', {
+  ref: 'Room',
+  localField: '_id',
+  foreignField: 'users',
+});
+
+userSchema.methods.getRoomsNames = async function () {
+  await this.populate('roomsDocuments').execPopulate();
+  return this.roomsDocuments.map((room) => room.name);
+};
 
 userSchema.pre('save', async function (next) {
   const user = this;

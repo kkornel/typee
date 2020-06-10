@@ -3,17 +3,22 @@ const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const http = require('http');
+const socketio = require('socket.io');
 
 require('dotenv').config();
 require('./db/mongoose');
 require('./services/passport/googleOath');
 
 const api = require('./routes');
+const { connectionEvent } = require('./chat/listeners');
 
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
 
 // Paths for Express config
 const publicDirectory = path.join(__dirname, '../public');
@@ -40,7 +45,24 @@ app.use(passport.session());
 
 app.use('/api/v1', api);
 
+connectionEvent(io);
+
+const test = async () => {
+  const User = require('./models/User');
+  const Token = require('./models/Token');
+  const Room = require('./models/Room');
+  const Message = require('./models/Message');
+
+  const user = await User.findById('5eca1ddb48c3141334633931');
+  const token = await Token.findById('5eca1ddb48c3141334633932');
+  const message = await Message.findById('5edf96f0bca4a01b1c804767');
+
+  console.log(await user.getRoomsNames());
+};
+
+test();
+
 app.use(notFound);
 app.use(errorHandler);
 
-module.exports = app;
+module.exports = server;

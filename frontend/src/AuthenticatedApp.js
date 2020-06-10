@@ -8,6 +8,7 @@ function AuthenticatedApp() {
   return (
     <Switch>
       <Route exact path="/" component={Dashboard} />
+      <Route path="/channel/*" component={Dashboard} />
       <Redirect to="/dashboard" from="/sign-in" />
       <Redirect to="/dashboard" from="/sign-up" />
       <Route path="*">
