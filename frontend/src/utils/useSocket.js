@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 
 import io from 'socket.io-client';
 
@@ -10,6 +10,9 @@ function messageHandler(onMessageReceived) {
   socket.on('message', onMessageReceived);
 }
 
+function roomDataHandler(onRoomDataReceived) {
+  socket.on('roomData', onRoomDataReceived);
+}
 function sendMessage(text, roomName, userId, callback) {
   socket.emit('sendMessage', { text, roomName, userId }, callback);
 }
@@ -23,12 +26,7 @@ function joinRoom(userId, roomName, callback) {
 }
 
 function leaveRoom(userId, roomName, callback) {
-  console.log(userId, roomName);
   socket.emit('leave', { roomName, userId }, callback);
-}
-
-function roomDataHandler(onRoomDataReceived) {
-  socket.on('roomData', onRoomDataReceived);
 }
 
 export {

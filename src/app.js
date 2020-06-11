@@ -56,8 +56,6 @@ const test = async () => {
   const user = await User.findById('5eca1ddb48c3141334633931');
   const token = await Token.findById('5eca1ddb48c3141334633932');
   const message = await Message.findById('5edf96f0bca4a01b1c804767');
-
-  console.log(await user.getRoomsNames());
 };
 
 test();
