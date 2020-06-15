@@ -15,6 +15,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -23,6 +24,9 @@ import MailIcon from '@material-ui/icons/Mail';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
+
+import { deepOrange, deepPurple } from '@material-ui/core/colors';
 
 import { useUser } from '../context/UserContext';
 import { useAuth } from '../context/AuthContext';
@@ -42,62 +46,77 @@ function Alert(props) {
 
 const useStyles = makeStyles((theme) => ({
   chat: {
-    width: '100%',
-    height: '100vh',
-    background: 'green',
-    flexGrow: 1,
-    position: 'fixed',
+    background: 'red',
+    height: 'calc(100vh - 64px) !important',
+    flexGrow: '1',
+    // width: '100%',
+    // position: 'fixed',
   },
-  appBarSpacer: theme.mixins.toolbar,
-  scrollable: {
-    overflowY: 'scroll',
+  divider: {
+    background: 'yellow',
+    height: '4px',
+  },
+  channels: {
+    width: '48px',
   },
   channelsList: {
-    background: 'red',
+    background: 'green',
+    maxHeight: 'calc(100vh - 64px) !important',
+    overflowX: 'hidden',
+    // width: '60px',
+    // overflowY: 'scroll',
   },
-  usersList: {
-    background: 'yellow',
+  channel: {},
+  channelIcon: {
+    width: '42px',
+    height: '42px',
+    margin: '3px 3px 3px 3px',
+    background: 'white',
   },
-  messageList: {},
-  messageListToolbar: {
-    display: 'flex',
-    justifyContent: 'center',
-    background: 'pink',
-    position: 'sticky',
-  },
-  messageListContainer: {
-    padding: '10px 10px 70px',
-    background: 'blue',
+  channelIconAvatar: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
   },
 
-  compose: {
-    padding: '10px',
-    display: 'flex',
+  users: {
     background: 'purple',
-    width: '100%',
-    position: 'fixed',
-    bottom: 0,
+    maxHeight: 'calc(100vh - 64px) !important',
+    // width: '90px',
+    // overflowX: 'hidden',
+    overflow: 'auto',
+    // overflowY: 'scroll',
   },
-  composeInput: {
-    flex: '1 1',
-    border: 'none',
+  user: {},
+  messages: {
+    // position: 'relative',
+    display: 'flex',
+    minWidth: '100%',
+    flexDirection: 'column',
+    height: 'calc(100vh - 64px) !important',
+  },
+  messagesBar: {
+    background: 'yellow',
+  },
+  messagesList: {
+    background: 'white',
+    // maxHeight: '1000px',
+    overflowY: 'scroll',
+  },
+  messagesCompose: {
+    display: 'flex',
+    background: 'blue',
+    // position: 'absolute',
+    // bottom: 0,
+    width: '100%',
+    marginLeft: '100px',
+    alignSelf: 'flex-end',
+    padding: '10px',
+    flexGrow: 1,
+  },
+  messagesComposeInput: {
+    width: '100%',
     fontSize: '14px',
     height: '40px',
-  },
-  bubble: {
-    border: '1px solid #000',
-  },
-  message: {
-    marginBottom: '16px',
-  },
-  message__name: {
-    fontWeight: '600',
-    fontSize: '14px',
-    marginRight: '8px',
-  },
-  message__meta: {
-    color: '#777',
-    fontSize: '14px',
   },
 }));
 
@@ -167,7 +186,11 @@ function Dashboard() {
   };
 
   const handleCreateClick = () => {
-    createRoom(user._id, dialogValue, createCallback);
+    // createRoom(user._id, dialogValue, createCallback);
+    // TEMP:
+    setSnackbarMessage(`${dialogValue} created!`);
+    setSnackbarSeverity('success');
+    setOpenSnackbar(true);
   };
 
   const createCallback = ({ error, room }) => {
@@ -186,8 +209,12 @@ function Dashboard() {
   };
 
   const handleJoinClick = () => {
-    leaveRoom(user._id, currentRoom, leaveCallback);
-    joinRoom(user._id, dialogValue, joinCallback);
+    // TEMP:
+    setSnackbarMessage(`${dialogValue} joined!`);
+    setSnackbarSeverity('error');
+    setOpenSnackbar(true);
+    // leaveRoom(user._id, currentRoom, leaveCallback);
+    // joinRoom(user._id, dialogValue, joinCallback);
   };
 
   const joinCallback = ({ error, room }) => {
@@ -215,78 +242,67 @@ function Dashboard() {
 
   return (
     <Box className={classes.chat}>
-      <div className={classes.appBarSpacer}></div>
-      <Grid container spacing={0} style={{ height: '100%' }}>
-        <Grid item xs={1}>
-          <Box className={classes.scrollable} height="100%">
-            <Box className={classes.channelsList} height="100%">
-              <List className={classes.root}>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map(
-                  (text, index) => (
-                    <ListItem
-                      key={text}
-                      onClick={() => handleRoomClick(text)}
-                      component={Link}
-                      to={'/channel/' + text}
+      <Grid container spacing={0}>
+        <Grid item className={classes.channels}>
+          <Box className={classes.channelsList}>
+            {['Channel 1', 'Channel 2', 'Channel 3'].map((channelName) => {
+              return (
+                <Box className={classes.channel}>
+                  <Tooltip title={channelName}>
+                    <IconButton
+                      aria-label={channelName}
+                      className={classes.channelIcon}
                     >
-                      <ListItemIcon>
-                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                      </ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  )
-                )}
-              </List>
-              <Divider />
-              <List>
-                <ListItem button onClick={(event) => handleAddClick(event)}>
-                  <ListItemIcon>
-                    <AddIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Add" />
-                </ListItem>
-              </List>
+                      <Avatar className={classes.channelIconAvatar}>
+                        {channelName[0]}
+                        {channelName[channelName.length - 1]}
+                      </Avatar>
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              );
+            })}
+            <Divider className={classes.divider} />
+            <Box className={classes.channel}>
+              <Tooltip title="Add channel">
+                <IconButton
+                  aria-label="add"
+                  className={classes.channelIcon}
+                  onClick={handleAddClick}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
             </Box>
           </Box>
         </Grid>
         <Grid item xs={1}>
-          <Box className={classes.scrollable} height="100%">
-            <Box className={classes.usersList} height="100%">
-              <Box>User 1</Box>
-              <Box>User 2</Box>
-              <Box>User 3</Box>
-              <Box>User 4</Box>
-            </Box>
+          <Box className={classes.users}>
+            {(() => {
+              const arr = [];
+              for (let i = 1; i < 64; i++) {
+                arr.push(<Box className={classes.user}>User 1</Box>);
+              }
+              return arr;
+            })()}
           </Box>
         </Grid>
-        <Grid item xs={10}>
-          <Box className={classes.scrollable} height="100%">
-            <Box className={classes.messageList} height="100%">
-              <Box className={classes.messageListToolbar}>
-                Title of the channel
-              </Box>
-              <Box className={classes.messageListContainer}>
-                <Box>Message 1</Box>
-                <Box>Message 2</Box>
-                <Box>Message 3</Box>
-                <Box>Message 4</Box>
-                <Box>Message 5</Box>
-                <Box>Message 6</Box>
-                <Box className={classes.bubble}>
-                  <Avatar>KK</Avatar>
-                  <div className={classes.message}>
-                    <p>
-                      <span className={classes.message__name}>Kornel</span>
-                      <span className={classes.message__meta}>12:12 PM</span>
-                    </p>
-                    <p>sadlkdjflksdjfkljdskfljdskljflkdsjlfk</p>
-                  </div>
-                </Box>
-              </Box>
-
-              <Box className={classes.compose}>
-                <input className={classes.composeInput}></input>
-              </Box>
+        <Grid item xs>
+          <Box className={classes.messages}>
+            <Box className={classes.messagesBar}>Bar bar bar</Box>
+            <Box className={classes.messagesList}>
+              {(() => {
+                const arr = [];
+                for (let i = 1; i < 164; i++) {
+                  arr.push(<Box>User 1</Box>);
+                }
+                return arr;
+              })()}
+            </Box>
+            <Box className={classes.messagesCompose}>
+              <Box style={{ marginLeft: '50px' }}> sdasd sasa das d</Box>
+              <input className={classes.messagesComposeInput} />
+              <Box style={{ marginLeft: '50px' }}> sdasd sasa das d</Box>
             </Box>
           </Box>
         </Grid>

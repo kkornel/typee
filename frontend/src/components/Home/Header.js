@@ -17,7 +17,7 @@ import { useAsync } from '../../utils/useAsync';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    position: 'fixed',
+    // position: 'fixed',
     backgroundColor: '#4527a0',
   },
   toolbar: {
