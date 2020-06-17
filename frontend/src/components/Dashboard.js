@@ -25,6 +25,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
 
@@ -50,12 +51,17 @@ const useStyles = makeStyles((theme) => ({
     height: 'calc(100vh - 64px) !important',
     flexGrow: '1',
     // width: '100%',
-    // position: 'fixed',
+    position: 'absolute',
+    zIndex: '-2',
   },
   divider: {
     background: 'yellow',
     height: '4px',
   },
+  flexDivider: {
+    width: '100%',
+  },
+
   channels: {
     width: '48px',
   },
@@ -63,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'green',
     maxHeight: 'calc(100vh - 64px) !important',
     overflowX: 'hidden',
+    height: '100%',
     // width: '60px',
     // overflowY: 'scroll',
   },
@@ -78,15 +85,47 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: deepOrange[500],
   },
 
-  users: {
+  usersList: {
     background: 'purple',
     maxHeight: 'calc(100vh - 64px) !important',
     // width: '90px',
-    // overflowX: 'hidden',
-    overflow: 'auto',
+    overflowX: 'hidden',
+    // overflow: 'auto',
+    height: '100%',
+    overflowY: 'auto',
     // overflowY: 'scroll',
+    zIndex: '1',
+    position: 'relative',
   },
-  user: {},
+  usersListItem: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '10px',
+    width: '100%',
+    '&:hover': {
+      background: '#eeeef1',
+      cursor: 'pointer',
+    },
+  },
+  usersListItemAvatar: {
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500],
+  },
+  usersListItemInfo: {
+    marginLeft: '10px',
+  },
+  usersListItemTitle: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    textTransform: 'capitalize',
+    margin: '0',
+  },
+  usersListItemSubTitle: {
+    fontSize: '14px',
+    color: '#888',
+    margin: '0',
+  },
+
   messages: {
     // position: 'relative',
     display: 'flex',
@@ -102,6 +141,31 @@ const useStyles = makeStyles((theme) => ({
     // maxHeight: '1000px',
     overflowY: 'scroll',
   },
+  messagesListItem: {
+    display: 'flex',
+    // flexWrap: 'wrap',
+    maxWidth: '100%',
+    background: '#eeeef1',
+    padding: '10px',
+  },
+  messagesListItemAvatar: {
+    marginRight: '10px',
+  },
+  messagesListItemInfo: {
+    display: 'flex',
+    alignItems: 'baseline',
+  },
+  messagesListItemUsername: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    marginRight: '5px',
+  },
+  messagesListItemDate: {
+    fontSize: '12px',
+    color: '#888',
+  },
+  messagesListItemContent: {},
+
   messagesCompose: {
     display: 'flex',
     background: 'blue',
@@ -112,6 +176,7 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: 'flex-end',
     padding: '10px',
     flexGrow: 1,
+    // zIndex: '-1',
   },
   messagesComposeInput: {
     width: '100%',
@@ -277,32 +342,216 @@ function Dashboard() {
           </Box>
         </Grid>
         <Grid item xs={1}>
-          <Box className={classes.users}>
-            {(() => {
-              const arr = [];
-              for (let i = 1; i < 64; i++) {
-                arr.push(<Box className={classes.user}>User 1</Box>);
-              }
-              return arr;
-            })()}
+          <Box className={classes.usersList}>
+            {[
+              { name: 'Pani Zosia', subtitle: 'Byłam dziś w warzywniaku' },
+              { name: 'Pani Krysia', subtitle: 'Very lon long lon long long' },
+              {
+                name: 'Pani Jadzia',
+                subtitle: 'Czas na przerwe, czas na kitkat',
+              },
+            ].map((user) => {
+              return (
+                <Box className={classes.usersListItem}>
+                  <Avatar className={classes.usersListItemAvatar}>
+                    {user.name[0]}
+                    {user.name[1]}
+                  </Avatar>
+                  <Box className={classes.usersListItemInfo}>
+                    <Box className={classes.usersListItemTitle}>
+                      {user.name}
+                    </Box>
+                    <Box className={classes.usersListItemSubTitle}>
+                      {user.subtitle}
+                    </Box>
+                  </Box>
+                </Box>
+              );
+            })}
           </Box>
         </Grid>
         <Grid item xs>
           <Box className={classes.messages}>
             <Box className={classes.messagesBar}>Bar bar bar</Box>
             <Box className={classes.messagesList}>
-              {(() => {
-                const arr = [];
-                for (let i = 1; i < 164; i++) {
-                  arr.push(<Box>User 1</Box>);
-                }
-                return arr;
-              })()}
+              {[
+                {
+                  author: 'Pani ZOsia',
+                  time: '13:34 PM',
+                  text: `Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a
+                    type specimen book.It has survived not only five centuries,
+                but also the leap into electronic typesetting, remaining
+                    essentially unchanged.It was popularised in the 1960s with
+                    the release of Letraset sheets containing Lorem Ipsum
+                    passages, and more recently with desktop publishing software
+                    like Aldus PageMaker including versions of Lorem Ipsum.Why
+                    do we use it? It is a long established fact that a reader
+                    will be distracted by the readable content of a page when
+                    looking at its layout.The point of using Lorem Ipsum is
+                    that it has a more- or - less normal distribution of letters,
+                as opposed to using 'Content here, content here', making it
+                    look like readable English.Many desktop publishing packages
+                    and web page editors now use Lorem Ipsum as their default
+                    model text, and a search for 'lorem ipsum' will uncover many
+                    web sites still in their infancy. Various versions have
+                    evolved over the years, sometimes by accident, sometimes on
+                    purpose (injected humour and the like). Where does it come
+                    from? Contrary to popular belief, Lorem Ipsum is not simply
+                    random text. It has roots in a piece of classical Latin
+                    literature from 45 BC, making it over 2000 years old.
+                    Richard McClintock, a Latin professor at Hampden-Sydney
+                    College in Virginia, looked up one of the more obscure Latin
+                    words, consectetur, from a Lorem Ipsum passage, and going
+                    through the cites of the word in classical literature,
+                    discovered the undoubtable source. Lorem Ipsum comes from
+                    sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et
+                    Malorum" (The Extremes of Good and Evil) by Cicero, written
+                    in 45 BC. This book is a treatise on the theory of ethics,
+                    very popular during the Renaissance. The first line of Lorem
+                    Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
+                    section 1.10.32. The standard chunk of Lorem Ipsum used
+                    since the 1500s is reproduced below for those interested.
+                    Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et
+                    Malorum" by Cicero are also reproduced in their exact
+                    original form, accompanied by English versions from the 1914
+                    translation by H. Rackham.`,
+                },
+                {
+                  author: 'Pani Danusia',
+                  time: '13:34 PM',
+                  text: `Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a
+                    type specimen book.It has survived not only five centuries,
+                but also the leap into electronic typesetting, remaining
+                    essentially unchanged.It was popularised in the 1960s with
+                    the release of Letraset sheets containing Lorem Ipsum
+                    passages, and more recently with desktop publishing software
+                    like Aldus PageMaker including versions of Lorem Ipsum.Why
+                    do we use it? It is a long established fact that a reader
+                    will be distracted by the readable content of a page when
+                    looking at its layout.The point of using Lorem Ipsum is
+                    that it has a more- or - less normal distribution of letters,
+                as opposed to using 'Content here, content here', making it
+                    look like readable English.Many desktop publishing packages
+                    and web page editors now use Lorem Ipsum as their default
+                    model text, and a search for 'lorem ipsum' will uncover many
+                    web sites still in their infancy. Various versions have
+                    evolved over the years, sometimes by accident, sometimes on
+                    purpose (injected humour and the like). Where does it come
+                    from? Contrary to popular belief, Lorem Ipsum is not simply
+                    random text. It has roots in a piece of classical Latin
+                    literature from 45 BC, making it over 2000 years old.
+                    Richard McClintock, a Latin professor at Hampden-Sydney
+                    College in Virginia, looked up one of the more obscure Latin
+                    words, consectetur, from a Lorem Ipsum passage, and going
+                    through the cites of the word in classical literature,
+                    discovered the undoubtable source. Lorem Ipsum comes from
+                    sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et
+                    Malorum" (The Extremes of Good and Evil) by Cicero, written
+                    in 45 BC. This book is a treatise on the theory of ethics,
+                    very popular during the Renaissance. The first line of Lorem
+                    Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
+                    section 1.10.32. The standard chunk of Lorem Ipsum used
+                    since the 1500s is reproduced below for those interested.
+                    Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et
+                    Malorum" by Cicero are also reproduced in their exact
+                    original form, accompanied by English versions from the 1914
+                    translation by H. Rackham.`,
+                },
+                {
+                  author: 'Pani Krysia',
+                  time: '13:34 PM',
+                  text: `Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a
+                    type specimen book.It has survived not only five centuries,
+                but also the leap into electronic typesetting, remaining
+                    essentially unchanged.It was popularised in the 1960s with
+                    the release of Letraset sheets containing Lorem Ipsum
+                    passages, and more recently with desktop publishing software
+                    like Aldus PageMaker including versions of Lorem Ipsum.Why
+                    do we use it? It is a long established fact that a reader
+                    will be distracted by the readable content of a page when
+                    looking at its layout.The point of using Lorem Ipsum is
+                    that it has a more- or - less normal distribution of letters,
+                as opposed to using 'Content here, content here', making it
+                    look like readable English.Many desktop publishing packages
+                    and web page editors now use Lorem Ipsum as their default
+                    model text, and a search for 'lorem ipsum' will uncover many
+                    web sites still in their infancy. Various versions have
+                    evolved over the years, sometimes by accident, sometimes on
+                    purpose (injected humour and the like). Where does it come
+                    from? Contrary to popular belief, Lorem Ipsum is not simply
+                    random text. It has roots in a piece of classical Latin
+                    literature from 45 BC, making it over 2000 years old.
+                    Richard McClintock, a Latin professor at Hampden-Sydney
+                    College in Virginia, looked up one of the more obscure Latin
+                    words, consectetur, from a Lorem Ipsum passage, and going
+                    through the cites of the word in classical literature,
+                    discovered the undoubtable source. Lorem Ipsum comes from
+                    sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et
+                    Malorum" (The Extremes of Good and Evil) by Cicero, written
+                    in 45 BC. This book is a treatise on the theory of ethics,
+                    very popular during the Renaissance. The first line of Lorem
+                    Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
+                    section 1.10.32. The standard chunk of Lorem Ipsum used
+                    since the 1500s is reproduced below for those interested.
+                    Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et
+                    Malorum" by Cicero are also reproduced in their exact
+                    original form, accompanied by English versions from the 1914
+                    translation by H. Rackham.`,
+                },
+              ].map((message) => {
+                return (
+                  <Box className={classes.messagesListItem}>
+                    <Avatar className={classes.messagesListItemAvatar}>
+                      {message.author[0]}
+                      {message.author[1]}
+                    </Avatar>
+                    <Box>
+                      <Box className={classes.messagesListItemInfo}>
+                        <Box className={classes.messagesListItemUsername}>
+                          {message.author}
+                        </Box>
+                        <Box className={classes.messagesListItemDate}>
+                          {message.time}
+                        </Box>
+                      </Box>
+                      <Box className={classes.flexDivider}></Box>
+                      <Box className={classes.messagesListItemContent}>
+                        {message.text}
+                      </Box>
+                    </Box>
+                  </Box>
+                );
+              })}
             </Box>
             <Box className={classes.messagesCompose}>
-              <Box style={{ marginLeft: '50px' }}> sdasd sasa das d</Box>
-              <input className={classes.messagesComposeInput} />
-              <Box style={{ marginLeft: '50px' }}> sdasd sasa das d</Box>
+              {/* <Box style={{ marginLeft: '50px' }}> sdasd sasa das d</Box> */}
+              <Box>
+                <Grid container spacing={1} alignItems="flex-end">
+                  <Grid item>
+                    <AddCircleIcon />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      id="filled-textarea"
+                      label="Multiline Placeholder"
+                      placeholder="Placeholder"
+                      multiline
+                      variant="filled"
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+              {/* <input className={classes.messagesComposeInput} /> */}
+              {/* <Box style={{ marginLeft: '50px' }}> sdasd sasa das d</Box> */}
             </Box>
           </Box>
         </Grid>
