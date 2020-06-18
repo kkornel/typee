@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import classNames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,7 +27,14 @@ import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import DirectionsIcon from '@material-ui/icons/Directions';
+import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
+import GifIcon from '@material-ui/icons/Gif';
+import SendIcon from '@material-ui/icons/Send';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
 
 import { useUser } from '../context/UserContext';
@@ -45,6 +53,67 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+const mainTheme = makeStyles((theme) => ({
+  headerPrimary: {
+    color: '#fff',
+  },
+  headerSecondary: {
+    color: '#b9bbbe',
+  },
+  textNormal: {
+    color: '#dcddde',
+  },
+  textMuted: {
+    color: '#72767d',
+  },
+  textLink: {
+    color: '#00b0f4',
+  },
+  channelsDefault: {
+    // more muted
+    color: '#8e9297',
+  },
+  interactiveNormal: {
+    color: '#b9bbbe',
+    '&:hover': {
+      color: '#dcddde',
+    },
+  },
+  interactiveHover: {
+    color: '#dcddde',
+  },
+  interactiveActive: {
+    color: '#fff',
+  },
+  interactiveMuted: {
+    color: '#4f545c',
+  },
+  backgroundPrimary: {
+    backgroundColor: '#36393f',
+  },
+  backgroundSecondary: {
+    backgroundColor: '#2f3136',
+  },
+  backgroundSecondaryAlt: {
+    backgroundColor: '#292b2f',
+  },
+  backgroundTertiary: {
+    backgroundColor: '#202225',
+  },
+  backgroundAccent: {
+    backgroundColor: '#4f545c',
+  },
+  backgroundFloating: {
+    backgroundColor: '#18191c',
+  },
+  backgroundBlueHover: {
+    backgroundColor: '#7289da',
+  },
+  backgroundGreenHover: {
+    backgroundColor: '#43b581',
+  },
+}));
+
 const useStyles = makeStyles((theme) => ({
   chat: {
     background: 'red',
@@ -53,9 +122,10 @@ const useStyles = makeStyles((theme) => ({
     // width: '100%',
     position: 'absolute',
     zIndex: '-2',
+    color: '#dcddde',
   },
   divider: {
-    background: 'yellow',
+    background: 'hsla(0,0%,100%,0.06)',
     height: '4px',
   },
   flexDivider: {
@@ -63,10 +133,12 @@ const useStyles = makeStyles((theme) => ({
   },
 
   channels: {
-    width: '48px',
+    width: '64px',
   },
   channelsList: {
-    background: 'green',
+    // background: 'green',
+    // background: '#202225',
+
     maxHeight: 'calc(100vh - 64px) !important',
     overflowX: 'hidden',
     height: '100%',
@@ -75,18 +147,44 @@ const useStyles = makeStyles((theme) => ({
   },
   channel: {},
   channelIcon: {
-    width: '42px',
-    height: '42px',
-    margin: '3px 3px 3px 3px',
-    background: 'white',
+    // width: '48px',
+    // height: '48px',
+    // margin: '3px 3px 3px 3px',
+    // background: 'white',
+    // background: '#36393f',
+    padding: '8px',
   },
   channelIconAvatar: {
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500],
+    width: '48px',
+    height: '48px',
+    color: '#dcddde',
+    backgroundColor: '#36393f',
+    // margin: '3px 3px 3px 3px',
+    '&:hover': {
+      backgroundColor: '#7289da',
+      color: '#fff',
+    },
   },
-
+  channelAddBox: {
+    padding: '8px',
+  },
+  channelAddIcon: {
+    width: '48px',
+    height: '48px',
+    // margin: '3px 3px 3px 3px',
+    // background: 'white',
+    background: '#36393f',
+    color: '#43b581',
+    '&:hover': {
+      background: '#43b581',
+      color: '#fff',
+    },
+    // padding: 0,
+    // margin: 0,
+  },
   usersList: {
-    background: 'purple',
+    // background: 'purple',
+    // background: '#2f3136',
     maxHeight: 'calc(100vh - 64px) !important',
     // width: '90px',
     overflowX: 'hidden',
@@ -103,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px',
     width: '100%',
     '&:hover': {
-      background: '#eeeef1',
+      background: '#32353b',
       cursor: 'pointer',
     },
   },
@@ -132,21 +230,29 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '100%',
     flexDirection: 'column',
     height: 'calc(100vh - 64px) !important',
+    alignItems: 'stretch',
   },
   messagesBar: {
-    background: 'yellow',
+    borderBottom: '1px solid #202225',
   },
   messagesList: {
-    background: 'white',
+    // background: 'white',
+    // background: '#36393f',
     // maxHeight: '1000px',
+    height: '100%',
     overflowY: 'scroll',
+    // alignItems: 'stretch',
   },
   messagesListItem: {
     display: 'flex',
     // flexWrap: 'wrap',
     maxWidth: '100%',
-    background: '#eeeef1',
+    // background: '#36393f',
     padding: '10px',
+    '&:hover': {
+      background: '#32353b',
+      // background: '#292b2f',
+    },
   },
   messagesListItemAvatar: {
     marginRight: '10px',
@@ -162,31 +268,56 @@ const useStyles = makeStyles((theme) => ({
   },
   messagesListItemDate: {
     fontSize: '12px',
-    color: '#888',
   },
   messagesListItemContent: {},
 
   messagesCompose: {
     display: 'flex',
-    background: 'blue',
+    // background: 'blue',
+    // background: '#36393f',
     // position: 'absolute',
     // bottom: 0,
     width: '100%',
-    marginLeft: '100px',
+    // marginLeft: '100px',
     alignSelf: 'flex-end',
-    padding: '10px',
-    flexGrow: 1,
+
+    // flexGrow: 1,
     // zIndex: '-1',
   },
   messagesComposeInput: {
+    // width: '100%',
+    // alignSelf: 'flex-end',
+    // height: '40px',
+    flexGrow: 1,
+  },
+  messagesComposeForm: {
+    padding: '8px 16px 8px 8px',
     width: '100%',
-    fontSize: '14px',
-    height: '40px',
+  },
+
+  roota: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    background: '#40444b',
+  },
+  inputa: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButtona: {
+    padding: 10,
+  },
+  dividera: {
+    height: 28,
+    margin: 4,
   },
 }));
 
 function Dashboard() {
   const classes = useStyles();
+  const theme = mainTheme();
   const { register, handleSubmit } = useForm();
 
   const { user } = useAuth();
@@ -309,7 +440,12 @@ function Dashboard() {
     <Box className={classes.chat}>
       <Grid container spacing={0}>
         <Grid item className={classes.channels}>
-          <Box className={classes.channelsList}>
+          <Box
+            className={classNames(
+              classes.channelsList,
+              theme.backgroundTertiary
+            )}
+          >
             {['Channel 1', 'Channel 2', 'Channel 3'].map((channelName) => {
               return (
                 <Box className={classes.channel}>
@@ -328,11 +464,11 @@ function Dashboard() {
               );
             })}
             <Divider className={classes.divider} />
-            <Box className={classes.channel}>
+            <Box className={classes.channelAddBox}>
               <Tooltip title="Add channel">
                 <IconButton
                   aria-label="add"
-                  className={classes.channelIcon}
+                  className={classes.channelAddIcon}
                   onClick={handleAddClick}
                 >
                   <AddIcon />
@@ -342,7 +478,9 @@ function Dashboard() {
           </Box>
         </Grid>
         <Grid item xs={1}>
-          <Box className={classes.usersList}>
+          <Box
+            className={classNames(classes.usersList, theme.backgroundSecondary)}
+          >
             {[
               { name: 'Pani Zosia', subtitle: 'Byłam dziś w warzywniaku' },
               { name: 'Pani Krysia', subtitle: 'Very lon long lon long long' },
@@ -372,8 +510,20 @@ function Dashboard() {
         </Grid>
         <Grid item xs>
           <Box className={classes.messages}>
-            <Box className={classes.messagesBar}>Bar bar bar</Box>
-            <Box className={classes.messagesList}>
+            <Box
+              className={classNames(
+                classes.messagesBar,
+                theme.backgroundPrimary
+              )}
+            >
+              Bar bar bar
+            </Box>
+            <Box
+              className={classNames(
+                classes.messagesList,
+                theme.backgroundPrimary
+              )}
+            >
               {[
                 {
                   author: 'Pani ZOsia',
@@ -509,22 +659,42 @@ function Dashboard() {
                 },
               ].map((message) => {
                 return (
-                  <Box className={classes.messagesListItem}>
+                  <Box
+                    className={classNames(
+                      classes.messagesListItem,
+                      theme.backgroundPrimary
+                    )}
+                  >
                     <Avatar className={classes.messagesListItemAvatar}>
                       {message.author[0]}
                       {message.author[1]}
                     </Avatar>
                     <Box>
                       <Box className={classes.messagesListItemInfo}>
-                        <Box className={classes.messagesListItemUsername}>
+                        <Box
+                          className={classNames(
+                            classes.messagesListItemUsername,
+                            theme.headerPrimary
+                          )}
+                        >
                           {message.author}
                         </Box>
-                        <Box className={classes.messagesListItemDate}>
+                        <Box
+                          className={classNames(
+                            classes.messagesListItemDate,
+                            theme.textMuted
+                          )}
+                        >
                           {message.time}
                         </Box>
                       </Box>
                       <Box className={classes.flexDivider}></Box>
-                      <Box className={classes.messagesListItemContent}>
+                      <Box
+                        className={classNames(
+                          classes.messagesListItemContent,
+                          theme.textNormal
+                        )}
+                      >
                         {message.text}
                       </Box>
                     </Box>
@@ -532,23 +702,86 @@ function Dashboard() {
                 );
               })}
             </Box>
-            <Box className={classes.messagesCompose}>
+            <Box
+              className={classNames(
+                classes.messagesCompose,
+                theme.backgroundPrimary
+              )}
+            >
               {/* <Box style={{ marginLeft: '50px' }}> sdasd sasa das d</Box> */}
-              <Box>
-                <Grid container spacing={1} alignItems="flex-end">
+              <Box className={classes.messagesComposeForm}>
+                <Paper component="form" className={classes.roota}>
+                  <IconButton
+                    className={classNames(
+                      classes.iconButtona,
+                      theme.interactiveNormal
+                    )}
+                    aria-label="menu"
+                  >
+                    <AddCircleIcon />
+                  </IconButton>
+                  <InputBase
+                    className={classNames(classes.inputa, theme.textNormal)}
+                    multiline
+                    rowsMax="3"
+                    placeholder="Search Google Maps"
+                    inputProps={{
+                      'aria-label': 'search google maps',
+                    }}
+                  />
+                  <IconButton
+                    type="submit"
+                    className={classNames(
+                      classes.iconButtona,
+                      theme.interactiveNormal
+                    )}
+                    aria-label="search"
+                  >
+                    <GifIcon />
+                  </IconButton>
+                  <IconButton
+                    type="submit"
+                    className={classNames(
+                      classes.iconButtona,
+                      theme.interactiveNormal
+                    )}
+                    aria-label="search"
+                  >
+                    <EmojiEmotionsIcon />
+                  </IconButton>
+                  <Divider
+                    className={classNames(
+                      classes.dividera,
+                      theme.backgroundSecondary
+                    )}
+                    orientation="vertical"
+                  />
+                  <IconButton
+                    color="primary"
+                    className={classNames(
+                      classes.iconButtona,
+                      theme.interactiveNormal
+                    )}
+                    aria-label="directions"
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </Paper>
+                {/* <Grid container alignItems="flex-end">
                   <Grid item>
                     <AddCircleIcon />
                   </Grid>
-                  <Grid item>
+                  <Grid item className={classes.messagesComposeInput}>
                     <TextField
                       id="filled-textarea"
                       label="Multiline Placeholder"
                       placeholder="Placeholder"
                       multiline
                       variant="filled"
+                      fullWidth
                     />
                   </Grid>
-                </Grid>
+                </Grid> */}
               </Box>
               {/* <input className={classes.messagesComposeInput} /> */}
               {/* <Box style={{ marginLeft: '50px' }}> sdasd sasa das d</Box> */}
