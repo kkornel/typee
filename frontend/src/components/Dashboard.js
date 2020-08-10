@@ -79,6 +79,19 @@ const mainTheme = makeStyles((theme) => ({
       color: '#dcddde',
     },
   },
+  rootxd: {
+    '& label.Mui-focused': {
+      color: '#7289da',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#7289da',
+    },
+  },
+  interactiveNormalButton: {
+    '&:hover': {
+      backgroundColor: '#4f545c',
+    },
+  },
   interactiveHover: {
     color: '#dcddde',
   },
@@ -724,9 +737,9 @@ function Dashboard() {
                     className={classNames(classes.inputa, theme.textNormal)}
                     multiline
                     rowsMax="3"
-                    placeholder="Search Google Maps"
+                    placeholder="Message #CHANNEL_NAME"
                     inputProps={{
-                      'aria-label': 'search google maps',
+                      'aria-label': 'Message #CHANNEL_NAME',
                     }}
                   />
                   <IconButton
@@ -793,12 +806,20 @@ function Dashboard() {
         open={openDialog}
         onClose={handleDialogClose}
         aria-labelledby="form-dialog-title"
+        PaperProps={{
+          style: {
+            backgroundColor: '#36393f',
+            color: '#dcddde',
+          },
+        }}
       >
         <DialogTitle id="form-dialog-title">
           Create a new room or join existing one
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>Please enter a room name:</DialogContentText>
+          <DialogContentText style={{ color: '#dcddde' }}>
+            Please enter a room name:
+          </DialogContentText>
           <TextField
             onChange={(event) => setDialogValue(event.target.value)}
             value={dialogValue}
@@ -808,16 +829,40 @@ function Dashboard() {
             label="Room name"
             type="text"
             fullWidth
+            className={theme.rootxd}
+            InputProps={{
+              style: {
+                color: '#dcddde',
+              },
+            }}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
+          <Button
+            onClick={handleDialogClose}
+            className={classNames(
+              theme.interactiveNormal,
+              theme.interactiveNormalButton
+            )}
+          >
             Cancel
           </Button>
-          <Button onClick={handleJoinClick} color="primary">
+          <Button
+            onClick={handleJoinClick}
+            className={classNames(
+              theme.interactiveNormal,
+              theme.interactiveNormalButton
+            )}
+          >
             Join
           </Button>
-          <Button onClick={handleCreateClick} color="primary">
+          <Button
+            onClick={handleCreateClick}
+            className={classNames(
+              theme.interactiveNormal,
+              theme.interactiveNormalButton
+            )}
+          >
             Create
           </Button>
         </DialogActions>
