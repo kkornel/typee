@@ -36,21 +36,32 @@ passport.use(
 
       // console.log('accessToken', accessToken);
       // console.log('refreshToken', refreshToken);
+      // console.log('Google profile', profile);
       // console.log('user', user);
 
       if (user) {
         return done(null, user);
       }
 
-      const newUser = await new User({
-        googleId: profile.id,
-        // TODO: What if there is already a name like that?
-        username: profile.displayName,
-        active: true,
-        jwtTokens: null,
-      }).save();
+      try {
+        const newUser = await new User({
+          googleId: profile.id,
+          // TODO: What if there is already a name or email like that?
 
-      done(null, newUser);
+          // Probably I can't do much in this case, because I'm not making request to my express server,
+          // but to the Google itself. So I have to use <a href=/api/v1/auth/google></a>
+          // instead of auth-client. So in this case I can't catch response...
+          // That's why it will prompt user with raw JSON from ErrorHandler.
+          email: profile.emails[0].value,
+          username: profile.displayName.replace(/\s/g, ''),
+          active: true,
+          jwtTokens: null,
+        }).save();
+
+        done(null, newUser);
+      } catch (error) {
+        done(error, null);
+      }
     }
   )
 );

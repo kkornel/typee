@@ -303,7 +303,7 @@ const setNewPassword = async (req, res, next) => {
     // Can't do here User.findByIdAndUpdate(), because this omits
     // the middleware used in userSchema like: userSchema.pre().
     // So the new password would not be hashed.
-    // Have to find, updated and change in three steps.
+    // Have to find, update and change in three steps.
     const user = token.userId;
     user.password = password;
 

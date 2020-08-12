@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import SignUpSchema from '../../utils/SignUpSchema';
+import PasswordNewSchema from '../../utils/PasswordNewSchema';
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -49,7 +49,7 @@ function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
-    validationSchema: SignUpSchema,
+    validationSchema: PasswordNewSchema,
   });
 
   const onSubmit = ({ password }) => {

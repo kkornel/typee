@@ -68,6 +68,12 @@ const joinRoom = async (name, userId, socketId) => {
 const leaveRoom = async (roomName, userId, socketId) => {
   const room = await Room.findOne({ name: roomName });
 
+  if (!room) {
+    return {
+      error: `Room ${name} doesn't exist.`,
+    };
+  }
+
   const index = room.users.findIndex((user) => user.userId === userId);
   console.log('index', index);
 

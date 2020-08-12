@@ -30,6 +30,8 @@ const connectionEvent = (io) => {
       socket.broadcast
         .to(room.name)
         .emit('message', generateMessage(`${userId} has joined!`));
+
+      // TODO: Generate room data
     });
 
     socket.on('leave', async ({ roomName, userId }, callback) => {

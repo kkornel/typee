@@ -14,7 +14,7 @@ function PasswordReset() {
   const onPasswordReset = async (email, setWasErrorShowed) => {
     const response = await execute(resetPassword(email));
     setWasErrorShowed(false);
-
+    
     if (response.success) {
       history.push(ROUTES.SIGN_IN, { message: response.message });
     }
