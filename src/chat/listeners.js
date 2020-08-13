@@ -6,10 +6,27 @@ const {
   leaveRoom,
   generateRoomData,
 } = require('./users');
+const ErrorResponse = require('../utils/ErrorResponse');
 
 const connectionEvent = (io) => {
   io.on('connection', (socket) => {
     console.log('New connection');
+
+    socket.on('message', (text, roomName, userId, callback) => {
+      console.log('message', text);
+
+      const { message, error } = createMessage(text, roomName, userId);
+
+      if (error) {
+        return callback(error);
+      }
+
+      console.log(roomName);
+
+      io.to(roomName).emit('message', message);
+
+      callback();
+    });
 
     socket.on('create', async ({ roomName, userId }, callback) => {
       console.log('create', roomName, userId);
@@ -22,7 +39,11 @@ const connectionEvent = (io) => {
       console.log('join', roomName, userId);
       const { error, room } = await joinRoom(roomName, userId, socket.id);
 
-      callback({ error, room });
+      if (error) {
+        return callback({ error });
+      }
+
+      callback({ undefined, room });
 
       socket.join(room.name);
 
