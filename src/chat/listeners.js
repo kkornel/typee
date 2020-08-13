@@ -12,16 +12,14 @@ const connectionEvent = (io) => {
   io.on('connection', (socket) => {
     console.log('New connection');
 
-    socket.on('message', (text, roomName, userId, callback) => {
-      console.log('message', text);
+    socket.on('message', async (text, roomName, userId, callback) => {
+      console.log('message', text, roomName, userId);
 
-      const { message, error } = createMessage(text, roomName, userId);
+      const { message, error } = await createMessage(text, roomName, userId);
 
       if (error) {
         return callback(error);
       }
-
-      console.log(roomName);
 
       io.to(roomName).emit('message', message);
 
@@ -32,7 +30,21 @@ const connectionEvent = (io) => {
       console.log('create', roomName, userId);
       const { error, room } = await createRoom(roomName, userId, socket.id);
 
-      callback({ error, room });
+      // Note: New code. Joining user imiedietly after creating room
+      if (error) {
+        return callback({ error });
+      }
+
+      callback({ undefined, room });
+
+      socket.join(room.name);
+
+      socket.emit('message', generateMessage(`Welcome to the ${room.name}`));
+      socket.broadcast
+        .to(room.name)
+        .emit('message', generateMessage(`${userId} has joined!`));
+
+      // TODO: Generate room data
     });
 
     socket.on('join', async ({ roomName, userId }, callback) => {

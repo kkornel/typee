@@ -1,0 +1,92 @@
+import React from 'react';
+
+import classNames from 'classnames';
+
+import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import { deepPurple } from '@material-ui/core/colors';
+
+// TODO: unique keys
+export default function ({ users }) {
+  const classes = useStyles();
+  const theme = mainTheme();
+
+  return (
+    <Box className={classNames(classes.usersList, theme.backgroundSecondary)}>
+      {[
+        { name: 'Pani Zosia', subtitle: 'Byłam dziś w warzywniaku' },
+        { name: 'Pani Krysia', subtitle: 'Very lon long lon long long' },
+        {
+          name: 'Pani Jadzia',
+          subtitle: 'Czas na przerwe, czas na kitkat',
+        },
+      ].map((user) => {
+        return (
+          <Box className={classes.usersListItem} key={user.name}>
+            <Avatar className={classes.usersListItemAvatar}>
+              {user.name[0]}
+              {user.name[1]}
+            </Avatar>
+            <Box className={classes.usersListItemInfo}>
+              <Box className={classes.usersListItemTitle}>{user.name}</Box>
+              <Box className={classes.usersListItemSubTitle}>
+                {user.subtitle}
+              </Box>
+            </Box>
+          </Box>
+        );
+      })}
+    </Box>
+  );
+}
+
+const mainTheme = makeStyles((theme) => ({
+  backgroundSecondary: {
+    backgroundColor: '#2f3136',
+  },
+}));
+
+const useStyles = makeStyles((theme) => ({
+  usersList: {
+    // background: 'purple',
+    // background: '#2f3136',
+    maxHeight: 'calc(100vh - 64px) !important',
+    // width: '90px',
+    overflowX: 'hidden',
+    // overflow: 'auto',
+    height: '100%',
+    overflowY: 'auto',
+    // overflowY: 'scroll',
+    zIndex: '1',
+    position: 'relative',
+  },
+  usersListItem: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '10px',
+    width: '100%',
+    '&:hover': {
+      background: '#32353b',
+      cursor: 'pointer',
+    },
+  },
+  usersListItemAvatar: {
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500],
+  },
+  usersListItemInfo: {
+    marginLeft: '10px',
+  },
+  usersListItemTitle: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    textTransform: 'capitalize',
+    margin: '0',
+  },
+  usersListItemSubTitle: {
+    fontSize: '14px',
+    color: '#888',
+    margin: '0',
+  },
+}));
