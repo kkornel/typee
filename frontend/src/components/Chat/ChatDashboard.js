@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
-import { useUser } from '../../context/UserContext';
+import { useUserData } from '../../context/UserDataContext';
 
 import MessageInput from './MessageInput';
 import MessageArea from './MessageArea';
@@ -12,13 +12,15 @@ import MessageAreaBar from './MessageAreaBar';
 import Dialog from './Dialog';
 import Snackbar from './Snackbar';
 import UserList from './UserList';
-import ChannelList from './ChannelList';
+import RoomList from './RoomList';
 
 function ChatDashboard({
   user,
   connect,
   sendMessage,
   newMessageHandler,
+  newUserDataHandler,
+  requestUserData,
   roomDataHandler,
   createRoom,
   joinRoom,
@@ -26,9 +28,9 @@ function ChatDashboard({
 }) {
   const classes = useStyles();
 
-  const { currentRoom, setCurrentRoom } = useUser('asdas');
+  // const { currentRoom, setCurrentRoom } = useUser('a');
 
-  const [roomData, setRoomData] = React.useState({ name: 'asdas' });
+  const [currentRoom, setCurrentRoom] = React.useState({ name: 'a' });
 
   const [messages, setMessages] = React.useState([]);
 
@@ -40,24 +42,37 @@ function ChatDashboard({
 
   React.useEffect(() => {
     newMessageHandler(onMessageReceived);
+    newUserDataHandler(onUserDataReceived);
+    requestUserData(user._id);
     // roomDataHandler(onRoomData);
   }, []);
 
   const onRoomData = ({ users }) => {
-    setRoomData(users);
+    setCurrentRoom(users);
   };
 
-  const handleRoomClick = (roomName) => {
-    console.log(roomName);
-    if (roomName !== currentRoom) {
-      leaveRoom(user._id, currentRoom, leaveCallback);
-    }
-    setCurrentRoom(roomName);
-    joinRoom(user._id, roomName, joinRoomCallback);
+  // const [rooms, setRooms] = React.useState([]);
+  const { rooms, setRooms } = useUserData();
+  const onUserDataReceived = ({ rooms }) => {
+    console.log('1', rooms);
+    setRooms(rooms);
   };
+
+  // const handleRoomClick = (roomName) => {
+  //   console.log(roomName);
+  //   if (roomName !== currentRoom) {
+  //     leaveRoom(user._id, currentRoom, leaveCallback);
+  //   }
+  //   setCurrentRoom(roomName);
+  //   joinRoom(user._id, roomName, joinRoomCallback);
+  // };
 
   const leaveCallback = (somedata) => {
     console.log(somedata);
+  };
+
+  const handleRoomClick = (roomName) => {
+    joinRoom(user._id, roomName, joinRoomCallback);
   };
 
   console.log('&&& ChatDashboard RE-RENDER');
@@ -80,8 +95,8 @@ function ChatDashboard({
     joinRoom(user._id, dialogValue, joinRoomCallback);
   };
 
-  const joinRoomCallback = ({ error, room }) => {
-    console.log('joinRoomCallback', error, room);
+  const joinRoomCallback = ({ error, room, rooms }) => {
+    console.log('joinRoomCallback', error, room, rooms);
 
     if (error) {
       setSnackbarMessage(error);
@@ -89,7 +104,7 @@ function ChatDashboard({
       return setOpenSnackbar(true);
     }
 
-    setRoomData(room);
+    setCurrentRoom(room);
     handleDialogClose();
   };
 
@@ -97,8 +112,8 @@ function ChatDashboard({
     createRoom(user._id, dialogValue, createRoomCallback);
   };
 
-  const createRoomCallback = ({ error, room }) => {
-    console.log(error, room);
+  const createRoomCallback = ({ error, room, rooms }) => {
+    console.log('createRoomCallback', error, room, rooms);
 
     if (error) {
       setSnackbarMessage(error);
@@ -108,7 +123,8 @@ function ChatDashboard({
 
     setSnackbarMessage(`Room ${room.name} created.`);
     setSnackbarSeverity('success');
-    setCurrentRoom(room.name);
+    setRooms(rooms);
+    setCurrentRoom(room);
     setOpenSnackbar(true);
     handleDialogClose();
     // TODO: Open this room page
@@ -119,7 +135,7 @@ function ChatDashboard({
   };
 
   const handleSubmit = (inputValue) => {
-    sendMessage(inputValue, roomData.name, user._id, submitCallback);
+    sendMessage(inputValue, currentRoom.name, user._id, submitCallback);
   };
 
   const submitCallback = (error) => {
@@ -139,10 +155,14 @@ function ChatDashboard({
     <Box className={classes.chat}>
       <Grid container spacing={0}>
         <Grid item className={classes.channels}>
-          <ChannelList channels={null} handleAddClick={handleAddRoomClick} />
+          <RoomList
+            rooms={rooms}
+            handleRoomClick={handleRoomClick}
+            handleAddClick={handleAddRoomClick}
+          />
         </Grid>
         <Grid item xs={1}>
-          <UserList users={null} />
+          <UserList users={currentRoom.users} />
         </Grid>
         <Grid item xs>
           <Box className={classes.messages}>

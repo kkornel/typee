@@ -2,68 +2,65 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const Message = require('../models/Message');
 
-const createRoom = async (name, creatorId, socketId) => {
-  const room = await Room.findOne({ name });
+const createRoom = async (roomName, authorId, socketId) => {
+  const alreadyExists = await Room.findOne({ name: roomName });
 
-  if (room) {
+  if (alreadyExists) {
     return {
       error: 'Room already exists.',
     };
   }
 
-  const user = await User.findById(creatorId);
+  const room = new Room({ name: roomName, authorId });
+  room.users.push({ userId: authorId, socketId });
+  await room.save();
 
-  const newRoom = new Room({ name, ownerId: creatorId });
-  newRoom.users.push({ userId: creatorId, socketId });
-  await newRoom.save();
-
-  // TODO: Is it good approach?
-  user.rooms.push(newRoom.name);
-  await user.save();
+  const roomWithUsers = JSON.parse(JSON.stringify(room));
+  roomWithUsers.users = await room.getUsersInRoom();
 
   return {
-    room: newRoom,
+    room: roomWithUsers,
   };
 };
 
-const joinRoom = async (name, userId, socketId) => {
-  const room = await Room.findOne({ name });
+const joinRoom = async (roomName, userId, socketId) => {
+  const room = await Room.findOne({ name: roomName });
 
   if (!room) {
     return {
-      error: `Room ${name} doesn't exist.`,
+      error: `Room ${roomName} doesn't exist.`,
     };
   }
 
+  // TODO: Think about it!
   const alreadyInRoom = room.users.findIndex(
-    (user) => user.userId.equals(userId) && user.socketId === socketId
+    // (user) => user.userId.equals(userId) && user.socketId === socketId
+    (user) => user.userId.equals(userId)
   );
 
   console.log('alreadyInRoom', alreadyInRoom);
 
   if (alreadyInRoom == -1) {
     room.users.push({ userId, socketId });
-    await room.save();
+  } else {
+    room.users[alreadyInRoom].socketId = socketId;
   }
 
+  await room.save();
+  // await room.populate('users.userId', '_id username').execPopulate();
+  await room.populate('messages', '_id authorId text createdAt').execPopulate();
+  await room.populate('messages.authorId', '_id username').execPopulate();
+
+  // I'm doing this, because I want to have only user list under property 'users',
+  // not any socketId or ObjectId, but there is no way to manipulate Mongo Document,
+  // so it it necessary to create new one by copying.
+  const roomWithUsers = JSON.parse(JSON.stringify(room));
+  roomWithUsers.users = await room.getUsersInRoom();
+
   return {
-    room,
+    room: roomWithUsers,
   };
 };
-
-// const leaveRoom = async (socketId) => {
-//   const rooms = await Room.find({ 'users.socketId': socketId });
-//   console.log('rooms', rooms);
-
-//   rooms.forEach(async (room) => {
-//     const index = room.users.findIndex((user) => user.socketId === socketId);
-//     console.log('index', index);
-
-//     room.users.splice(index, 1);
-//     await room.save();
-//     console.log('room', room);
-//   });
-// };
 
 const leaveRoom = async (roomName, userId, socketId) => {
   const room = await Room.findOne({ name: roomName });
@@ -75,16 +72,16 @@ const leaveRoom = async (roomName, userId, socketId) => {
   }
 
   const index = room.users.findIndex((user) => user.userId === userId);
-  console.log('index', index);
+  // console.log('index', index);
 
   room.users.splice(index, 1);
   await room.save();
 
-  console.log('room', room);
+  // console.log('room', room);
   return { room };
 };
 
-const createMessage = async (text, roomName, userId) => {
+const createMessage = async (text, roomName, authorId) => {
   const room = await Room.findOne({ name: roomName });
 
   if (!room) {
@@ -93,8 +90,8 @@ const createMessage = async (text, roomName, userId) => {
     };
   }
 
-  const user = await User.findById(userId);
-  const newMessage = await new Message({ userId, text }).save();
+  const user = await User.findById(authorId);
+  const newMessage = await new Message({ authorId, text }).save();
 
   room.messages.push(newMessage);
   await room.save();
@@ -114,14 +111,18 @@ const generateMessage = (text, username = 'Admin', createdAt = Date.now()) => {
 
 const generateRoomData = async (roomName) => {
   const room = await Room.findOne({ name: roomName });
-
-  console.log(room);
-
-  await room.populate('usersDocuments').execPopulate();
-  console.log(room.usersDocuments);
-  const users = room.usersDocuments.map((user) => user.username);
-  console.log('users', users);
+  // await room.populate('users.userId', '_id username').execPopulate();
+  const users = await room.getUsersInRoom();
+  // console.log('generateRoomData', users);
   return { users };
+};
+
+const getUserData = async (userId) => {
+  const user = await User.findById(userId);
+  // console.log(user);
+  const rooms = await user.getRoomsNames();
+  // console.log(rooms);
+  return { rooms };
 };
 
 module.exports = {
@@ -131,4 +132,5 @@ module.exports = {
   generateMessage,
   leaveRoom,
   generateRoomData,
+  getUserData,
 };

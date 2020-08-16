@@ -32,6 +32,7 @@ export default function ({
     }
 
     handleJoinRoomClick(dialogValue);
+    setDialogValue('');
   };
 
   const onCreateRoomClick = () => {
@@ -40,6 +41,7 @@ export default function ({
     }
 
     handleCreateRoomClick(dialogValue);
+    setDialogValue('');
   };
 
   console.log('&&& Dialog RE-RENDER');

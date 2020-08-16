@@ -8,30 +8,26 @@ import Box from '@material-ui/core/Box';
 import { deepPurple } from '@material-ui/core/colors';
 
 // TODO: unique keys
-export default function ({ users }) {
+export default function ({ users = [] }) {
   const classes = useStyles();
   const theme = mainTheme();
 
   return (
     <Box className={classNames(classes.usersList, theme.backgroundSecondary)}>
-      {[
-        { name: 'Pani Zosia', subtitle: 'Byłam dziś w warzywniaku' },
-        { name: 'Pani Krysia', subtitle: 'Very lon long lon long long' },
-        {
-          name: 'Pani Jadzia',
-          subtitle: 'Czas na przerwe, czas na kitkat',
-        },
-      ].map((user) => {
+      {users.map((user) => {
         return (
-          <Box className={classes.usersListItem} key={user.name}>
+          <Box className={classes.usersListItem} key={user._id}>
             <Avatar className={classes.usersListItemAvatar}>
-              {user.name[0]}
-              {user.name[1]}
+              {/* {user.name[0]}
+              {user.name[1]} */}
+              {user.username[0]}
+              {user.username[1]}
             </Avatar>
             <Box className={classes.usersListItemInfo}>
               <Box className={classes.usersListItemTitle}>{user.name}</Box>
               <Box className={classes.usersListItemSubTitle}>
-                {user.subtitle}
+                {/* {user.subtitle} */}
+                Lorem ipsum
               </Box>
             </Box>
           </Box>

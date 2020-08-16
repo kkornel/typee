@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
 const tokenSchema = new Schema({
@@ -10,21 +11,18 @@ const tokenSchema = new Schema({
   // It makes sense, because it is actually stored in database.
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: 'User',
+    required: true,
   },
-
   token: {
     type: String,
     required: true,
   },
-
   createdAt: {
     type: Date,
-    required: true,
     default: Date.now,
+    required: true,
   },
-
   expires: {
     type: Date,
     required: true,

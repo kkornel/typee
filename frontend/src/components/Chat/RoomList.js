@@ -10,8 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-// TODO: unique keys
-export default function ({ channels, handleAddClick }) {
+export default function ({ rooms = [], handleRoomClick, handleAddClick }) {
   const classes = useStyles();
   const theme = mainTheme();
 
@@ -19,21 +18,27 @@ export default function ({ channels, handleAddClick }) {
     handleAddClick();
   };
 
-  console.log('&&& ChannelList RE-RENDER');
+  const onRoomIconClick = (event) => {
+    handleRoomClick(event.target.offsetParent.value);
+  };
+
+  console.log('&&& RoomList RE-RENDER');
 
   return (
-    <Box className={classNames(classes.channelsList, theme.backgroundTertiary)}>
-      {['Channel 1', 'Channel 2', 'Channel 3'].map((channelName) => {
+    <Box className={classNames(classes.roomList, theme.backgroundTertiary)}>
+      {rooms.map((roomName) => {
         return (
-          <Box className={classes.channel} key={channelName}>
-            <Tooltip title={channelName}>
+          <Box className={classes.room} key={roomName}>
+            <Tooltip title={roomName}>
               <IconButton
-                aria-label={channelName}
-                className={classes.channelIcon}
+                value={roomName}
+                aria-label={roomName}
+                className={classes.roomIcon}
+                onClick={onRoomIconClick}
               >
-                <Avatar className={classes.channelIconAvatar}>
-                  {channelName[0]}
-                  {channelName[channelName.length - 1]}
+                <Avatar className={classes.roomIconAvatar}>
+                  {roomName[0]}
+                  {roomName[roomName.length - 1]}
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -41,11 +46,11 @@ export default function ({ channels, handleAddClick }) {
         );
       })}
       <Divider className={classes.divider} />
-      <Box className={classes.channelAddBox}>
+      <Box className={classes.roomAddBox}>
         <Tooltip title="Add channel">
           <IconButton
             aria-label="add"
-            className={classes.channelAddIcon}
+            className={classes.roomAddIcon}
             onClick={onAddClick}
           >
             <AddIcon />
@@ -67,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'hsla(0,0%,100%,0.06)',
     height: '4px',
   },
-  channelsList: {
+  roomList: {
     // background: 'green',
     // background: '#202225',
 
@@ -77,8 +82,8 @@ const useStyles = makeStyles((theme) => ({
     // width: '60px',
     // overflowY: 'scroll',
   },
-  channel: {},
-  channelIcon: {
+  room: {},
+  roomIcon: {
     // width: '48px',
     // height: '48px',
     // margin: '3px 3px 3px 3px',
@@ -86,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
     // background: '#36393f',
     padding: '8px',
   },
-  channelIconAvatar: {
+  roomIconAvatar: {
     width: '48px',
     height: '48px',
     color: '#dcddde',
@@ -97,10 +102,10 @@ const useStyles = makeStyles((theme) => ({
       color: '#fff',
     },
   },
-  channelAddBox: {
+  roomAddBox: {
     padding: '8px',
   },
-  channelAddIcon: {
+  roomAddIcon: {
     width: '48px',
     height: '48px',
     // margin: '3px 3px 3px 3px',

@@ -16,8 +16,8 @@ function useSocket(endpoint = ENDPOINT) {
     // setSocket(io(endpoint));
   }
 
-  function sendMessage(text, roomName, userId, callback) {
-    socket.emit('message', text, roomName, userId, callback);
+  function sendMessage(text, roomName, authorId, callback) {
+    socket.emit('message', { text, roomName, authorId }, callback);
   }
 
   function newMessageHandler(onMessageReceived) {
@@ -28,8 +28,16 @@ function useSocket(endpoint = ENDPOINT) {
     socket.on('roomData', onRoomDataReceived);
   }
 
-  function createRoom(userId, roomName, callback) {
-    socket.emit('create', { roomName, userId }, callback);
+  function newUserDataHandler(onNewUserData) {
+    socket.on('newUserData', onNewUserData);
+  }
+
+  function requestUserData(userId) {
+    socket.emit('userDataRequest', { userId });
+  }
+
+  function createRoom(authorId, roomName, callback) {
+    socket.emit('create', { roomName, authorId }, callback);
   }
 
   function joinRoom(userId, roomName, callback) {
@@ -44,6 +52,8 @@ function useSocket(endpoint = ENDPOINT) {
     connect,
     sendMessage,
     newMessageHandler,
+    newUserDataHandler,
+    requestUserData,
     roomDataHandler,
     createRoom,
     joinRoom,

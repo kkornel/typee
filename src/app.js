@@ -63,4 +63,14 @@ test();
 app.use(notFound);
 app.use(errorHandler);
 
+(async () => {
+  const User = require('./models/User');
+  const user = await User.findById('5f365cff264ad02a0415cd3f');
+  // user.getRoomsNames();
+  const Room = require('./models/Room');
+  const room = await Room.findOne({ name: 'a' });
+  const lel = await room.getUsersInRoom();
+  // console.log(lel);
+})();
+
 module.exports = server;

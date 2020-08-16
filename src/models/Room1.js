@@ -6,19 +6,20 @@ const roomSchema = new Schema({
   name: {
     type: String,
     unique: true,
-    required: true,
   },
-  authorId: {
+
+  ownerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
     required: true,
+    ref: 'User',
   },
+
   users: [
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
         required: true,
+        ref: 'User',
       },
       socketId: {
         type: String,
@@ -26,19 +27,27 @@ const roomSchema = new Schema({
       },
     },
   ],
+
   messages: [
     {
       type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: 'Message',
     },
   ],
 });
 
-roomSchema.methods.getUsersInRoom = async function () {
-  await this.populate('users.userId', '_id username').execPopulate();
-  const users = this.users.map((user) => user.userId);
-  return users;
-};
+roomSchema.virtual('usersDocuments', {
+  ref: 'User',
+  localField: 'users.userId',
+  foreignField: '_id',
+});
+
+roomSchema.virtual('messagesDocuments', {
+  ref: 'Message',
+  localField: 'messages',
+  foreignField: '_id',
+});
 
 const Room = mongoose.model('Room', roomSchema);
 

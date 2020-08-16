@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useUser } from '../context/UserContext';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../utils/useSocket';
 
@@ -13,10 +12,12 @@ function Dashboard() {
     connect,
     sendMessage,
     newMessageHandler,
+    newUserDataHandler,
     roomDataHandler,
     createRoom,
     joinRoom,
     leaveRoom,
+    requestUserData,
   } = useSocket();
 
   console.log('&&& Dashboard RE-RENDER');
@@ -27,6 +28,8 @@ function Dashboard() {
       connect={connect}
       sendMessage={sendMessage}
       newMessageHandler={newMessageHandler}
+      newUserDataHandler={newUserDataHandler}
+      requestUserData={requestUserData}
       roomDataHandler={roomDataHandler}
       createRoom={createRoom}
       joinRoom={joinRoom}

@@ -1,9 +1,3 @@
-// https://mongoosejs.com/docs/populate.html#refs-to-children
-// https://docs.mongodb.com/manual/tutorial/model-referenced-one-to-many-relationships-between-documents/
-
-// It is debatable that we really want two sets of pointers as they may get out of sync.
-// Instead we could skip populating and directly find() the [data] we are interested in.
-
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
@@ -18,24 +12,6 @@ const verificationTemplate = require('../services/emailTemplates/verificationTem
 const passwordResetTemplate = require('../services/emailTemplates/passwordResetTemplate');
 const Token = require('./Token');
 
-// userSchema.methods.toJSON = function () {
-//   const user = this;
-//   const userObject = user.toObject();
-
-//   delete userObject.password;
-//   delete userObject.tokens;
-//   delete userObject.avatar;
-
-//   return userObject;
-// };
-
-// Delete user tasks when user is removed
-// userSchema.pre('remove', async function (next) {
-//   const user = this;
-//   await Task.deleteMany({ author: user._id });
-//   next();
-// });
-
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -45,10 +21,11 @@ const userSchema = new Schema(
       unique: true,
       sparse: true,
     },
+
     email: {
       type: String,
       unique: true,
-      required: true,
+      // required: true,
       trim: true,
       lowercase: true,
       validate(value) {
@@ -57,12 +34,14 @@ const userSchema = new Schema(
         }
       },
     },
+
     username: {
       type: String,
       unique: true,
-      required: true,
+      // required: true,
       trim: true,
     },
+
     password: {
       type: String,
       // required: true,
@@ -78,14 +57,14 @@ const userSchema = new Schema(
         }
       },
     },
-    avatar: {
-      type: Buffer,
-    },
+
+    avatar: Buffer,
+
+    // It is an array, because user can log in from multiple devices,
+    // so every connection from every device has different token.
+    // Also logging out (deleting token) from one device,
+    // will not logout user from another devices.
     jwtTokens: [
-      // It is an array, because user can log in from multiple devices,
-      // so every connection from every device has different token.
-      // Also logging out (deleting token) from one device,
-      // will not logout user from another devices.
       {
         token: {
           type: String,
@@ -93,10 +72,17 @@ const userSchema = new Schema(
         },
       },
     ],
+
     active: {
       type: Boolean,
       default: false,
     },
+
+    rooms: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -119,24 +105,25 @@ userSchema.virtual('tokens', {
 userSchema.virtual('messages', {
   ref: 'Message',
   localField: '_id',
-  foreignField: 'authorId',
+  foreignField: 'userId',
 });
 
-userSchema.virtual('rooms', {
+userSchema.virtual('roomsDocuments', {
   ref: 'Room',
   localField: '_id',
-  foreignField: 'users.userId',
+  foreignField: 'users',
 });
 
-userSchema.virtual('createdRooms', {
-  ref: 'Room',
-  localField: '_id',
-  foreignField: 'authorId',
-});
+userSchema.methods.getRoomsNames = async function () {
+  await this.populate('roomsDocuments').execPopulate();
+  return this.roomsDocuments.map((room) => room.name);
+};
 
 userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, config.hashRounds);
+  const user = this;
+
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, config.hashRounds);
   }
 
   next();
@@ -158,21 +145,15 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-userSchema.methods.getRooms = async function () {
-  await this.populate('rooms').execPopulate();
-  return this.rooms;
-};
-
-userSchema.methods.getRoomsNames = async function () {
-  await this.populate('rooms').execPopulate();
-  return this.rooms.map((room) => room.name);
-};
-
 userSchema.methods.generateAuthToken = async function () {
+  const user = this;
+
   // Need to call toString(), because _id is stored as ObjectID
-  const token = jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET);
-  this.jwtTokens.push({ token });
-  await this.save();
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
+
+  user.jwtTokens.push({ token });
+  await user.save();
+
   return token;
 };
 
@@ -187,22 +168,30 @@ userSchema.methods.generateToken = function (expiresIn) {
 };
 
 userSchema.methods.sendVerificationEmail = function (token) {
+  const user = this;
+
+  // const token = user.generateToken(60 * 60);
+  // await token.save();
+
+  // const url = `${process.env.REDIRECT_DOMAIN}/api/auth/verify/${token}`;
   const url = `${process.env.REDIRECT_DOMAIN}/api/v1/auth/verify/${token}`;
 
   sendEmailAsync(
-    this.email,
+    user.email,
     'Confirm your email',
-    verificationTemplate(this.username, url)
+    verificationTemplate(user.username, url)
   );
 };
 
 userSchema.methods.sendPasswordResetEmail = function (token) {
+  const user = this;
+  // const url = `${process.env.REDIRECT_DOMAIN}/api/auth/password/reset/${token}`;
   const url = `${process.env.REDIRECT_DOMAIN}/api/v1/auth/password/reset/${token}`;
 
   sendEmailAsync(
-    this.email,
+    user.email,
     'Password reset request',
-    passwordResetTemplate(this.username, url)
+    passwordResetTemplate(user.username, url)
   );
 };
 

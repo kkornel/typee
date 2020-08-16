@@ -87,6 +87,12 @@ const login = async (req, res, next) => {
 
     const token = await user.generateAuthToken();
 
+    // TODO: If I don't want to have 'rooms' field in the DB,
+    // this is the way to get rooms from virtual to new, copied object.
+    // const userWithRooms = JSON.parse(JSON.stringify(user));
+    // userWithRooms.rooms = await user.getRoomsNames();
+
+    // res.status(200).send({ user: userWithRooms, token });
     res.status(200).send({ user, token });
   } catch (error) {
     next(error);
