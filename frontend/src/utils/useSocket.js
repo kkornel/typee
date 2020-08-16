@@ -24,6 +24,10 @@ function useSocket(endpoint = ENDPOINT) {
     socket.on('message', onMessageReceived);
   }
 
+  function unregisterMessageHandler(onMessageReceived) {
+    socket.off('message', onMessageReceived);
+  }
+
   function roomDataHandler(onRoomDataReceived) {
     socket.on('roomData', onRoomDataReceived);
   }
@@ -53,6 +57,7 @@ function useSocket(endpoint = ENDPOINT) {
     sendMessage,
     newMessageHandler,
     newUserDataHandler,
+    unregisterMessageHandler,
     requestUserData,
     roomDataHandler,
     createRoom,

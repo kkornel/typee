@@ -4,52 +4,56 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
+import { useSnackbar } from 'notistack';
+
 import { useUserData } from '../../context/UserDataContext';
 
 import MessageInput from './MessageInput';
 import MessageArea from './MessageArea';
 import MessageAreaBar from './MessageAreaBar';
 import Dialog from './Dialog';
-import Snackbar from './Snackbar';
 import UserList from './UserList';
 import RoomList from './RoomList';
 
-// import MySnackbar from './MySnackbar';
+import { useRoomData } from '../../utils/useRoomData';
+
+// function messageReducer(state, action) {
+//   switch (action.type) {
+//     case 'NEW_MESSAGE':
+//       console.log('reducer', state);
+//       return [...state, action.payload];
+//     default:
+//       throw new Error(`Unhandled action type: ${action.type}`);
+//   }
+// }
 
 function ChatDashboard({
   user,
   connect,
   sendMessage,
   newMessageHandler,
+  unregisterMessageHandler,
   newUserDataHandler,
   requestUserData,
   roomDataHandler,
   createRoom,
   joinRoom,
   leaveRoom,
+  // currentRoomLOL,
+  // messagesLOL,
+  // dispatchLOL,
 }) {
+  // const [state, dispatch] = React.useReducer(messageReducer, []);
+
+  const { messages, dispatch } = useRoomData();
+
   const classes = useStyles();
-
-  // const { currentRoom, setCurrentRoom } = useUser('a');
-
-  const [currentRoom, setCurrentRoom] = React.useState({ name: 'a' });
-
-  const [messages, setMessages] = React.useState([]);
-
+  const { enqueueSnackbar } = useSnackbar();
+  // const [messages, setMessages] = React.useState([]);
   const [dialogData, setDialogData] = React.useState({
     open: false,
     error: '',
   });
-
-  const [snackbarData, setSnackbarData] = React.useState({
-    open: false,
-    message: '',
-    severity: 'success',
-  });
-
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = React.useState('success');
 
   React.useEffect(() => {
     console.log('useEffect');
@@ -59,15 +63,70 @@ function ChatDashboard({
   }, []);
 
   // React.useEffect(() => {
-  //   console.log('useEffect');
+  //   console.log('useEffect !!');
   //   newMessageHandler(onMessageReceived);
+  //   return () => {
+  //     console.log('useEffect !! unregister');
+  //     unregisterMessageHandler(onMessageReceived);
+  //   };
   // }, [messages]);
 
-  // const [rooms, setRooms] = React.useState([]);
+  // const { currentRoom, setCurrentRoom } = useUser('a');
   const { rooms, setRooms } = useUserData();
+
+  const [currentRoom, setCurrentRoom] = React.useState({ name: 'a' });
+
   const onUserDataReceived = ({ rooms }) => {
     console.log('onUserDataReceived', rooms);
     setRooms(rooms);
+  };
+
+  const joinRoomCallback = ({ error, room, rooms }) => {
+    console.log('joinRoomCallback', error, room, rooms);
+
+    if (error) {
+      return setDialogData((prevState) => {
+        return { ...prevState, error };
+      });
+    }
+
+    setCurrentRoom(room);
+    // setMessages((prevMessages) => [...prevMessages, ...room.messages]);
+    dispatch({ type: 'LOAD_MESSAGES', payload: room.messages });
+
+    if (dialogData.open) {
+      handleDialogClose();
+    }
+  };
+
+  const createRoomCallback = ({ error, room, rooms }) => {
+    console.log('createRoomCallback', error, room, rooms);
+
+    if (error) {
+      return setDialogData((prevState) => {
+        return { ...prevState, error };
+      });
+    }
+
+    // TODO: how to store rooms and room?
+    setRooms(rooms);
+    setCurrentRoom(room);
+
+    enqueueSnackbar(`Room ${room.name} created.`, {
+      variant: 'success',
+      autoHideDuration: 2000,
+    });
+    handleDialogClose();
+
+    // TODO: Open this room page
+  };
+
+  const onMessageReceived = (message) => {
+    // console.log('onMessageReceived prevMessages', messagesLOL);
+    // console.log('onMessageReceived message', message);
+    // setMessages((prevMessages) => [...prevMessages, message]);
+    dispatch({ type: 'NEW_MESSAGE', payload: message });
+    // dispatchLOL({ type: 'NEW_MESSAGE', payload: message });
   };
 
   // const handleRoomClick = (roomName) => {
@@ -107,60 +166,9 @@ function ChatDashboard({
     joinRoom(user._id, dialogValue, joinRoomCallback);
   };
 
-  const joinRoomCallback = ({ error, room, rooms }) => {
-    console.log('joinRoomCallback', error, room, rooms);
-
-    if (error) {
-      return setDialogData((prevState) => {
-        return { ...prevState, error };
-      });
-      // setSnackbarMessage(error);
-      // setSnackbarSeverity('error');
-      // return setOpenSnackbar(true);
-    }
-
-    setCurrentRoom(room);
-    setMessages((prevMessages) => [...prevMessages, ...room.messages]);
-
-    if (dialogData.open) {
-      handleDialogClose();
-    }
-  };
-
   const handleCreateRoomClick = (dialogValue) => {
     createRoom(user._id, dialogValue, createRoomCallback);
   };
-
-  const createRoomCallback = ({ error, room, rooms }) => {
-    console.log('createRoomCallback', error, room, rooms);
-
-    if (error) {
-      return setDialogData((prevState) => {
-        return { ...prevState, error };
-      });
-    }
-
-    // setSnackbarData({
-    //   open: true,
-    //   message: `Room ${room.name} created.`,
-    //   severity: 'success',
-    // });
-    setSnackbarMessage(`Room ${room.name} created.`);
-    setSnackbarSeverity('success');
-
-    // TODO: how to store rooms and room?
-    setRooms(rooms);
-    setCurrentRoom(room);
-
-    setOpenSnackbar(true);
-    handleDialogClose();
-
-    // TODO: Open this room page
-  };
-
-  // const handleSnackbarClose = () => {
-  //   // setOpenSnackbar(false);
-  // };
 
   const handleSubmit = (inputValue) => {
     sendMessage(inputValue, currentRoom.name, user._id, submitCallback);
@@ -173,13 +181,6 @@ function ChatDashboard({
 
     console.log('Message delivered.');
   };
-
-  const onMessageReceived = (message) => {
-    console.log('onMessageReceived message', message);
-    setMessages((prevMessage) => [...prevMessage, message]);
-  };
-
-  console.log('!!!', dialogData);
 
   return (
     <Box className={classes.chat}>
@@ -208,13 +209,6 @@ function ChatDashboard({
         handleJoinRoomClick={handleJoinRoomClick}
         handleCreateRoomClick={handleCreateRoomClick}
       />
-      {/* <Snackbar
-        openSnackbar={openSnackbar}
-        handleSnackbarClose={handleSnackbarClose}
-        snackbarSeverity={snackbarSeverity}
-        snackbarMessage={snackbarMessage}
-      /> */}
-      {/* <MySnackbar snackbarData={snackbarData} /> */}
     </Box>
   );
 }

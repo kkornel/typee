@@ -20,6 +20,7 @@
     "faker": "^4.1.0",
     "http-proxy-middleware": "^1.0.3",
     "lodash": "^4.17.15",
+    "notistack": "^0.9.17",
     "password-validator": "^5.0.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -1,14 +1,18 @@
 import React from 'react';
 
+import { SnackbarProvider } from 'notistack';
+
 import { AuthProvider } from './AuthContext';
 import { UserDataProvider } from './UserDataContext';
 
 function AppProviders({ children }) {
   return (
-    <AuthProvider>
-      {/* {children} */}
-      <UserDataProvider>{children}</UserDataProvider>
-    </AuthProvider>
+    <SnackbarProvider maxSnack={3}>
+      <AuthProvider>
+        {/* {children} */}
+        <UserDataProvider>{children}</UserDataProvider>
+      </AuthProvider>
+    </SnackbarProvider>
   );
 }
 
