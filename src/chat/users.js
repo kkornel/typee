@@ -96,9 +96,13 @@ const createMessage = async (text, roomName, authorId) => {
   room.messages.push(newMessage);
   await room.save();
 
-  const message = generateMessage(text, user.username, newMessage.createdAt);
+  // const message = generateMessage(text, user.username, newMessage.createdAt);
+  // return { message };
 
-  return { message };
+  await newMessage.populate('authorId', '_id username').execPopulate();
+  console.log('createMessage newMessage', newMessage);
+
+  return { message: newMessage };
 };
 
 const generateMessage = (text, username = 'Admin', createdAt = Date.now()) => {

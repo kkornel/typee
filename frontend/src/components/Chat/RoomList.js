@@ -22,8 +22,6 @@ export default function ({ rooms = [], handleRoomClick, handleAddClick }) {
     handleRoomClick(event.target.offsetParent.value);
   };
 
-  console.log('&&& RoomList RE-RENDER');
-
   return (
     <Box className={classNames(classes.roomList, theme.backgroundTertiary)}>
       {rooms.map((roomName) => {

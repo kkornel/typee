@@ -61,7 +61,7 @@ const connectionEvent = (io) => {
       callback({ room, rooms });
 
       socket.join(room.name);
-      socket.emit('message', generateMessage(`Welcome to the ${room.name}`));
+      // socket.emit('message', generateMessage(`Welcome to the ${room.name}`));
       socket.broadcast
         .to(room.name)
         .emit('message', generateMessage(`${userId} has joined!`));

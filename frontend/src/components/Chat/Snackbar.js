@@ -13,8 +13,7 @@ export default function ({
   snackbarSeverity,
   snackbarMessage,
 }) {
-  console.log('&&& Snackbar RE-RENDER');
-
+  console.log('asdas');
   return (
     <Snackbar
       open={openSnackbar}

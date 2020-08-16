@@ -12,17 +12,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
 export default function ({
-  openDialog,
+  dialogData,
   handleDialogClose,
   handleJoinRoomClick,
   handleCreateRoomClick,
 }) {
   const theme = mainTheme();
 
+  const { open, error } = dialogData;
   const [dialogValue, setDialogValue] = React.useState('');
 
   const onDialogClose = () => {
-    setDialogValue('');
     handleDialogClose();
   };
 
@@ -32,7 +32,6 @@ export default function ({
     }
 
     handleJoinRoomClick(dialogValue);
-    setDialogValue('');
   };
 
   const onCreateRoomClick = () => {
@@ -41,14 +40,17 @@ export default function ({
     }
 
     handleCreateRoomClick(dialogValue);
-    setDialogValue('');
   };
 
-  console.log('&&& Dialog RE-RENDER');
+  const onExit = () => {
+    setDialogValue('');
+    console.log('onExit');
+  };
 
   return (
     <Dialog
-      open={openDialog}
+      // open={openDialog}
+      open={open}
       onClose={handleDialogClose}
       aria-labelledby="form-dialog-title"
       PaperProps={{
@@ -57,6 +59,7 @@ export default function ({
           color: '#dcddde',
         },
       }}
+      onExit={onExit}
     >
       <DialogTitle id="form-dialog-title">
         Create a new room or join existing one
@@ -66,6 +69,8 @@ export default function ({
           Please enter a room name:
         </DialogContentText>
         <TextField
+          helperText={error}
+          error={!!error}
           onChange={(event) => setDialogValue(event.target.value)}
           value={dialogValue}
           autoFocus

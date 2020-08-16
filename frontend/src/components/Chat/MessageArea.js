@@ -20,11 +20,12 @@ export default function ({ messages }) {
               classes.messagesListItem,
               theme.backgroundPrimary
             )}
-            key={message.username}
+            key={message._id}
           >
             <Avatar className={classes.messagesListItemAvatar}>
-              {message.username[0]}
-              {message.username[1]}
+              ss
+              {/* {message.authorId.username[0]}
+              {message.authorId.username[1]} */}
             </Avatar>
             <Box>
               <Box className={classes.messagesListItemInfo}>
@@ -34,7 +35,8 @@ export default function ({ messages }) {
                     theme.headerPrimary
                   )}
                 >
-                  {message.username}
+                  {/* {message.authorId.username} */}
+                  ss
                 </Box>
                 <Box
                   className={classNames(
