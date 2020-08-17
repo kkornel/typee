@@ -44,12 +44,10 @@ export default function ({
 
   const onExit = () => {
     setDialogValue('');
-    console.log('onExit');
   };
 
   return (
     <Dialog
-      // open={openDialog}
       open={open}
       onClose={handleDialogClose}
       aria-labelledby="form-dialog-title"

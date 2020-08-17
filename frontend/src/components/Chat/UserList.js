@@ -24,7 +24,7 @@ export default function ({ users = [] }) {
               {user.username[1]}
             </Avatar>
             <Box className={classes.usersListItemInfo}>
-              <Box className={classes.usersListItemTitle}>{user.name}</Box>
+              <Box className={classes.usersListItemTitle}>{user.username}</Box>
               <Box className={classes.usersListItemSubTitle}>
                 {/* {user.subtitle} */}
                 Lorem ipsum

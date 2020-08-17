@@ -15,41 +15,29 @@ import Dialog from './Dialog';
 import UserList from './UserList';
 import RoomList from './RoomList';
 
-import { useRoomData } from '../../utils/useRoomData';
-
-// function messageReducer(state, action) {
-//   switch (action.type) {
-//     case 'NEW_MESSAGE':
-//       console.log('reducer', state);
-//       return [...state, action.payload];
-//     default:
-//       throw new Error(`Unhandled action type: ${action.type}`);
-//   }
-// }
+import { useRoomData, ACTIONS } from '../../utils/useRoomData';
 
 function ChatDashboard({
   user,
-  connect,
   sendMessage,
   newMessageHandler,
-  unregisterMessageHandler,
   newUserDataHandler,
   requestUserData,
   roomDataHandler,
   createRoom,
   joinRoom,
   leaveRoom,
-  // currentRoomLOL,
-  // messagesLOL,
-  // dispatchLOL,
 }) {
-  // const [state, dispatch] = React.useReducer(messageReducer, []);
-
-  const { messages, dispatch } = useRoomData();
-
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  // const [messages, setMessages] = React.useState([]);
+  const { messages, currentRoom, dispatch } = useRoomData();
+  const {
+    rooms,
+    setRooms,
+    getLastOpenedRoom,
+    setLastOpenedRoom,
+  } = useUserData();
+
   const [dialogData, setDialogData] = React.useState({
     open: false,
     error: '',
@@ -57,24 +45,12 @@ function ChatDashboard({
 
   React.useEffect(() => {
     console.log('useEffect');
+    const lastOpenedRoom = getLastOpenedRoom();
     newMessageHandler(onMessageReceived);
     newUserDataHandler(onUserDataReceived);
     requestUserData(user._id);
+    joinRoom(user._id, lastOpenedRoom, joinRoomCallback);
   }, []);
-
-  // React.useEffect(() => {
-  //   console.log('useEffect !!');
-  //   newMessageHandler(onMessageReceived);
-  //   return () => {
-  //     console.log('useEffect !! unregister');
-  //     unregisterMessageHandler(onMessageReceived);
-  //   };
-  // }, [messages]);
-
-  // const { currentRoom, setCurrentRoom } = useUser('a');
-  const { rooms, setRooms } = useUserData();
-
-  const [currentRoom, setCurrentRoom] = React.useState({ name: 'a' });
 
   const onUserDataReceived = ({ rooms }) => {
     console.log('onUserDataReceived', rooms);
@@ -90,9 +66,9 @@ function ChatDashboard({
       });
     }
 
-    setCurrentRoom(room);
-    // setMessages((prevMessages) => [...prevMessages, ...room.messages]);
-    dispatch({ type: 'LOAD_MESSAGES', payload: room.messages });
+    dispatch({ type: ACTIONS.SET_CURRENT_ROOM, payload: room });
+    dispatch({ type: ACTIONS.LOAD_MESSAGES, payload: room.messages });
+    setLastOpenedRoom(room.name);
 
     if (dialogData.open) {
       handleDialogClose();
@@ -109,8 +85,9 @@ function ChatDashboard({
     }
 
     // TODO: how to store rooms and room?
+    dispatch({ type: ACTIONS.SET_CURRENT_ROOM, payload: room });
     setRooms(rooms);
-    setCurrentRoom(room);
+    setLastOpenedRoom(room.name);
 
     enqueueSnackbar(`Room ${room.name} created.`, {
       variant: 'success',
@@ -122,11 +99,7 @@ function ChatDashboard({
   };
 
   const onMessageReceived = (message) => {
-    // console.log('onMessageReceived prevMessages', messagesLOL);
-    // console.log('onMessageReceived message', message);
-    // setMessages((prevMessages) => [...prevMessages, message]);
-    dispatch({ type: 'NEW_MESSAGE', payload: message });
-    // dispatchLOL({ type: 'NEW_MESSAGE', payload: message });
+    dispatch({ type: ACTIONS.NEW_MESSAGE, payload: message });
   };
 
   // const handleRoomClick = (roomName) => {
@@ -157,10 +130,6 @@ function ChatDashboard({
   };
 
   const handleJoinRoomClick = (dialogValue) => {
-    // TEMP:
-    // setSnackbarMessage(`${dialogValue} joined!`);
-    // setSnackbarSeverity('error');
-    // setOpenSnackbar(true);
     // TODO: leave?
     // leaveRoom(user._id, currentRoom, leaveCallback);
     joinRoom(user._id, dialogValue, joinRoomCallback);
@@ -193,11 +162,11 @@ function ChatDashboard({
           />
         </Grid>
         <Grid item xs={1}>
-          <UserList users={currentRoom.users} />
+          <UserList users={currentRoom ? currentRoom.users : []} />
         </Grid>
         <Grid item xs>
           <Box className={classes.messages}>
-            <MessageAreaBar text={currentRoom.name} />
+            <MessageAreaBar text={currentRoom ? currentRoom.name : ''} />
             <MessageArea messages={messages} />
             <MessageInput handleMessageSubmit={handleSubmit} />
           </Box>

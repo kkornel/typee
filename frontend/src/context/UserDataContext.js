@@ -1,19 +1,28 @@
 import React from 'react';
 
+const LAST_OPENED_ROOM_KEY = 'lastOpenedRoom';
+
 const UserDataContext = React.createContext();
 
 function UserDataProvider(props) {
-  const [currentRoom, setCurrentRoom] = React.useState('');
   const [rooms, setRooms] = React.useState([]);
+
+  const setLastOpenedRoom = React.useCallback((lastOpenedRoom) => {
+    localStorage.setItem(LAST_OPENED_ROOM_KEY, lastOpenedRoom);
+  }, []);
+
+  const getLastOpenedRoom = React.useCallback(() => {
+    return localStorage.getItem(LAST_OPENED_ROOM_KEY);
+  }, []);
 
   const value = React.useMemo(
     () => ({
-      currentRoom,
-      setCurrentRoom,
+      getLastOpenedRoom,
+      setLastOpenedRoom,
       rooms,
       setRooms,
     }),
-    [currentRoom, setCurrentRoom, rooms, setRooms]
+    [getLastOpenedRoom, setLastOpenedRoom, rooms, setRooms]
   );
 
   return <UserDataContext.Provider value={value} {...props} />;
