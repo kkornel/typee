@@ -20,33 +20,46 @@ function ChatDashboard({ user, socket }) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { messages, currentRoom, users, dispatch } = useRoomData();
-  const {
-    rooms,
-    setRooms,
-    getLastOpenedRoom,
-    setLastOpenedRoom,
-  } = useUserData();
+  const userData = useUserData();
 
   const [dialogData, setDialogData] = React.useState({
     open: false,
     error: '',
   });
 
+  React.useEffect(() => {
+    console.log('useEffect');
+    socket.connect(user._id, connectCallback);
+    socket.onNewMessage(onNewMessage);
+    socket.onNewRoomData(onNewRoomData);
+    socket.onNewUserData(onNewUserData);
+    socket.onUserStatusChanged(onUserStatusChanged);
+    socket.requestUserData(user._id);
+    socket.joinRoom(user._id, userData.getLastOpenedRoom(), joinRoomCallback);
+  }, []);
+
   const connectCallback = ({ error, user }) => {
     console.log('connectCallback', error, user);
   };
 
+  const onNewMessage = React.useCallback(
+    (message) => {
+      dispatch({ type: ACTIONS.NEW_MESSAGE, payload: message });
+    },
+    [dispatch]
+  );
+
   const onNewUserData = React.useCallback(
     ({ rooms }) => {
-      console.log('onUserDataReceived', rooms);
-      setRooms(rooms);
+      console.log('onNewUserData', rooms);
+      userData.setRooms(rooms);
     },
-    [setRooms]
+    [userData.setRooms]
   );
 
   const onUserStatusChanged = React.useCallback(
     (user) => {
-      console.log('onUserLeft', user);
+      console.log('onUserStatusChanged', user);
       dispatch({ type: ACTIONS.USER_STATUS_CHANGED, payload: user });
     },
     [dispatch]
@@ -54,7 +67,7 @@ function ChatDashboard({ user, socket }) {
 
   const onNewRoomData = React.useCallback(
     ({ users }) => {
-      console.log('onNewRoomDataReceived', users);
+      console.log('onNewRoomData', users);
       dispatch({ type: ACTIONS.USER_LIST_CHANGED, payload: users });
     },
     [dispatch]
@@ -69,21 +82,17 @@ function ChatDashboard({ user, socket }) {
       });
     }
 
+    // TODO: hmm?
     if (currentRoom) {
       console.log("There is some room so I'll leave it");
       socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
     }
 
     dispatch({ type: ACTIONS.LOAD_ROOM, payload: room });
-    // dispatch({ type: ACTIONS.SET_CURRENT_ROOM, payload: room });
-    // dispatch({ type: ACTIONS.LOAD_MESSAGES, payload: room.messages });
-    // dispatch({ type: ACTIONS.USER_LIST_CHANGED, payload: room.users });
-    setLastOpenedRoom(room.name);
-    setRooms(rooms);
+    userData.setLastOpenedRoom(room.name);
+    userData.setRooms(rooms);
 
-    if (dialogData.open) {
-      handleDialogClose();
-    }
+    handleDialogClose();
   };
 
   const createRoomCallback = ({ error, room, rooms }) => {
@@ -102,8 +111,8 @@ function ChatDashboard({ user, socket }) {
     }
 
     dispatch({ type: ACTIONS.SET_CURRENT_ROOM, payload: room });
-    setRooms(rooms);
-    setLastOpenedRoom(room.name);
+    userData.setRooms(rooms);
+    userData.setLastOpenedRoom(room.name);
 
     enqueueSnackbar(`Room ${room.name} created.`, {
       variant: 'success',
@@ -114,24 +123,8 @@ function ChatDashboard({ user, socket }) {
     // TODO: Open this room page
   };
 
-  const onNewMessage = React.useCallback(
-    (message) => {
-      dispatch({ type: ACTIONS.NEW_MESSAGE, payload: message });
-    },
-    [dispatch]
-  );
-
   const leaveCallback = (somedata) => {
     console.log('leaveCallback', somedata);
-  };
-
-  const handleRoomClick = (roomName) => {
-    if (roomName === currentRoom?.name) {
-      return;
-    }
-
-    // leaveRoom(user._id, currentRoom.name, leaveCallback);
-    socket.joinRoom(user._id, roomName, joinRoomCallback);
   };
 
   console.log('&&& ChatDashboard RE-RENDER');
@@ -140,13 +133,7 @@ function ChatDashboard({ user, socket }) {
     setDialogData({ open: true });
   };
 
-  const handleDialogClose = () => {
-    setDialogData({ open: false });
-  };
-
   const handleJoinRoomClick = (dialogValue) => {
-    // TODO: leave?
-    // leaveRoom(user._id, currentRoom, leaveCallback);
     socket.joinRoom(user._id, dialogValue, joinRoomCallback);
   };
 
@@ -166,31 +153,27 @@ function ChatDashboard({ user, socket }) {
     console.log('Message delivered.');
   };
 
-  React.useEffect(() => {
-    console.log('useEffect');
-    socket.connect(user._id, connectCallback);
-    socket.onNewMessage(onNewMessage);
-    socket.onNewRoomData(onNewRoomData);
-    socket.onNewUserData(onNewUserData);
-    socket.onUserStatusChanged(onUserStatusChanged);
-    socket.requestUserData(user._id);
-    socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
-  }, [
-    getLastOpenedRoom,
-    onNewMessage,
-    onNewRoomData,
-    onNewUserData,
-    onUserStatusChanged,
-    socket,
-    user._id,
-  ]);
+  const handleDialogClose = () => {
+    if (dialogData.open) {
+      setDialogData({ open: false });
+    }
+  };
+
+  const handleRoomClick = (roomName) => {
+    // if (roomName === currentRoom?.name) {
+    if (roomName === currentRoom?.name) {
+      return;
+    }
+
+    socket.joinRoom(user._id, roomName, joinRoomCallback);
+  };
 
   return (
     <Box className={classes.chat}>
       <Grid container spacing={0}>
         <Grid item className={classes.channels}>
           <RoomList
-            rooms={rooms}
+            rooms={userData.rooms}
             handleRoomClick={handleRoomClick}
             handleAddClick={handleAddRoomClick}
           />

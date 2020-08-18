@@ -16,24 +16,28 @@ const connectionEvent = (io) => {
     console.log('New connection', socket.id);
 
     socket.on('connectUser', async ({ userId }, callback) => {
-      console.log('connectUser');
       const { error, user } = await connectUser(userId, socket.id);
-      console.log('connectUser', socket.id, user.toJSON(), error);
-      callback({ error, user });
-      const rooms = await user.getRoomsNames();
 
+      console.log('connectUser', user.toJSON(), error);
+
+      callback({ error, user });
+
+      const rooms = await user.getRoomsNames();
       rooms.forEach((room) => {
         io.to(room).emit('userStatusChanged', user);
       });
     });
 
     socket.on('disconnect', async () => {
-      console.log('disconnect', socket.id);
-
       const { error, user } = await disconnectUser(socket.id);
 
-      const rooms = await user.getRoomsNames();
+      if (error) {
+        return;
+      }
 
+      console.log('disconnectUser', user.toJSON());
+
+      const rooms = await user.getRoomsNames();
       rooms.forEach((room) => {
         io.to(room).emit('userStatusChanged', user);
       });
@@ -60,8 +64,9 @@ const connectionEvent = (io) => {
     });
 
     socket.on('message', async ({ text, roomName, authorId }, callback) => {
-      console.log('message', text, roomName, authorId);
       const { message, error } = await createMessage(text, roomName, authorId);
+
+      console.log('createMessage', message.toJSON());
 
       if (error) {
         return callback(error);

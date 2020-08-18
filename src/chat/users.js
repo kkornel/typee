@@ -89,7 +89,6 @@ const createMessage = async (text, roomName, authorId) => {
   await room.save();
 
   await newMessage.populate('author', '_id username').execPopulate();
-  console.log('createMessage newMessage', newMessage);
 
   return { message: newMessage };
 };
@@ -115,7 +114,6 @@ const getUserData = async (userId) => {
 };
 
 const connectUser = async (userId, socketId) => {
-  console.log('connectUser');
   const user = await User.findByIdAndUpdate(
     userId,
     { socketId, online: true },
@@ -139,8 +137,6 @@ const disconnectUser = async (socketId) => {
       new: true,
     }
   );
-
-  console.log('disconnectUser', user.toJSON());
 
   if (!user) {
     return { error: `Couldn't find user associated with socket: ${socketId}.` };

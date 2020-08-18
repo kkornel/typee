@@ -27,16 +27,9 @@ function roomDataReducer(state, action) {
     case ACTIONS.USER_LIST_CHANGED:
       return { ...state, users: action.payload };
     case ACTIONS.USER_STATUS_CHANGED:
-      console.log('ACTIONS.USER_LEFT', action);
-      console.log('!!!!!!!!!!!!!!!!!!!! state', state);
-      console.log('!!!!!!!!!!!!!!!!!!!! state.users', state.users);
-
       const users = state.users.map((user) => {
-        console.log('!!!!!!!!!!!!!!!!!!!!', user);
         if (user._id === action.payload._id) {
-          console.log('??????????????????????????', user);
           user.online = action.payload.online;
-          console.log('??????????????????????????', user);
         }
         return user;
       });
@@ -59,7 +52,6 @@ function useRoomData() {
   const { currentRoom, messages, users } = state;
 
   console.log('useRoomData state', state);
-  console.log('useRoomData users', users);
 
   return {
     currentRoom,
