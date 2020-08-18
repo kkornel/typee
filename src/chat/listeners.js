@@ -6,11 +6,52 @@ const {
   leaveRoom,
   generateRoomData,
   getUserData,
+  connectUser,
+  disconnectUser,
 } = require('./users');
+const User = require('../models/User');
 
 const connectionEvent = (io) => {
   io.on('connection', (socket) => {
     console.log('New connection', socket.id);
+
+    socket.on('connectUser', async ({ userId }, callback) => {
+      console.log('connectUser');
+      const { error, user } = await connectUser(userId, socket.id);
+      console.log('connectUser', socket.id, user.toJSON(), error);
+      callback({ error, user });
+      const rooms = await user.getRoomsNames();
+
+      rooms.forEach((room) => {
+        io.to(room).emit('userStatusChanged', user);
+      });
+    });
+
+    socket.on('disconnect', async () => {
+      console.log('disconnect', socket.id);
+
+      const { error, user } = await disconnectUser(socket.id);
+
+      const rooms = await user.getRoomsNames();
+
+      rooms.forEach((room) => {
+        io.to(room).emit('userStatusChanged', user);
+      });
+
+      // leaveRoom(socket.id);
+      // const user = removeUser(socket.id);
+
+      // if (user) {
+      //   io.to(user.room).emit(
+      //     'message',
+      //     generateMessage(`${userId} has left!`)
+      //   );
+      //   io.to(user.room).emit('roomData', {
+      //     room: user.room,
+      //     users: getUsersInRoom(user.room),
+      //   });
+      // }
+    });
 
     socket.on('userDataRequest', async ({ userId }) => {
       console.log('userDataRequest', userId);
@@ -41,12 +82,17 @@ const connectionEvent = (io) => {
       const { rooms } = await getUserData(authorId);
       callback({ room, rooms });
 
+      const user = await User.findById(authorId);
+
       // Joining user immediately after creating room
       socket.join(room.name);
-      socket.emit('message', generateMessage(`Welcome to the ${room.name}`));
+      socket.emit(
+        'message',
+        generateMessage(`Welcome ${user.username} to the ${room.name}`)
+      );
       socket.broadcast
         .to(room.name)
-        .emit('message', generateMessage(`${authorId} has joined!`));
+        .emit('message', generateMessage(`${user.username} has joined!`));
     });
 
     socket.on('join', async ({ roomName, userId }, callback) => {
@@ -60,11 +106,16 @@ const connectionEvent = (io) => {
       const { rooms } = await getUserData(userId);
       callback({ room, rooms });
 
+      const user = await User.findById(userId);
+
       socket.join(room.name);
-      // socket.emit('message', generateMessage(`Welcome to the ${room.name}`));
+      socket.emit(
+        'message',
+        generateMessage(`Welcome ${user.username} to the ${room.name}`)
+      );
       socket.broadcast
         .to(room.name)
-        .emit('message', generateMessage(`${userId} has joined!`));
+        .emit('message', generateMessage(`${user.username} has joined!`));
 
       // TODO: Generate room data to the others
       socket.broadcast
@@ -77,34 +128,19 @@ const connectionEvent = (io) => {
       const { error, room } = await leaveRoom(roomName, userId, socket.id);
 
       if (error) {
-        callback({ error });
+        return callback({ error });
       }
 
       callback();
 
+      const user = await User.findById(userId);
+
       socket.broadcast
         .to(roomName)
-        .emit('message', generateMessage(`${userId} has left!`));
+        .emit('message', generateMessage(`${user.username} has left!`));
       socket.broadcast
         .to(roomName)
         .emit('roomData', await generateRoomData(roomName));
-    });
-
-    socket.on('disconnect', () => {
-      console.log('disconnect', socket.id);
-      // leaveRoom(socket.id);
-      // const user = removeUser(socket.id);
-
-      // if (user) {
-      //   io.to(user.room).emit(
-      //     'message',
-      //     generateMessage(`${userId} has left!`)
-      //   );
-      //   io.to(user.room).emit('roomData', {
-      //     room: user.room,
-      //     users: getUsersInRoom(user.room),
-      //   });
-      // }
     });
   });
 };

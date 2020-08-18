@@ -158,7 +158,7 @@ const handleResendVerificationRequest = async (req, res, next) => {
 
     // Delete existing token, user requested new one
     // so either he didn't receive old or the token expired
-    const token = await Token.findOne({ userId: user.id });
+    const token = await Token.findOne({ user: user.id });
     if (token) {
       await token.remove();
     }
@@ -195,7 +195,7 @@ const verifyConfirmationToken = async (req, res, next) => {
       throw new ErrorResponse(400, 'Token expired.');
     }
 
-    await User.findByIdAndUpdate(token.userId, { active: true });
+    await User.findByIdAndUpdate(token.user, { active: true });
     await token.remove();
 
     res.status(200).send({
@@ -304,13 +304,13 @@ const setNewPassword = async (req, res, next) => {
     // req.cookies = null;
     // res.cookies = null;
 
-    await token.populate('userId').execPopulate();
+    await token.populate('user').execPopulate();
 
     // Can't do here User.findByIdAndUpdate(), because this omits
     // the middleware used in userSchema like: userSchema.pre().
     // So the new password would not be hashed.
     // Have to find, update and change in three steps.
-    const user = token.userId;
+    const user = token.user;
     user.password = password;
 
     await user.save();

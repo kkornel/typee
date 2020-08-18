@@ -1,67 +1,88 @@
 import React from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import { Paper } from '@material-ui/core';
 
 // TODO: Add unique key
 export default function ({ messages }) {
   const classes = useStyles();
   const theme = mainTheme();
 
-  return (
-    <Box className={classNames(classes.messagesList, theme.backgroundPrimary)}>
-      {messages.map((message) => {
-        return (
-          <Box
-            className={classNames(
-              classes.messagesListItem,
-              theme.backgroundPrimary
-            )}
-            key={message._id}
-          >
-            <Avatar className={classes.messagesListItemAvatar}>
-              ss
-              {/* {message.authorId.username[0]}
+  const renderMessage = () => {
+    return (
+      <Box
+        className={classNames(classes.messagesList, theme.backgroundPrimary)}
+      >
+        {messages.map((message) => {
+          let username = '';
+          let key = '';
+
+          if (message.username) {
+            username = 'Admin';
+            key = uuidv4();
+            console.log('key', key);
+          } else {
+            username = message.author.username;
+            key = message._id;
+          }
+          return (
+            <Box
+              className={classNames(
+                classes.messagesListItem,
+                theme.backgroundPrimary
+              )}
+              // key={message._id}
+              key={key}
+            >
+              <Avatar className={classes.messagesListItemAvatar}>
+                {username[0]}
+                {username[1]}
+                {/* {message.authorId.username[0]}
               {message.authorId.username[1]} */}
-            </Avatar>
-            <Box>
-              <Box className={classes.messagesListItemInfo}>
+              </Avatar>
+              <Box>
+                <Box className={classes.messagesListItemInfo}>
+                  <Box
+                    className={classNames(
+                      classes.messagesListItemUsername,
+                      theme.headerPrimary
+                    )}
+                  >
+                    {/* {message.authorId.username} */}
+                    {username}
+                  </Box>
+                  <Box
+                    className={classNames(
+                      classes.messagesListItemDate,
+                      theme.textMuted
+                    )}
+                  >
+                    {message.createdAt}
+                  </Box>
+                </Box>
+                <Box className={classes.flexDivider}></Box>
                 <Box
                   className={classNames(
-                    classes.messagesListItemUsername,
-                    theme.headerPrimary
+                    classes.messagesListItemContent,
+                    theme.textNormal
                   )}
                 >
-                  {/* {message.authorId.username} */}
-                  ss
+                  {message.text}
                 </Box>
-                <Box
-                  className={classNames(
-                    classes.messagesListItemDate,
-                    theme.textMuted
-                  )}
-                >
-                  {message.createdAt}
-                </Box>
-              </Box>
-              <Box className={classes.flexDivider}></Box>
-              <Box
-                className={classNames(
-                  classes.messagesListItemContent,
-                  theme.textNormal
-                )}
-              >
-                {message.text}
               </Box>
             </Box>
-          </Box>
-        );
-      })}
-    </Box>
-  );
+          );
+        })}
+      </Box>
+    );
+  };
+
+  return renderMessage();
 }
 
 const mainTheme = makeStyles((theme) => ({

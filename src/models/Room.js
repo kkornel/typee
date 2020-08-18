@@ -8,14 +8,14 @@ const roomSchema = new Schema({
     unique: true,
     required: true,
   },
-  authorId: {
+  author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
   users: [
     {
-      userId: {
+      user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
@@ -35,9 +35,15 @@ const roomSchema = new Schema({
 });
 
 roomSchema.methods.getUsersInRoom = async function () {
-  await this.populate('users.userId', '_id username').execPopulate();
-  const users = this.users.map((user) => user.userId);
+  await this.populate('users.user', '_id username online').execPopulate();
+  const users = this.users.map((user) => user.user);
   return users;
+};
+
+roomSchema.methods.toJSON = function () {
+  const roomObject = this.toObject();
+  delete roomObject.__v;
+  return roomObject;
 };
 
 const Room = mongoose.model('Room', roomSchema);

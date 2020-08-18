@@ -54,7 +54,7 @@ const userNotVerified = {
 const expiredTokenId = new mongoose.Types.ObjectId();
 const expiredToken = {
   _id: expiredTokenId,
-  userId: userOneId.toString(),
+  user: userOneId.toString(),
   token: crypto.randomBytes(20).toString('hex'),
   expires: Date.now() - 3600000,
 };
@@ -62,7 +62,7 @@ const expiredToken = {
 const validTokenId = new mongoose.Types.ObjectId();
 const validToken = {
   _id: validTokenId,
-  userId: userNotVerifiedId.toString(),
+  user: userNotVerifiedId.toString(),
   token: crypto.randomBytes(20).toString('hex'),
   expires: Date.now() + 3600000,
 };

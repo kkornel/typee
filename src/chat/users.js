@@ -7,12 +7,12 @@ const createRoom = async (roomName, authorId, socketId) => {
 
   if (alreadyExists) {
     return {
-      error: 'Room already exists.',
+      error: `Room ${roomName} already exists.`,
     };
   }
 
-  const room = new Room({ name: roomName, authorId });
-  room.users.push({ userId: authorId, socketId });
+  const room = new Room({ name: roomName, author: authorId });
+  room.users.push({ user: authorId, socketId });
   await room.save();
 
   const roomWithUsers = JSON.parse(JSON.stringify(room));
@@ -32,24 +32,19 @@ const joinRoom = async (roomName, userId, socketId) => {
     };
   }
 
-  // TODO: Think about it!
-  const alreadyInRoom = room.users.findIndex(
-    // (user) => user.userId.equals(userId) && user.socketId === socketId
-    (user) => user.userId.equals(userId)
+  const alreadyInRoom = room.users.findIndex((user) =>
+    user.user.equals(userId)
   );
 
-  console.log('alreadyInRoom', alreadyInRoom);
-
-  if (alreadyInRoom == -1) {
-    room.users.push({ userId, socketId });
+  if (alreadyInRoom === -1) {
+    room.users.push({ user: userId, socketId });
   } else {
     room.users[alreadyInRoom].socketId = socketId;
   }
 
   await room.save();
-  // await room.populate('users.userId', '_id username').execPopulate();
-  await room.populate('messages', '_id authorId text createdAt').execPopulate();
-  await room.populate('messages.authorId', '_id username').execPopulate();
+  await room.populate('messages', '_id author text createdAt').execPopulate();
+  await room.populate('messages.author', '_id username').execPopulate();
 
   // I'm doing this, because I want to have only user list under property 'users',
   // not any socketId or ObjectId, but there is no way to manipulate Mongo Document,
@@ -71,13 +66,11 @@ const leaveRoom = async (roomName, userId, socketId) => {
     };
   }
 
-  const index = room.users.findIndex((user) => user.userId === userId);
-  // console.log('index', index);
+  // const index = room.users.findIndex((user) => user.user === userId);
 
-  room.users.splice(index, 1);
-  await room.save();
+  // room.users.splice(index, 1);
+  // await room.save();
 
-  // console.log('room', room);
   return { room };
 };
 
@@ -90,16 +83,12 @@ const createMessage = async (text, roomName, authorId) => {
     };
   }
 
-  const user = await User.findById(authorId);
-  const newMessage = await new Message({ authorId, text }).save();
+  const newMessage = await new Message({ author: authorId, text }).save();
 
   room.messages.push(newMessage);
   await room.save();
 
-  // const message = generateMessage(text, user.username, newMessage.createdAt);
-  // return { message };
-
-  await newMessage.populate('authorId', '_id username').execPopulate();
+  await newMessage.populate('author', '_id username').execPopulate();
   console.log('createMessage newMessage', newMessage);
 
   return { message: newMessage };
@@ -115,18 +104,49 @@ const generateMessage = (text, username = 'Admin', createdAt = Date.now()) => {
 
 const generateRoomData = async (roomName) => {
   const room = await Room.findOne({ name: roomName });
-  // await room.populate('users.userId', '_id username').execPopulate();
   const users = await room.getUsersInRoom();
-  // console.log('generateRoomData', users);
   return { users };
 };
 
 const getUserData = async (userId) => {
   const user = await User.findById(userId);
-  // console.log(user);
   const rooms = await user.getRoomsNames();
-  // console.log(rooms);
   return { rooms };
+};
+
+const connectUser = async (userId, socketId) => {
+  console.log('connectUser');
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { socketId, online: true },
+    {
+      new: true,
+    }
+  );
+
+  if (!user) {
+    return { error: `Couldn't find user with id: ${userId}.` };
+  }
+
+  return { user };
+};
+
+const disconnectUser = async (socketId) => {
+  const user = await User.findOneAndUpdate(
+    { socketId },
+    { socketId: null, online: false },
+    {
+      new: true,
+    }
+  );
+
+  console.log('disconnectUser', user.toJSON());
+
+  if (!user) {
+    return { error: `Couldn't find user associated with socket: ${socketId}.` };
+  }
+
+  return { user };
 };
 
 module.exports = {
@@ -137,4 +157,6 @@ module.exports = {
   leaveRoom,
   generateRoomData,
   getUserData,
+  connectUser,
+  disconnectUser,
 };

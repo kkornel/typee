@@ -18,17 +18,6 @@ const verificationTemplate = require('../services/emailTemplates/verificationTem
 const passwordResetTemplate = require('../services/emailTemplates/passwordResetTemplate');
 const Token = require('./Token');
 
-// userSchema.methods.toJSON = function () {
-//   const user = this;
-//   const userObject = user.toObject();
-
-//   delete userObject.password;
-//   delete userObject.tokens;
-//   delete userObject.avatar;
-
-//   return userObject;
-// };
-
 // Delete user tasks when user is removed
 // userSchema.pre('remove', async function (next) {
 //   const user = this;
@@ -97,6 +86,13 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    socketId: {
+      type: String,
+    },
+    online: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
@@ -105,7 +101,7 @@ const userSchema = new Schema(
 // It is relationship between two entities.
 // It is for mongoose to know how things are related.
 // Allows to use: await user.populate('tokens').execPopulate(),
-// to get list of all tokens with userId of that user,
+// to get list of all tokens with user of that user,
 // instead of querying Token collection by his id.
 // It not returns tokens of user! But a user object with tokens property.
 // 'tokens' property is actually not visible when console.log(user),
@@ -113,25 +109,25 @@ const userSchema = new Schema(
 userSchema.virtual('tokens', {
   ref: 'Token',
   localField: '_id',
-  foreignField: 'userId',
+  foreignField: 'user',
 });
 
 userSchema.virtual('messages', {
   ref: 'Message',
   localField: '_id',
-  foreignField: 'authorId',
+  foreignField: 'author',
 });
 
 userSchema.virtual('rooms', {
   ref: 'Room',
   localField: '_id',
-  foreignField: 'users.userId',
+  foreignField: 'users.user',
 });
 
 userSchema.virtual('createdRooms', {
   ref: 'Room',
   localField: '_id',
-  foreignField: 'authorId',
+  foreignField: 'author',
 });
 
 userSchema.pre('save', async function (next) {
@@ -178,7 +174,7 @@ userSchema.methods.generateAuthToken = async function () {
 
 userSchema.methods.generateToken = function (expiresIn) {
   const payload = {
-    userId: this._id.toString(),
+    user: this._id.toString(),
     token: crypto.randomBytes(20).toString('hex'),
     expires: Date.now() + expiresIn,
   };
@@ -204,6 +200,19 @@ userSchema.methods.sendPasswordResetEmail = function (token) {
     'Password reset request',
     passwordResetTemplate(this.username, url)
   );
+};
+
+userSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+
+  delete userObject.password;
+  delete userObject.avatar;
+  delete userObject.jwtTokens;
+  delete userObject.createdAt;
+  delete userObject.updatedAt;
+  delete userObject.__v;
+
+  return userObject;
 };
 
 const User = mongoose.model('User', userSchema);

@@ -12,28 +12,17 @@ function useSocket(endpoint = ENDPOINT) {
   const socket = io(endpoint);
 
   // Approach #1
-  function connect(endpoint = ENDPOINT) {
-    // setSocket(io(endpoint));
+  // function connect(endpoint = ENDPOINT) {
+  //   setSocket(io(endpoint));
+  // }
+
+  function connect(userId, callback) {
+    console.log('connect');
+    socket.emit('connectUser', { userId }, callback);
   }
 
   function sendMessage(text, roomName, authorId, callback) {
     socket.emit('message', { text, roomName, authorId }, callback);
-  }
-
-  function newMessageHandler(onMessageReceived) {
-    socket.on('message', onMessageReceived);
-  }
-
-  function unregisterMessageHandler(onMessageReceived) {
-    socket.off('message', onMessageReceived);
-  }
-
-  function roomDataHandler(onRoomDataReceived) {
-    socket.on('roomData', onRoomDataReceived);
-  }
-
-  function newUserDataHandler(onNewUserData) {
-    socket.on('newUserData', onNewUserData);
   }
 
   function requestUserData(userId) {
@@ -52,17 +41,38 @@ function useSocket(endpoint = ENDPOINT) {
     socket.emit('leave', { roomName, userId }, callback);
   }
 
+  function onNewMessage(callback) {
+    socket.on('message', callback);
+  }
+
+  function onNewRoomData(callback) {
+    socket.on('roomData', callback);
+  }
+
+  function onNewUserData(callback) {
+    socket.on('newUserData', callback);
+  }
+
+  function onUserStatusChanged(callback) {
+    socket.on('userStatusChanged', callback);
+  }
+
+  function disconnet() {
+    socket.disconnect();
+  }
+
   return {
     connect,
     sendMessage,
-    newMessageHandler,
-    newUserDataHandler,
-    unregisterMessageHandler,
     requestUserData,
-    roomDataHandler,
     createRoom,
     joinRoom,
     leaveRoom,
+    onNewMessage,
+    onNewRoomData,
+    onNewUserData,
+    onUserStatusChanged,
+    disconnet,
   };
 }
 

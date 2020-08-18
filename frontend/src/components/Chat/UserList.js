@@ -8,15 +8,24 @@ import Box from '@material-ui/core/Box';
 import { deepPurple } from '@material-ui/core/colors';
 
 // TODO: unique keys
-export default function ({ users = [] }) {
+export default function UserList({ users = [] }) {
   const classes = useStyles();
   const theme = mainTheme();
 
   return (
     <Box className={classNames(classes.usersList, theme.backgroundSecondary)}>
       {users.map((user) => {
+        if (!user) {
+          return;
+        }
+        console.log('UserList', user);
+        const cls = user.online
+          ? classes.usersListItem
+          : classNames(classes.usersListItem, classes.red);
+
         return (
-          <Box className={classes.usersListItem} key={user._id}>
+          // <Box className={classes.usersListItem} key={user._id}>
+          <Box className={cls} key={user._id}>
             <Avatar className={classes.usersListItemAvatar}>
               {/* {user.name[0]}
               {user.name[1]} */}
@@ -44,6 +53,9 @@ const mainTheme = makeStyles((theme) => ({
 }));
 
 const useStyles = makeStyles((theme) => ({
+  red: {
+    background: 'red',
+  },
   usersList: {
     // background: 'purple',
     // background: '#2f3136',

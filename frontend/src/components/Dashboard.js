@@ -8,32 +8,25 @@ import ChatDashboard from './Chat/ChatDashboard';
 function Dashboard() {
   const { user } = useAuth();
 
-  const {
-    sendMessage,
-    newMessageHandler,
-    newUserDataHandler,
-    roomDataHandler,
-    createRoom,
-    joinRoom,
-    leaveRoom,
-    requestUserData,
-  } = useSocket();
+  // const {
+  //   connect,
+  //   sendMessage,
+  //   requestUserData,
+  //   createRoom,
+  //   joinRoom,
+  //   leaveRoom,
+  //   onNewMessage,
+  //   onNewRoomData,
+  //   onNewUserData,
+  //   onUserStatusChanged,
+  //   disconnet,
+  // } = useSocket();
+
+  const socket = useSocket();
 
   console.log('&&& Dashboard RE-RENDER');
 
-  return (
-    <ChatDashboard
-      user={user}
-      sendMessage={sendMessage}
-      newMessageHandler={newMessageHandler}
-      newUserDataHandler={newUserDataHandler}
-      requestUserData={requestUserData}
-      roomDataHandler={roomDataHandler}
-      createRoom={createRoom}
-      joinRoom={joinRoom}
-      leaveRoom={leaveRoom}
-    />
-  );
+  return <ChatDashboard socket={socket} user={user} />;
 }
 
 export default Dashboard;

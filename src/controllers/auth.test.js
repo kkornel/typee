@@ -111,7 +111,7 @@ describe('POST /api/v1/auth/register', () => {
     expect(user.password).not.toEqual(newUserFormValues.password);
 
     // Find all user's tokens
-    const tokens = await Token.find({ userId: user._id });
+    const tokens = await Token.find({ user: user._id });
 
     // Expect to be only one token for new user - email verification token
     expect(tokens).not.toBeNull();
@@ -280,7 +280,7 @@ describe('POST /api/v1/auth/verify', () => {
     const user = await User.findOne({ email });
     expect(user).not.toBeNull();
 
-    const token = await Token.findOne({ userId: userNotVerified._id });
+    const token = await Token.findOne({ user: userNotVerified._id });
     expect(token).not.toBeNull();
 
     expect(response.body).toMatchObject({
@@ -322,7 +322,7 @@ describe('POST /api/v1/auth/verify/:token', () => {
   });
 
   it('should respond with 200 for account verified with valid token', async () => {
-    let user = await User.findById(validToken.userId);
+    let user = await User.findById(validToken.user);
     expect(user.active).toBe(false);
 
     let token = await Token.findOne(validToken);
@@ -333,7 +333,7 @@ describe('POST /api/v1/auth/verify/:token', () => {
       .expect('Content-Type', /json/)
       .expect(200);
 
-    user = await User.findById(validToken.userId);
+    user = await User.findById(validToken.user);
     expect(user.active).toBe(true);
 
     // Expect token to be deleted after use
@@ -386,7 +386,7 @@ describe('POST /api/v1/auth/password/reset', () => {
     const user = await User.findOne({ email: userOne.email });
     expect(user).not.toBeNull();
 
-    const token = await Token.findOne({ userId: user._id });
+    const token = await Token.findOne({ user: user._id });
     expect(token).not.toBeNull();
 
     expect(response.body).toMatchObject({
@@ -487,7 +487,7 @@ describe('POST /api/v1/auth/password/reset/new', () => {
   });
 
   it("should respond 200 for updating user's password", async () => {
-    let user = await User.findById(validToken.userId);
+    let user = await User.findById(validToken.user);
     expect(user).not.toBeNull();
 
     const newPassword = 'N3wPassw0rd!@';
@@ -501,7 +501,7 @@ describe('POST /api/v1/auth/password/reset/new', () => {
       .send({ password: newPassword })
       .expect(200);
 
-    user = await User.findById(validToken.userId);
+    user = await User.findById(validToken.user);
 
     isMatch = await bcrypt.compare(newPassword, user.password);
     expect(isMatch).toBe(true);
