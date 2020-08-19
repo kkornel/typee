@@ -3,8 +3,8 @@ import { useSnackbar } from 'notistack';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-
 import MessageInput from './MessageInput';
 import MessageArea from './MessageArea';
 import MessageAreaBar from './MessageAreaBar';
@@ -14,7 +14,7 @@ import RoomList from './RoomList';
 
 import { useUserData } from '../../context/UserDataContext';
 import { useRoomData, ACTIONS } from '../../utils/useRoomData';
-import { Button } from '@material-ui/core';
+import FullPageSpinner from '../../components/ui/FullPageSpinner';
 
 function ChatDashboard({ user, socket }) {
   const classes = useStyles();
@@ -37,6 +37,10 @@ function ChatDashboard({ user, socket }) {
     socket.requestUserData(user._id);
     socket.joinRoom(user._id, userData.getLastOpenedRoom(), joinRoomCallback);
   }, []);
+
+  const onLeaveClick = () => {
+    console.log('onLeaveClick');
+  };
 
   const connectCallback = ({ error, user }) => {
     console.log('connectCallback', error, user);
@@ -168,6 +172,10 @@ function ChatDashboard({ user, socket }) {
     socket.joinRoom(user._id, roomName, joinRoomCallback);
   };
 
+  if (!currentRoom) {
+    return <FullPageSpinner />;
+  }
+
   return (
     <Box className={classes.chat}>
       <Grid container spacing={0}>
@@ -184,7 +192,11 @@ function ChatDashboard({ user, socket }) {
         </Grid>
         <Grid item xs>
           <Box className={classes.messages}>
-            <MessageAreaBar text={currentRoom?.name} />
+            <MessageAreaBar
+              text={currentRoom.name}
+              isAuthor={currentRoom.author === user._id}
+              onLeaveClick={onLeaveClick}
+            />
             <MessageArea messages={messages} />
             <MessageInput handleMessageSubmit={handleSubmit} />
           </Box>
