@@ -2,6 +2,7 @@ const {
   createRoom,
   joinRoom,
   generateMessage,
+  generateSystemMessage,
   createMessage,
   leaveRoom,
   generateRoomData,
@@ -93,11 +94,11 @@ const connectionEvent = (io) => {
       socket.join(room.name);
       socket.emit(
         'message',
-        generateMessage(`Welcome ${user.username} to the ${room.name}`)
+        generateSystemMessage(`Welcome to the ${room.name}`)
       );
       socket.broadcast
         .to(room.name)
-        .emit('message', generateMessage(`${user.username} has joined!`));
+        .emit('message', generateSystemMessage(`${user.username} has joined!`));
     });
 
     socket.on('join', async ({ roomName, userId }, callback) => {
@@ -116,11 +117,11 @@ const connectionEvent = (io) => {
       socket.join(room.name);
       socket.emit(
         'message',
-        generateMessage(`Welcome ${user.username} to the ${room.name}`)
+        generateSystemMessage(`Welcome to the ${room.name}`)
       );
       socket.broadcast
         .to(room.name)
-        .emit('message', generateMessage(`${user.username} has joined!`));
+        .emit('message', generateSystemMessage(`${user.username} has joined!`));
 
       // TODO: Generate room data to the others
       socket.broadcast
@@ -142,7 +143,7 @@ const connectionEvent = (io) => {
 
       socket.broadcast
         .to(roomName)
-        .emit('message', generateMessage(`${user.username} has left!`));
+        .emit('message', generateSystemMessage(`${user.username} has left!`));
       socket.broadcast
         .to(roomName)
         .emit('roomData', await generateRoomData(roomName));

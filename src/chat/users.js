@@ -1,3 +1,5 @@
+const { v4: uuidv4 } = require('uuid');
+
 const Room = require('../models/Room');
 const User = require('../models/User');
 const Message = require('../models/Message');
@@ -101,6 +103,15 @@ const generateMessage = (text, username = 'Admin', createdAt = Date.now()) => {
   };
 };
 
+const generateSystemMessage = (text) => {
+  return {
+    _id: uuidv4(),
+    systemMessage: true,
+    text,
+    createdAt: Date.now(),
+  };
+};
+
 const generateRoomData = async (roomName) => {
   const room = await Room.findOne({ name: roomName });
   const users = await room.getUsersInRoom();
@@ -151,6 +162,7 @@ module.exports = {
   joinRoom,
   createMessage,
   generateMessage,
+  generateSystemMessage,
   leaveRoom,
   generateRoomData,
   getUserData,
