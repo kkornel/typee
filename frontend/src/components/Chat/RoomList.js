@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-export default function ({ rooms = [], handleRoomClick, handleAddClick }) {
+export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
   const classes = useStyles();
   const theme = mainTheme();
 
@@ -24,9 +24,9 @@ export default function ({ rooms = [], handleRoomClick, handleAddClick }) {
 
   return (
     <Box className={classNames(classes.roomList, theme.backgroundTertiary)}>
-      {rooms.map((roomName) => {
+      {rooms.map(({ _id, name: roomName }) => {
         return (
-          <Box className={classes.room} key={roomName}>
+          <Box className={classes.room} key={_id}>
             <Tooltip title={roomName}>
               <IconButton
                 value={roomName}

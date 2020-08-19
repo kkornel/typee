@@ -9,7 +9,7 @@ import Box from '@material-ui/core/Box';
 import { Paper } from '@material-ui/core';
 
 // TODO: Add unique key
-export default function ({ messages }) {
+export default function MessageArea({ messages }) {
   const classes = useStyles();
   const theme = mainTheme();
 

@@ -23,7 +23,9 @@ const messageSchema = new Schema({
 
 messageSchema.methods.toJSON = function () {
   const messageObject = this.toObject();
+
   delete messageObject.__v;
+
   return messageObject;
 };
 

@@ -13,7 +13,7 @@ import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
 import SendIcon from '@material-ui/icons/Send';
 
-export default function ({ handleMessageSubmit }) {
+export default function MessageInput({ handleMessageSubmit }) {
   const classes = useStyles();
   const theme = mainTheme();
 

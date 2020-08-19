@@ -109,7 +109,8 @@ const generateRoomData = async (roomName) => {
 
 const getUserData = async (userId) => {
   const user = await User.findById(userId);
-  const rooms = await user.getRoomsNames();
+  // const rooms = await user.getRoomsNames();
+  const rooms = await user.getRooms();
   return { rooms };
 };
 
