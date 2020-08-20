@@ -222,7 +222,7 @@ const useStyles = makeStyles((theme) => ({
     // width: '100%',
     position: 'absolute',
     zIndex: '-2',
-    color: '#dcddde',
+    color: theme.palette.textNormal,
     width: '100%',
   },
   channels: {

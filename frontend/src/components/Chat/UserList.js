@@ -11,13 +11,14 @@ import TextDivider from './TextDivider';
 
 export default function UserList({ users }) {
   const classes = useStyles();
-  const theme = mainTheme();
+  // const theme = mainTheme();
 
   const online = users.filter((user) => user.online === true);
   const offline = users.filter((user) => user.online === false);
 
   return (
-    <Box className={classNames(classes.usersList, theme.backgroundSecondary)}>
+    // <Box className={classNames(classes.usersList, theme.backgroundSecondary)}>
+    <Box className={classes.usersList}>
       {online.map((user) => (
         <UserListItem user={user} key={user._id} />
       ))}
@@ -31,16 +32,17 @@ export default function UserList({ users }) {
   );
 }
 
-const mainTheme = makeStyles((theme) => ({
-  backgroundSecondary: {
-    backgroundColor: '#2f3136',
-  },
-}));
+// const mainTheme = makeStyles((theme) => ({
+//   backgroundSecondary: {
+//     backgroundColor: '#2f3136',
+//   },
+// }));
 
 const useStyles = makeStyles((theme) => ({
   usersList: {
     // background: 'purple',
     // background: '#2f3136',
+    background: theme.palette.backgroundMiddle,
     maxHeight: 'calc(100vh - 64px) !important',
     // width: '90px',
     overflowX: 'hidden',

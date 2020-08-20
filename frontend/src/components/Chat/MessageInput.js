@@ -15,7 +15,7 @@ import SendIcon from '@material-ui/icons/Send';
 
 export default function MessageInput({ handleMessageSubmit }) {
   const classes = useStyles();
-  const theme = mainTheme();
+  // const theme = mainTheme();
 
   const [inputValue, setInputValue] = React.useState('');
 
@@ -31,9 +31,7 @@ export default function MessageInput({ handleMessageSubmit }) {
   };
 
   return (
-    <Box
-      className={classNames(classes.messagesCompose, theme.backgroundPrimary)}
-    >
+    <Box className={classes.messagesCompose}>
       <Box className={classes.messagesComposeForm}>
         <Paper
           component="form"
@@ -41,13 +39,14 @@ export default function MessageInput({ handleMessageSubmit }) {
           onSubmit={handleSubmit}
         >
           <IconButton
-            className={classNames(classes.iconButton, theme.interactiveNormal)}
+            // className={classNames(classes.iconButton, theme.interactiveNormal)}
+            className={classes.iconButton}
             aria-label="menu"
           >
             <AddCircleIcon />
           </IconButton>
           <InputBase
-            className={classNames(classes.input, theme.textNormal)}
+            className={classes.input}
             value={inputValue}
             onChange={(event) => setInputValue(event.target.value)}
             // multiline
@@ -57,26 +56,17 @@ export default function MessageInput({ handleMessageSubmit }) {
               'aria-label': 'Message #CHANNEL_NAME',
             }}
           />
-          <IconButton
-            className={classNames(classes.iconButton, theme.interactiveNormal)}
-            aria-label="search"
-          >
+          <IconButton className={classes.iconButton} aria-label="search">
             <GifIcon />
           </IconButton>
-          <IconButton
-            className={classNames(classes.iconButton, theme.interactiveNormal)}
-            aria-label="search"
-          >
+          <IconButton className={classes.iconButton} aria-label="search">
             <EmojiEmotionsIcon />
           </IconButton>
-          <Divider
-            className={classNames(classes.divider, theme.backgroundSecondary)}
-            orientation="vertical"
-          />
+          <Divider className={classes.divider} orientation="vertical" />
           <IconButton
             type="submit"
             color="primary"
-            className={classNames(classes.iconButton, theme.interactiveNormal)}
+            className={classes.iconButton}
             aria-label="directions"
           >
             <SendIcon />
@@ -87,23 +77,23 @@ export default function MessageInput({ handleMessageSubmit }) {
   );
 }
 
-const mainTheme = makeStyles((theme) => ({
-  textNormal: {
-    color: '#dcddde',
-  },
-  interactiveNormal: {
-    color: '#b9bbbe',
-    '&:hover': {
-      color: '#dcddde',
-    },
-  },
-  backgroundPrimary: {
-    backgroundColor: '#36393f',
-  },
-  backgroundSecondary: {
-    backgroundColor: '#2f3136',
-  },
-}));
+// const mainTheme = makeStyles((theme) => ({
+//   textNormal: {
+//     color: '#dcddde',
+//   },
+//   interactiveNormal: {
+//     color: '#b9bbbe',
+//     '&:hover': {
+//       color: '#dcddde',
+//     },
+//   },
+//   backgroundPrimary: {
+//     backgroundColor: '#36393f',
+//   },
+//   backgroundSecondary: {
+//     backgroundColor: '#2f3136',
+//   },
+// }));
 
 const useStyles = makeStyles((theme) => ({
   messagesCompose: {
@@ -112,6 +102,7 @@ const useStyles = makeStyles((theme) => ({
     // background: '#36393f',
     // position: 'absolute',
     // bottom: 0,
+    background: theme.palette.backgroundDark,
     width: '100%',
     // marginLeft: '100px',
     alignSelf: 'flex-end',
@@ -128,17 +119,23 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    background: '#40444b',
+    background: theme.palette.backgroundMessageInput,
   },
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
+    color: theme.palette.textNormal,
   },
   iconButton: {
+    color: theme.palette.interactiveNormal,
+    '&:hover': {
+      color: theme.palette.interactiveNormalOnHover,
+    },
     padding: 10,
   },
   divider: {
     height: 28,
     margin: 4,
+    background: theme.palette.backgroundMiddle,
   },
 }));

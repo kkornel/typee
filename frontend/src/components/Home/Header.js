@@ -18,7 +18,7 @@ import { useAsync } from '../../utils/useAsync';
 const useStyles = makeStyles((theme) => ({
   appBar: {
     // position: 'fixed',
-    backgroundColor: '#4527a0',
+    backgroundColor: theme.palette.appBarBackground,
   },
   toolbar: {
     flexWrap: 'wrap',
@@ -83,9 +83,7 @@ function Header() {
         </Link> */}
         {user ? (
           <React.Fragment>
-            <Button color="inherit" onClick={onLogout}>
-              Logout
-            </Button>
+            <Button onClick={onLogout}>Logout</Button>
             <Button color="inherit" onClick={onLogoutAll}>
               Logout all
             </Button>

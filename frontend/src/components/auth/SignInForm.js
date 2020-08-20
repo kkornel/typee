@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   or: {
     margin: theme.spacing(2, 0, 2),
-    color: '#616161',
+    color: theme.palette.signInOr,
   },
   link: {
     textDecoration: 'none',
@@ -57,39 +57,39 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   signUp: {
-    color: '#424242',
+    color: theme.palette.signUpText,
     fontSize: '14px',
     marginTop: '4px',
   },
   signUpLink: {
     // color: '#9c27b0',
-    color: '#3f50b5',
+    color: theme.palette.signUpLink,
     fontWeight: 700,
     marginLeft: '4px',
   },
   forgotLink: {
-    color: '#757575',
+    color: theme.palette.signInForgotLink,
     fontStyle: 'italic',
     fontSize: '12px',
   },
   resendLink: {
-    color: '#3f50b5',
+    color: theme.palette.signInResendLink,
     fontStyle: 'italic',
     fontSize: '12px',
     fontWeight: 600,
   },
   divider: {
-    backgroundColor: '#9e9e9e',
+    backgroundColor: theme.palette.signInDivider,
   },
 }));
 
 const GoogleButton = withStyles((theme) => ({
   root: {
-    color: theme.palette.getContrastText('#DB4437'),
+    color: theme.palette.getContrastText(theme.palette.signInGoogleButton),
     textTransform: 'none',
-    backgroundColor: '#DB4437',
+    backgroundColor: theme.palette.signInGoogleButton,
     '&:hover': {
-      backgroundColor: '#c42d1f',
+      backgroundColor: theme.palette.signInGoogleButtonOnHover,
     },
   },
 }))(Button);

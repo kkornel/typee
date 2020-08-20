@@ -7,32 +7,32 @@ import Box from '@material-ui/core/Box';
 
 export default function SystemMessage({ message }) {
   const classes = useStyles();
-  const theme = mainTheme();
+  // const theme = mainTheme();
 
   return (
-    <Box className={classNames(classes.systemMessage, theme.backgroundPrimary)}>
-      {message.text}
-    </Box>
+    // <Box className={classNames(classes.systemMessage, theme.backgroundPrimary)}>
+    <Box className={classes.systemMessage}>{message.text}</Box>
   );
 }
 
-const mainTheme = makeStyles((theme) => ({
-  headerPrimary: {
-    color: '#fff',
-  },
-  textNormal: {
-    color: '#dcddde',
-  },
-  textMuted: {
-    color: '#72767d',
-  },
-  backgroundPrimary: {
-    backgroundColor: '#36393f',
-  },
-}));
+// const mainTheme = makeStyles((theme) => ({
+//   headerPrimary: {
+//     color: '#fff',
+//   },
+//   textNormal: {
+//     color: '#dcddde',
+//   },
+//   textMuted: {
+//     color: '#72767d',
+//   },
+//   backgroundPrimary: {
+//     backgroundColor: '#36393f',
+//   },
+// }));
 
 const useStyles = makeStyles((theme) => ({
   systemMessage: {
+    backgroundColor: theme.palette.backgroundDark,
     // display: 'flex',
     // width: '100%',
     // maxWidth: '100%',
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: 'italic',
     fontSize: '11px',
     '&:hover': {
-      background: '#32353b',
+      background: theme.palette.messageOnHover,
       // background: '#292b2f',
     },
   },

@@ -12,7 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
   const classes = useStyles();
-  const theme = mainTheme();
+  // const theme = mainTheme();
 
   const onAddClick = () => {
     handleAddClick();
@@ -23,7 +23,8 @@ export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
   };
 
   return (
-    <Box className={classNames(classes.roomList, theme.backgroundTertiary)}>
+    // <Box className={classNames(classes.roomList, theme.backgroundTertiary)}>
+    <Box className={classes.roomList}>
       {rooms.map(({ _id, name: roomName }) => {
         return (
           <Box className={classes.room} key={_id}>
@@ -59,11 +60,11 @@ export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
   );
 }
 
-const mainTheme = makeStyles((theme) => ({
-  backgroundTertiary: {
-    backgroundColor: '#202225',
-  },
-}));
+// const mainTheme = makeStyles((theme) => ({
+//   backgroundTertiary: {
+//     // backgroundColor: '#202225',
+//   },
+// }));
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   roomList: {
     // background: 'green',
     // background: '#202225',
-
+    background: theme.palette.backgroundLight,
     maxHeight: 'calc(100vh - 64px) !important',
     overflowX: 'hidden',
     height: '100%',
@@ -93,10 +94,10 @@ const useStyles = makeStyles((theme) => ({
     width: '48px',
     height: '48px',
     color: '#dcddde',
-    backgroundColor: '#36393f',
+    background: theme.palette.backgroundDark,
     // margin: '3px 3px 3px 3px',
     '&:hover': {
-      backgroundColor: '#7289da',
+      background: theme.palette.roomIconAvatarOnHover,
       color: '#fff',
     },
   },
@@ -108,10 +109,10 @@ const useStyles = makeStyles((theme) => ({
     height: '48px',
     // margin: '3px 3px 3px 3px',
     // background: 'white',
-    background: '#36393f',
-    color: '#43b581',
+    background: theme.palette.backgroundDark,
+    color: theme.palette.green,
     '&:hover': {
-      background: '#43b581',
+      background: theme.palette.green,
       color: '#fff',
     },
     // padding: 0,

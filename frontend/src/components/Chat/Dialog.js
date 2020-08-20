@@ -17,7 +17,8 @@ export default function ({
   handleJoinRoomClick,
   handleCreateRoomClick,
 }) {
-  const theme = mainTheme();
+  const classes = useStyles();
+  // const theme = mainTheme();
 
   const { open, error } = dialogData;
   const [dialogValue, setDialogValue] = React.useState('');
@@ -77,7 +78,7 @@ export default function ({
           label="Room name"
           type="text"
           fullWidth
-          className={theme.root}
+          className={classes.root}
           InputProps={{
             style: {
               color: '#dcddde',
@@ -88,28 +89,19 @@ export default function ({
       <DialogActions>
         <Button
           onClick={onDialogClose}
-          className={classNames(
-            theme.interactiveNormal,
-            theme.interactiveNormalButton
-          )}
+          className={classes.interactiveNormalButton}
         >
           Cancel
         </Button>
         <Button
           onClick={onJoinRoomClick}
-          className={classNames(
-            theme.interactiveNormal,
-            theme.interactiveNormalButton
-          )}
+          className={classes.interactiveNormalButton}
         >
           Join
         </Button>
         <Button
           onClick={onCreateRoomClick}
-          className={classNames(
-            theme.interactiveNormal,
-            theme.interactiveNormalButton
-          )}
+          className={classes.interactiveNormalButton}
         >
           Create
         </Button>
@@ -118,24 +110,43 @@ export default function ({
   );
 }
 
-const mainTheme = makeStyles((theme) => ({
+// const mainTheme = makeStyles((theme) => ({
+//   root: {
+//     '& label.Mui-focused': {
+//       color: '#7289da',
+//     },
+//     '& .MuiFormLabel-root': {
+//       color: '#b9bbbe',
+//     },
+//     '& .MuiInput-underline:before': {
+//       borderBottomColor: '#7289da',
+//     },
+//     '& .MuiInput-underline:after': {
+//       borderBottomColor: '#7289da',
+//     },
+//   },
+// }));
+
+const useStyles = makeStyles((theme) => ({
   root: {
     '& label.Mui-focused': {
-      color: '#7289da',
+      color: theme.palette.formInputBorder,
+    },
+    '& .MuiFormLabel-root': {
+      color: theme.palette.interactiveNormal,
+    },
+    '& .MuiInput-underline:before': {
+      borderBottomColor: theme.palette.formInputBorder,
     },
     '& .MuiInput-underline:after': {
-      borderBottomColor: '#7289da',
-    },
-  },
-  interactiveNormal: {
-    color: '#b9bbbe',
-    '&:hover': {
-      color: '#dcddde',
+      borderBottomColor: theme.palette.formInputBorder,
     },
   },
   interactiveNormalButton: {
+    color: theme.palette.interactiveNormal,
     '&:hover': {
-      backgroundColor: '#4f545c',
+      color: theme.palette.interactiveNormalOnHover,
+      backgroundColor: theme.palette.interactiveNormalButtonOnHover,
     },
   },
 }));

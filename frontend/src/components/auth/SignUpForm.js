@@ -46,21 +46,21 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   signIn: {
-    color: '#424242',
+    color: theme.palette.signUpText,
     fontSize: '14px',
     marginTop: '4px',
   },
   signInLink: {
     // color: '#9c27b0',
-    color: '#3f50b5',
+    color: theme.palette.signUpLink,
     fontWeight: 700,
     marginLeft: '4px',
   },
   divider: {
-    backgroundColor: '#9e9e9e',
+    backgroundColor: theme.palette.signInDivider,
   },
   forgotLink: {
-    color: '#3f50b5',
+    color: theme.palette.signInResendLink,
     fontStyle: 'italic',
     fontSize: '12px',
     fontWeight: 600,

@@ -8,76 +8,58 @@ import Box from '@material-ui/core/Box';
 
 export default function Message({ message }) {
   const classes = useStyles();
-  const theme = mainTheme();
+  // const theme = mainTheme();
 
   return (
-    <Box
-      className={classNames(classes.messagesListItem, theme.backgroundPrimary)}
-    >
+    <Box className={classes.messagesListItem}>
       <Avatar className={classes.messagesListItemAvatar}>
         {message.author.username[0]}
         {message.author.username[1]}
       </Avatar>
       <Box>
         <Box className={classes.messagesListItemInfo}>
-          <Box
-            className={classNames(
-              classes.messagesListItemUsername,
-              theme.headerPrimary
-            )}
-          >
+          <Box className={classes.messagesListItemUsername}>
             {message.author.username}
           </Box>
-          <Box
-            className={classNames(
-              classes.messagesListItemDate,
-              theme.textMuted
-            )}
-          >
+          <Box className={classes.messagesListItemDate}>
             {message.createdAt}
           </Box>
         </Box>
         <Box className={classes.flexDivider}></Box>
-        <Box
-          className={classNames(
-            classes.messagesListItemContent,
-            theme.textNormal
-          )}
-        >
-          {message.text}
-        </Box>
+        <Box className={classes.messagesListItemContent}>{message.text}</Box>
       </Box>
     </Box>
   );
 }
 
-const mainTheme = makeStyles((theme) => ({
-  headerPrimary: {
-    color: '#fff',
-  },
-  textNormal: {
-    color: '#dcddde',
-  },
-  textMuted: {
-    color: '#72767d',
-  },
-  backgroundPrimary: {
-    backgroundColor: '#36393f',
-  },
-}));
+// const mainTheme = makeStyles((theme) => ({
+//   headerPrimary: {
+//     // color: '#fff',
+//   },
+//   textNormal: {
+//     color: '#dcddde',
+//   },
+//   textMuted: {
+//     // color: '#72767d',
+//   },
+//   backgroundPrimary: {
+//     backgroundColor: '#36393f',
+//   },
+// }));
 
 const useStyles = makeStyles((theme) => ({
   flexDivider: {
     width: '100%',
   },
   messagesListItem: {
+    background: theme.palette.backgroundDark,
     display: 'flex',
     // flexWrap: 'wrap',
     maxWidth: '100%',
     // background: '#36393f',
     padding: '10px',
     '&:hover': {
-      background: '#32353b',
+      background: theme.palette.messageOnHover,
       // background: '#292b2f',
     },
   },
@@ -93,9 +75,13 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '14px',
     fontWeight: 'bold',
     marginRight: '5px',
+    color: theme.palette.white,
   },
   messagesListItemDate: {
     fontSize: '12px',
+    color: theme.palette.textMuted,
   },
-  messagesListItemContent: {},
+  messagesListItemContent: {
+    color: theme.palette.textNormal,
+  },
 }));

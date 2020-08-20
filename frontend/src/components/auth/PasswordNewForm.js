@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   recaptchaError: {
-    color: '#FF0000',
+    color: theme.palette.recaptchaError,
     textAlign: 'center',
     fontSize: '12px',
   },
