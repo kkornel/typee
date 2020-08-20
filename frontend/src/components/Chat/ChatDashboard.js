@@ -16,7 +16,7 @@ import { useUserData } from '../../context/UserDataContext';
 import { useRoomData, ACTIONS } from '../../utils/useRoomData';
 import FullPageSpinner from '../../components/ui/FullPageSpinner';
 
-function ChatDashboard({ user, socket }) {
+export default function ChatDashboard({ user, socket }) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { messages, currentRoom, users, dispatch } = useRoomData();
@@ -212,28 +212,24 @@ function ChatDashboard({ user, socket }) {
   );
 }
 
-export default ChatDashboard;
-
 const useStyles = makeStyles((theme) => ({
   chat: {
     background: 'red',
-    height: 'calc(100vh - 64px) !important',
-    flexGrow: '1',
-    // width: '100%',
-    position: 'absolute',
-    zIndex: '-2',
     color: theme.palette.textNormal,
+    flexGrow: '1',
+    height: 'calc(100vh - 64px) !important',
+    position: 'absolute',
     width: '100%',
+    zIndex: '-2',
   },
   channels: {
     width: '64px',
   },
   messages: {
-    // position: 'relative',
-    display: 'flex',
-    minWidth: '100%',
-    flexDirection: 'column',
-    height: 'calc(100vh - 64px) !important',
     alignItems: 'stretch',
+    display: 'flex',
+    flexDirection: 'column',
+    minWidth: '100%',
+    height: 'calc(100vh - 64px) !important',
   },
 }));

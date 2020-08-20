@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     alignItems: 'center',
-    // padding: '0px 10px 0px 10px',
     margin: '0 10px 0 10px',
   },
   border: {

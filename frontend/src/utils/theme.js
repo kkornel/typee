@@ -6,7 +6,7 @@ const theme = createMuiTheme({
     appBarBackground: '#4527a0',
     backgroundDark: '#36393f',
     backgroundMiddle: '#2f3136', // secondary
-    backgroundLight: '#202225',
+    backgroundLight: '#202225', // tertiary
     backgroundMessageInput: '#40444b',
     textNormal: '#dcddde',
     textMuted: '#72767d',

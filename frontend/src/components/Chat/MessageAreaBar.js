@@ -1,7 +1,5 @@
 import React from 'react';
 
-import classNames from 'classnames';
-
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,7 +11,6 @@ import ManageRoomDialog from './ManageRoomDialog';
 
 export default function MessageAreaBar({ text, isAuthor, onLeaveClick }) {
   const classes = useStyles();
-  // const theme = mainTheme();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -79,27 +76,14 @@ const StyledMenu = withStyles((theme) => ({
   },
 }))((props) => <Menu elevation={0} {...props} />);
 
-// const StyledMenu = withStyles({
-//   paper: {
-//     border: '1px solid #d3d4d5',
-//     background: '#2f3136',
-//   },
-// })((props) => <Menu elevation={0} {...props} />);
-
 const StyledMenuItem = withStyles((theme) => ({
   root: {
     '&:focus': {
       backgroundColor: theme.palette.menuItemBackgroundOnFocus,
     },
-    color: '#fff;',
+    color: theme.palette.white,
   },
 }))(MenuItem);
-
-// const mainTheme = makeStyles((theme) => ({
-//   backgroundPrimary: {
-//     backgroundColor: '#36393f',
-//   },
-// }));
 
 const useStyles = makeStyles((theme) => ({
   title: {

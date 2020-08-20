@@ -1,7 +1,5 @@
 import React from 'react';
 
-import classNames from 'classnames';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,7 +16,6 @@ export default function ({
   handleCreateRoomClick,
 }) {
   const classes = useStyles();
-  // const theme = mainTheme();
 
   const { open, error } = dialogData;
   const [dialogValue, setDialogValue] = React.useState('');
@@ -109,23 +106,6 @@ export default function ({
     </Dialog>
   );
 }
-
-// const mainTheme = makeStyles((theme) => ({
-//   root: {
-//     '& label.Mui-focused': {
-//       color: '#7289da',
-//     },
-//     '& .MuiFormLabel-root': {
-//       color: '#b9bbbe',
-//     },
-//     '& .MuiInput-underline:before': {
-//       borderBottomColor: '#7289da',
-//     },
-//     '& .MuiInput-underline:after': {
-//       borderBottomColor: '#7289da',
-//     },
-//   },
-// }));
 
 const useStyles = makeStyles((theme) => ({
   root: {

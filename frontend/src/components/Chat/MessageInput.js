@@ -1,7 +1,5 @@
 import React from 'react';
 
-import classNames from 'classnames';
-
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Box from '@material-ui/core/Box';
@@ -15,7 +13,6 @@ import SendIcon from '@material-ui/icons/Send';
 
 export default function MessageInput({ handleMessageSubmit }) {
   const classes = useStyles();
-  // const theme = mainTheme();
 
   const [inputValue, setInputValue] = React.useState('');
 
@@ -38,11 +35,7 @@ export default function MessageInput({ handleMessageSubmit }) {
           className={classes.root}
           onSubmit={handleSubmit}
         >
-          <IconButton
-            // className={classNames(classes.iconButton, theme.interactiveNormal)}
-            className={classes.iconButton}
-            aria-label="menu"
-          >
+          <IconButton className={classes.iconButton} aria-label="menu">
             <AddCircleIcon />
           </IconButton>
           <InputBase
@@ -77,38 +70,12 @@ export default function MessageInput({ handleMessageSubmit }) {
   );
 }
 
-// const mainTheme = makeStyles((theme) => ({
-//   textNormal: {
-//     color: '#dcddde',
-//   },
-//   interactiveNormal: {
-//     color: '#b9bbbe',
-//     '&:hover': {
-//       color: '#dcddde',
-//     },
-//   },
-//   backgroundPrimary: {
-//     backgroundColor: '#36393f',
-//   },
-//   backgroundSecondary: {
-//     backgroundColor: '#2f3136',
-//   },
-// }));
-
 const useStyles = makeStyles((theme) => ({
   messagesCompose: {
     display: 'flex',
-    // background: 'blue',
-    // background: '#36393f',
-    // position: 'absolute',
-    // bottom: 0,
     background: theme.palette.backgroundDark,
     width: '100%',
-    // marginLeft: '100px',
     alignSelf: 'flex-end',
-
-    // flexGrow: 1,
-    // zIndex: '-1',
   },
   messagesComposeForm: {
     padding: '8px 16px 8px 8px',

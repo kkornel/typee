@@ -1,14 +1,11 @@
 import React from 'react';
 
-import classNames from 'classnames';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
 export default function Message({ message }) {
   const classes = useStyles();
-  // const theme = mainTheme();
 
   return (
     <Box className={classes.messagesListItem}>
@@ -32,21 +29,6 @@ export default function Message({ message }) {
   );
 }
 
-// const mainTheme = makeStyles((theme) => ({
-//   headerPrimary: {
-//     // color: '#fff',
-//   },
-//   textNormal: {
-//     color: '#dcddde',
-//   },
-//   textMuted: {
-//     // color: '#72767d',
-//   },
-//   backgroundPrimary: {
-//     backgroundColor: '#36393f',
-//   },
-// }));
-
 const useStyles = makeStyles((theme) => ({
   flexDivider: {
     width: '100%',
@@ -54,13 +36,10 @@ const useStyles = makeStyles((theme) => ({
   messagesListItem: {
     background: theme.palette.backgroundDark,
     display: 'flex',
-    // flexWrap: 'wrap',
     maxWidth: '100%',
-    // background: '#36393f',
     padding: '10px',
     '&:hover': {
       background: theme.palette.messageOnHover,
-      // background: '#292b2f',
     },
   },
   messagesListItemAvatar: {
