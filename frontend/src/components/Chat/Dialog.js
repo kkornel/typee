@@ -48,39 +48,28 @@ export default function ({
     <Dialog
       open={open}
       onClose={handleDialogClose}
-      aria-labelledby="form-dialog-title"
-      PaperProps={{
-        style: {
-          backgroundColor: '#36393f',
-          color: '#dcddde',
-        },
-      }}
       onExit={onExit}
+      aria-labelledby="form-dialog-title"
+      PaperProps={{ classes: { root: classes.paper } }}
     >
-      <DialogTitle id="form-dialog-title">
-        Create a new room or join existing one
-      </DialogTitle>
+      <DialogTitle>Create a new room or join existing one</DialogTitle>
       <DialogContent>
-        <DialogContentText style={{ color: '#dcddde' }}>
+        <DialogContentText className={classes.content}>
           Please enter a room name:
         </DialogContentText>
         <TextField
-          helperText={error}
-          error={!!error}
-          onChange={(event) => setDialogValue(event.target.value)}
-          value={dialogValue}
-          autoFocus
-          margin="dense"
-          id="name"
           label="Room name"
-          type="text"
+          value={dialogValue}
+          onChange={(event) => setDialogValue(event.target.value)}
+          error={!!error}
+          helperText={error}
+          autoFocus
           fullWidth
+          id="name"
+          type="text"
+          margin="dense"
           className={classes.root}
-          InputProps={{
-            style: {
-              color: '#dcddde',
-            },
-          }}
+          InputProps={{ classes: { root: classes.paper } }}
         />
       </DialogContent>
       <DialogActions>
@@ -121,6 +110,13 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiInput-underline:after': {
       borderBottomColor: theme.palette.purple,
     },
+  },
+  paper: {
+    backgroundColor: theme.palette.backgroundPrimary,
+    color: theme.palette.textNormal,
+  },
+  content: {
+    color: theme.palette.textNormal,
   },
   interactiveNormalButton: {
     color: theme.palette.interactiveNormal,

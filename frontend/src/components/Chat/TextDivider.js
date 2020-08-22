@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     alignItems: 'center',
-    margin: '0 10px 0 10px',
+    // margin: '0 10px 0 10px',
   },
   border: {
     borderBottom: `1px solid ${theme.palette.border}`,
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     padding: '0 4px 0 4px',
     fontSize: '12px',
-    color: theme.palette.textMuted,
+    color: theme.palette.textNormal,
+    // color: theme.palette.textMuted,
   },
 }));

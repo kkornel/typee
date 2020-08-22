@@ -9,11 +9,31 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import ManageRoomDialog from './ManageRoomDialog';
 
-export default function MessageAreaBar({ text, isAuthor, onLeaveClick }) {
+export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
+
+  const [dialogData, setDialogData] = React.useState({
+    open: true,
+    error: null,
+  });
+
+  const handleDialogClose = () => {
+    if (dialogData.open) {
+      setDialogData({ open: false });
+    }
+  };
+
+  const handleSaveClicked = (title, file, deleteCurrent) => {
+    console.log(title, deleteCurrent, file);
+    if (title.startsWith('a')) {
+      setDialogData({ ...dialogData, error: 'Name taken' });
+    } else {
+      setDialogData({ ...dialogData, error: null });
+    }
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -40,7 +60,7 @@ export default function MessageAreaBar({ text, isAuthor, onLeaveClick }) {
         <h3 className={classes.header} style={{ color: '#72767d' }}>
           #{' '}
         </h3>
-        <h3 className={classes.header}>{text}</h3>
+        <h3 className={classes.header}>{room?.name}</h3>
       </Box>
       <Box className={classes.settingsBox}>
         <IconButton color="inherit" onClick={handleClick}>
@@ -64,7 +84,12 @@ export default function MessageAreaBar({ text, isAuthor, onLeaveClick }) {
           )}
         </StyledMenu>
       </Box>
-      <ManageRoomDialog open={open} setOpen={setOpen} />
+      <ManageRoomDialog
+        dialogData={dialogData}
+        handleDialogClose={handleDialogClose}
+        handleSaveClicked={handleSaveClicked}
+        room={room}
+      />
     </Box>
   );
 }

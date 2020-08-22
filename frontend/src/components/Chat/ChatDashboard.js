@@ -24,7 +24,7 @@ export default function ChatDashboard({ user, socket }) {
 
   const [dialogData, setDialogData] = React.useState({
     open: false,
-    error: '',
+    error: null,
   });
 
   React.useEffect(() => {
@@ -174,7 +174,7 @@ export default function ChatDashboard({ user, socket }) {
 
   // If user clears cache it's no working
   if (!currentRoom) {
-    return <FullPageSpinner />;
+    // return <FullPageSpinner />;
   }
 
   return (
@@ -194,8 +194,8 @@ export default function ChatDashboard({ user, socket }) {
         <Grid item xs>
           <Box className={classes.messages}>
             <MessageAreaBar
-              text={currentRoom.name}
-              isAuthor={currentRoom.author === user._id}
+              room={currentRoom}
+              isAuthor={currentRoom?.author === user._id}
               onLeaveClick={onLeaveClick}
             />
             <MessageArea messages={messages} />
