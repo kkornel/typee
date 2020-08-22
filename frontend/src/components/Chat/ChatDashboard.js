@@ -172,6 +172,7 @@ export default function ChatDashboard({ user, socket }) {
     socket.joinRoom(user._id, roomName, joinRoomCallback);
   };
 
+  // If user clears cache it's no working
   if (!currentRoom) {
     return <FullPageSpinner />;
   }

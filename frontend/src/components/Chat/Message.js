@@ -34,12 +34,12 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   messagesListItem: {
-    background: theme.palette.backgroundDark,
+    background: theme.palette.backgroundPrimary,
     display: 'flex',
     maxWidth: '100%',
     padding: '10px',
     '&:hover': {
-      background: theme.palette.messageOnHover,
+      background: theme.palette.itemOnHover,
     },
   },
   messagesListItemAvatar: {
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '14px',
     fontWeight: 'bold',
     marginRight: '5px',
-    color: theme.palette.white,
+    color: theme.palette.headerPrimary,
   },
   messagesListItemDate: {
     fontSize: '12px',

@@ -110,23 +110,23 @@ export default function ({
 const useStyles = makeStyles((theme) => ({
   root: {
     '& label.Mui-focused': {
-      color: theme.palette.formInputBorder,
+      color: theme.palette.purple,
     },
     '& .MuiFormLabel-root': {
       color: theme.palette.interactiveNormal,
     },
     '& .MuiInput-underline:before': {
-      borderBottomColor: theme.palette.formInputBorder,
+      borderBottomColor: theme.palette.purple,
     },
     '& .MuiInput-underline:after': {
-      borderBottomColor: theme.palette.formInputBorder,
+      borderBottomColor: theme.palette.purple,
     },
   },
   interactiveNormalButton: {
     color: theme.palette.interactiveNormal,
     '&:hover': {
-      color: theme.palette.interactiveNormalOnHover,
-      backgroundColor: theme.palette.interactiveNormalButtonOnHover,
+      color: theme.palette.interactiveHover,
+      backgroundColor: theme.palette.interactiveMuted,
     },
   },
 }));

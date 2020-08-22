@@ -21,12 +21,12 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 10px 0 10px',
   },
   border: {
-    borderBottom: `1px solid ${theme.palette.textDividerBorderBottom}`,
+    borderBottom: `1px solid ${theme.palette.border}`,
     width: '100%',
   },
   content: {
     padding: '0 4px 0 4px',
     fontSize: '12px',
-    color: theme.palette.usersListItemSubTitle,
+    color: theme.palette.textMuted,
   },
 }));

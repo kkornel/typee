@@ -73,7 +73,7 @@ export default function MessageInput({ handleMessageSubmit }) {
 const useStyles = makeStyles((theme) => ({
   messagesCompose: {
     display: 'flex',
-    background: theme.palette.backgroundDark,
+    background: theme.palette.backgroundPrimary,
     width: '100%',
     alignSelf: 'flex-end',
   },
@@ -96,13 +96,13 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     color: theme.palette.interactiveNormal,
     '&:hover': {
-      color: theme.palette.interactiveNormalOnHover,
+      color: theme.palette.interactiveHover,
     },
     padding: 10,
   },
   divider: {
     height: 28,
     margin: 4,
-    background: theme.palette.backgroundMiddle,
+    background: theme.palette.backgroundSecondary,
   },
 }));

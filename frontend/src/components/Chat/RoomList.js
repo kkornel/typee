@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     height: '4px',
   },
   roomList: {
-    background: theme.palette.backgroundLight,
+    background: theme.palette.backgroundTertiary,
     maxHeight: 'calc(100vh - 64px) !important',
     overflowX: 'hidden',
     height: '100%',
@@ -75,10 +75,10 @@ const useStyles = makeStyles((theme) => ({
     width: '48px',
     height: '48px',
     color: theme.palette.textNormal,
-    background: theme.palette.backgroundDark,
+    background: theme.palette.backgroundPrimary,
     '&:hover': {
-      background: theme.palette.roomIconAvatarOnHover,
-      color: theme.palette.white,
+      background: theme.palette.purple,
+      color: theme.palette.headerPrimary,
     },
   },
   roomAddBox: {
@@ -87,11 +87,11 @@ const useStyles = makeStyles((theme) => ({
   roomAddIcon: {
     width: '48px',
     height: '48px',
-    background: theme.palette.backgroundDark,
+    background: theme.palette.backgroundPrimary,
     color: theme.palette.green,
     '&:hover': {
       background: theme.palette.green,
-      color: theme.palette.white,
+      color: theme.palette.headerPrimary,
     },
   },
 }));

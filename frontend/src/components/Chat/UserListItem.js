@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px',
     width: '100%',
     '&:hover': {
-      background: theme.palette.usersListItemOnHover,
+      background: theme.palette.itemOnHover,
       cursor: 'pointer',
     },
   },
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
   usersListItemSubTitle: {
     fontSize: '14px',
-    color: theme.palette.usersListItemSubTitle,
+    color: theme.palette.textMuted,
     margin: '0',
   },
 }));

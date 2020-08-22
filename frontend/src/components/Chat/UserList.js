@@ -27,7 +27,7 @@ export default function UserList({ users }) {
 
 const useStyles = makeStyles((theme) => ({
   usersList: {
-    background: theme.palette.backgroundMiddle,
+    background: theme.palette.backgroundSecondary,
     maxHeight: 'calc(100vh - 64px) !important',
     overflowX: 'hidden',
     height: '100%',

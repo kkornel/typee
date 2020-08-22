@@ -35,7 +35,7 @@ export default function MessageArea({ messages }) {
 
 const useStyles = makeStyles((theme) => ({
   messagesList: {
-    backgroundColor: theme.palette.backgroundDark,
+    backgroundColor: theme.palette.backgroundPrimary,
     height: '100%',
     overflowY: 'scroll',
   },

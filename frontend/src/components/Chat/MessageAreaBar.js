@@ -71,17 +71,17 @@ export default function MessageAreaBar({ text, isAuthor, onLeaveClick }) {
 
 const StyledMenu = withStyles((theme) => ({
   paper: {
-    border: `1px solid ${theme.palette.menuBorder}`,
-    background: theme.palette.backgroundMiddle,
+    border: `1px solid ${theme.palette.backgroundAccent}`,
+    background: theme.palette.backgroundSecondary,
   },
 }))((props) => <Menu elevation={0} {...props} />);
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {
     '&:focus': {
-      backgroundColor: theme.palette.menuItemBackgroundOnFocus,
+      backgroundColor: theme.palette.itemOnHover,
     },
-    color: theme.palette.white,
+    color: theme.palette.headerPrimary,
   },
 }))(MenuItem);
 
@@ -98,9 +98,9 @@ const useStyles = makeStyles((theme) => ({
   },
   messagesBar: {
     display: 'flex',
-    borderBottom: `1px solid ${theme.palette.messageBarBorderBottom}`,
+    borderBottom: `1px solid ${theme.palette.border}`,
     height: '48px',
-    background: theme.palette.backgroundDark,
+    background: theme.palette.backgroundPrimary,
   },
   header: { marginTop: '0', marginBottom: '0', display: 'inline' },
 }));

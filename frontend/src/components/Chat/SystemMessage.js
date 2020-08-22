@@ -11,13 +11,13 @@ export default function SystemMessage({ message }) {
 
 const useStyles = makeStyles((theme) => ({
   systemMessage: {
-    backgroundColor: theme.palette.backgroundDark,
+    backgroundColor: theme.palette.backgroundPrimary,
     padding: '5px 10px 5px 12px',
     fontFamily: 'Lucida Console',
     fontStyle: 'italic',
     fontSize: '11px',
     '&:hover': {
-      background: theme.palette.messageOnHover,
+      background: theme.palette.itemOnHover,
     },
   },
 }));
