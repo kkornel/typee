@@ -10,6 +10,11 @@ async function client(endpoint, { body } = {}) {
     headers.Authorization = `Bearer ${token}`;
   }
 
+  if (body?.file) {
+    delete headers['content-type'];
+    // headers['content-type'] = 'multipart/form-data';
+  }
+
   const config = {
     method: body ? 'POST' : 'GET',
     headers: {

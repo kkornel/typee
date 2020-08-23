@@ -5,6 +5,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const http = require('http');
 const socketio = require('socket.io');
+const cors = require('cors');
 
 require('dotenv').config();
 require('./db/mongoose');
@@ -30,6 +31,7 @@ app.set('view engine', 'pug');
 // Set the directory where the template files are located
 app.set('views', viewsDirectory);
 
+api.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(

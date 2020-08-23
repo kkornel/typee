@@ -11,6 +11,7 @@ function AuthenticatedApp() {
       <Route path="/channel/*" component={Dashboard} />
       <Redirect to="/dashboard" from="/sign-in" />
       <Redirect to="/dashboard" from="/sign-up" />
+      <Route path="/" component={Dashboard} />
       <Route path="*">
         <FourOhFour />
       </Route>

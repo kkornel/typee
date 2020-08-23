@@ -32,6 +32,12 @@ const roomSchema = new Schema({
       ref: 'Message',
     },
   ],
+  avatar: {
+    type: Buffer,
+  },
+  avatarURL: {
+    type: String,
+  },
 });
 
 roomSchema.methods.getUsersInRoom = async function () {

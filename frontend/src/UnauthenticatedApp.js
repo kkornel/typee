@@ -16,7 +16,7 @@ function UnauthenticatedApp() {
       <Route path="/sign-up" component={SignUp} />
       <Route path="/password-reset" component={PasswordReset} />
       <Route path="/password-reset-new" component={PasswordNew} />
-      <Route to="/dashboard" component={Dashboard} />
+      {/* <Route to="/dashboard" component={Dashboard} /> */}
       <Redirect
         to={{
           pathname: '/sign-in',

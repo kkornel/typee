@@ -15,16 +15,17 @@ import TextDivider from './TextDivider';
 import TextField from '@material-ui/core/TextField';
 
 export default function ManageRoomDialog({
+  room,
   dialogData,
+  resetError,
   handleDialogClose,
   handleSaveClicked,
-  room,
 }) {
   const classes = useStyles();
 
   const inputRef = React.useRef(null);
   const [file, setFile] = React.useState(null);
-  const [title, setTitle] = React.useState('');
+  const [name, setName] = React.useState('');
   const [deleteCurrent, setDeleteCurrent] = React.useState(false);
 
   React.useEffect(() => {
@@ -32,7 +33,12 @@ export default function ManageRoomDialog({
   }, [file]);
 
   const handleSave = () => {
-    handleSaveClicked(title, file, deleteCurrent);
+    handleSaveClicked(name, file, deleteCurrent);
+  };
+
+  const onTitleChange = (event) => {
+    setName(event.target.value);
+    resetError();
   };
 
   const handleClose = () => {
@@ -46,7 +52,7 @@ export default function ManageRoomDialog({
 
   const onExit = () => {
     // setFile(null);
-    // setTitle('');
+    // setName('');
     // inputRef.current.value = null;
   };
 
@@ -66,7 +72,7 @@ export default function ManageRoomDialog({
       onExit={onExit}
       maxWidth={'xs'}
       fullWidth={true}
-      aria-labelledby="form-dialog-title"
+      aria-labelledby="form-dialog-name"
       PaperProps={{ classes: { root: classes.paper } }}
     >
       <DialogTitle>
@@ -78,8 +84,8 @@ export default function ManageRoomDialog({
         </DialogContentText>
         <TextField
           label="Room's name"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          value={name}
+          onChange={onTitleChange}
           placeholder={room?.name}
           error={!!dialogData.error}
           helperText={dialogData.error}
@@ -100,7 +106,9 @@ export default function ManageRoomDialog({
             Change room image:
           </DialogContentText>
           {file && (
-            <img src={URL.createObjectURL(file)} className={classes.img} />
+            <Box>
+              <img src={URL.createObjectURL(file)} className={classes.img} />
+            </Box>
           )}
           <input
             id="file"
@@ -111,10 +119,10 @@ export default function ManageRoomDialog({
             ref={inputRef}
           />
         </Box>
-        {!room?.avatar && !file && (
+        {room?.avatar && !file && (
           <Box style={{ marginTop: '20px' }}>
             <Box>
-              <img src={room?.avatar} className={classes.img} />
+              <img src={room?.avatarURL} className={classes.img} />
             </Box>
             <FormControlLabel
               className={classes.formControl}

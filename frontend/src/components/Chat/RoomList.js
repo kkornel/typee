@@ -16,12 +16,18 @@ export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
   };
 
   const onRoomIconClick = (event) => {
-    handleRoomClick(event.target.offsetParent.value);
+    if (event.target.tagName === 'IMG') {
+      handleRoomClick(event.target.offsetParent.offsetParent.value);
+    } else if (event.target.tagName === 'DIV') {
+      handleRoomClick(event.target.offsetParent.value);
+    }
   };
+
+  console.log('123123', rooms);
 
   return (
     <Box className={classes.roomList}>
-      {rooms.map(({ _id, name: roomName }) => {
+      {rooms.map(({ _id, name: roomName, avatarURL }) => {
         return (
           <Box className={classes.room} key={_id}>
             <Tooltip title={roomName}>
@@ -31,10 +37,17 @@ export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
                 className={classes.roomIcon}
                 onClick={onRoomIconClick}
               >
-                <Avatar className={classes.roomIconAvatar}>
-                  {roomName[0]}
-                  {roomName[roomName.length - 1]}
-                </Avatar>
+                {avatarURL ? (
+                  <Avatar
+                    className={classes.roomIconAvatar}
+                    src={avatarURL}
+                  ></Avatar>
+                ) : (
+                  <Avatar className={classes.roomIconAvatar}>
+                    {roomName[0]}
+                    {roomName[roomName.length - 1]}
+                  </Avatar>
+                )}
               </IconButton>
             </Tooltip>
           </Box>

@@ -7,6 +7,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SettingsIcon from '@material-ui/icons/Settings';
 
+import { updateRoom } from '../../utils/room-client';
 import ManageRoomDialog from './ManageRoomDialog';
 
 export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
@@ -26,12 +27,24 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
     }
   };
 
-  const handleSaveClicked = (title, file, deleteCurrent) => {
-    console.log(title, deleteCurrent, file);
-    if (title.startsWith('a')) {
+  const handleSaveClicked = async (newName, file, deleteCurrent) => {
+    console.log(newName, deleteCurrent, file);
+    if (newName.startsWith('a')) {
       setDialogData({ ...dialogData, error: 'Name taken' });
     } else {
       setDialogData({ ...dialogData, error: null });
+    }
+    const data = new FormData();
+    data.append('newName', newName);
+    data.append('file', file);
+    data.append('deleteCurrent', JSON.stringify(deleteCurrent));
+    try {
+      const res = await updateRoom(room.name, data);
+      console.log('handleSaveClicked red', res);
+    } catch (e) {
+      console.log('!!!', e);
+      console.log('!!!', e.response.data);
+      setDialogData({ ...dialogData, error: e.response.data.message });
     }
   };
 
@@ -52,6 +65,10 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
     console.log('handleManageClick');
     setOpen(true);
     handleClose();
+  };
+
+  const resetError = () => {
+    setDialogData({ ...dialogData, error: null });
   };
 
   return (
@@ -85,10 +102,11 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
         </StyledMenu>
       </Box>
       <ManageRoomDialog
+        room={room}
         dialogData={dialogData}
+        resetError={resetError}
         handleDialogClose={handleDialogClose}
         handleSaveClicked={handleSaveClicked}
-        room={room}
       />
     </Box>
   );
