@@ -5,31 +5,28 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import MessageInput from './MessageInput';
+
+import Dialog from './Dialog';
 import MessageArea from './MessageArea';
 import MessageAreaBar from './MessageAreaBar';
-import Dialog from './Dialog';
+import MessageInput from './MessageInput';
 import UserList from './UserList';
 import RoomList from './RoomList';
 
-import {
-  useUserData,
-  ACTIONS as USER_DATA_ACTIONS,
-} from '../../context/UserDataContext';
+import { useUserData } from '../../context/UserDataContext';
 
 import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
 } from '../../context/RoomDataContext';
-import FullPageSpinner from '../../components/ui/FullPageSpinner';
 
 export default function ChatDashboard({ user, socket }) {
   const classes = useStyles();
+
   const { enqueueSnackbar } = useSnackbar();
-  // const { messages, currentRoom, users, dispatch } = useRoomData();
   const [roomDataState, roomDataDispatch] = useRoomData();
   const { currentRoom, users } = roomDataState;
-  const userData = useUserData();
+  const { getLastOpenedRoom, setLastOpenedRoom } = useUserData();
 
   const [dialogData, setDialogData] = React.useState({
     open: false,
@@ -44,7 +41,7 @@ export default function ChatDashboard({ user, socket }) {
     socket.onNewUserData(onNewUserData);
     socket.onUserStatusChanged(onUserStatusChanged);
     socket.requestUserData(user._id);
-    socket.joinRoom(user._id, userData.getLastOpenedRoom(), joinRoomCallback);
+    socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
   }, []);
 
   const onLeaveClick = () => {
@@ -69,9 +66,10 @@ export default function ChatDashboard({ user, socket }) {
     ({ rooms }) => {
       console.log('onNewUserData', rooms);
       // userData.setRooms(rooms);
-      userData.dispatch({ type: USER_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+      // userData.dispatch({ type: USER_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+      roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
     },
-    [userData.dispatch]
+    [roomDataDispatch]
   );
 
   const onUserStatusChanged = React.useCallback(
@@ -112,8 +110,9 @@ export default function ChatDashboard({ user, socket }) {
     }
 
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.LOAD_ROOM, payload: room });
-    userData.setLastOpenedRoom(room.name);
-    userData.dispatch({ type: USER_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+    setLastOpenedRoom(room.name);
+    // userData.dispatch({ type: USER_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
     // userData.setRooms(rooms);
 
     handleDialogClose();
@@ -138,8 +137,8 @@ export default function ChatDashboard({ user, socket }) {
       type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
       payload: room,
     });
-    userData.setRooms(rooms);
-    userData.setLastOpenedRoom(room.name);
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+    setLastOpenedRoom(room.name);
 
     enqueueSnackbar(`Room ${room.name} created.`, {
       variant: 'success',
@@ -188,7 +187,7 @@ export default function ChatDashboard({ user, socket }) {
 
   const handleRoomClick = (roomName) => {
     // if (roomName === currentRoom?.name) {
-    if (roomName === currentRoom?.name) {
+    if (roomName === currentRoom.name) {
       return;
     }
 
@@ -205,7 +204,7 @@ export default function ChatDashboard({ user, socket }) {
       <Grid container spacing={0}>
         <Grid item className={classes.channels}>
           <RoomList
-            rooms={userData.state.rooms}
+            rooms={roomDataState.rooms}
             handleRoomClick={handleRoomClick}
             handleAddClick={handleAddRoomClick}
           />
@@ -218,7 +217,7 @@ export default function ChatDashboard({ user, socket }) {
           <Box className={classes.messages}>
             <MessageAreaBar
               room={currentRoom}
-              isAuthor={currentRoom?.author === user._id}
+              isAuthor={currentRoom.author === user._id}
               onLeaveClick={onLeaveClick}
             />
             <MessageArea messages={roomDataState.messages} />

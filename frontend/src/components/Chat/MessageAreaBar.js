@@ -10,11 +10,6 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { updateRoom } from '../../utils/room-client';
 import ManageRoomDialog from './ManageRoomDialog';
 import {
-  useUserData,
-  ACTIONS as USER_DATA_ACTIONS,
-} from '../../context/UserDataContext';
-// import { useRoomData, ACTIONS } from '../../utils/useRoomData';
-import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
 } from '../../context/RoomDataContext';
@@ -22,11 +17,10 @@ import {
 export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
   const classes = useStyles();
 
-  const userData = useUserData();
-  const [roomDataState, roomDataDispatch] = useRoomData();
-  const { messages, currentRoom, users } = roomDataState;
+  const [loading, setLoading] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const [roomDataState, roomDataDispatch] = useRoomData();
   const [dialogData, setDialogData] = React.useState({
     open: false,
     error: null,
@@ -40,24 +34,28 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
 
   const handleSaveClicked = async (newName, file, deleteCurrent) => {
     const data = new FormData();
+
     data.append('newName', newName);
     data.append('file', file);
     data.append('deleteCurrent', JSON.stringify(deleteCurrent));
 
     try {
+      setLoading(true);
       const updatedRoom = await updateRoom(room.name, data);
       setDialogData({ ...dialogData, open: false });
-      userData.dispatch({
-        type: USER_DATA_ACTIONS.UPDATE_ROOM,
+      roomDataDispatch({
+        type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
         payload: updatedRoom,
       });
       roomDataDispatch({
         type: ROOM_DATA_ACTIONS.ROOM_UPDATED,
         payload: updatedRoom,
       });
-    } catch (e) {
-      console.log('Update Room ERROR', e.response.data);
-      setDialogData({ ...dialogData, error: e.response.data.message });
+    } catch (error) {
+      console.log('Update Room ERROR', error.response.data);
+      setDialogData({ ...dialogData, error: error.response.data.message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -89,7 +87,7 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
         <h3 className={classes.header} style={{ color: '#72767d' }}>
           #{' '}
         </h3>
-        <h3 className={classes.header}>{room?.name}</h3>
+        <h3 className={classes.header}>{room.name}</h3>
       </Box>
       <Box className={classes.settingsBox}>
         <IconButton color="inherit" onClick={handleClick}>
@@ -115,6 +113,7 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
       </Box>
       <ManageRoomDialog
         room={room}
+        loading={loading}
         dialogData={dialogData}
         resetError={resetError}
         handleDialogClose={handleDialogClose}

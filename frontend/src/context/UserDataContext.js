@@ -45,6 +45,18 @@ const userDataReducer = (state, action) => {
 
 function UserDataProvider(props) {
   const [state, dispatch] = React.useReducer(userDataReducer, initialState);
+  const value = React.useMemo(() => [state, dispatch], [state]);
+  return <UserDataContext.Provider value={value} {...props} />;
+}
+
+function useUserData() {
+  const context = React.useContext(UserDataContext);
+
+  if (context === undefined) {
+    throw new Error('useUser must be used within a UserProvider');
+  }
+
+  const [state, dispatch] = context;
 
   const setLastOpenedRoom = React.useCallback((lastOpenedRoom) => {
     localStorage.setItem(LAST_OPENED_ROOM_KEY, lastOpenedRoom);
@@ -54,25 +66,12 @@ function UserDataProvider(props) {
     return localStorage.getItem(LAST_OPENED_ROOM_KEY);
   }, []);
 
-  const value = React.useMemo(
-    () => ({
-      state,
-      dispatch,
-      getLastOpenedRoom,
-      setLastOpenedRoom,
-    }),
-    [state, getLastOpenedRoom, setLastOpenedRoom]
-  );
-
-  return <UserDataContext.Provider value={value} {...props} />;
-}
-
-function useUserData() {
-  const context = React.useContext(UserDataContext);
-  if (context === undefined) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
+  return {
+    state,
+    dispatch,
+    setLastOpenedRoom,
+    getLastOpenedRoom,
+  };
 }
 
 export { ACTIONS, useUserData, UserDataProvider };

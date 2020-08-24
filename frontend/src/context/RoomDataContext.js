@@ -8,10 +8,13 @@ const ACTIONS = {
   LOAD_ROOM: 'LOAD_ROOM',
   USER_STATUS_CHANGED: 'USER_STATUS_CHANGED',
   ROOM_UPDATED: 'ROOM_UPDATED',
+  SET_ROOMS: 'SET_ROOMS',
+  UPDATE_ROOM: 'UPDATE_ROOM',
 };
 
 const initialState = {
-  currentRoom: null,
+  rooms: {},
+  currentRoom: {},
   messages: [],
   users: [],
 };
@@ -21,6 +24,30 @@ const RoomDataContext = React.createContext();
 function roomDataReducer(state, action) {
   console.log('roomDataReducer', state, action);
   switch (action.type) {
+    case ACTIONS.SET_ROOMS: {
+      const rooms = action.payload.reduce((accumulator, currentValue) => {
+        return {
+          ...accumulator,
+          [currentValue._id]: currentValue,
+        };
+      }, {});
+      console.log('roomDataReducer state', state);
+      console.log('roomDataReducer rooms', rooms);
+      return { ...state, rooms: { ...state.rooms, ...rooms } };
+    }
+    case ACTIONS.UPDATE_ROOM: {
+      // TODO: Here it's loading whole room, with users, messages etc.
+      // Is it necessary?
+      console.log('roomDataReducer new', state);
+      console.log('roomDataReducer old', {
+        ...state,
+        rooms: { ...state.rooms, [action.payload._id]: action.payload },
+      });
+      return {
+        ...state,
+        rooms: { ...state.rooms, [action.payload._id]: action.payload },
+      };
+    }
     case ACTIONS.NEW_MESSAGE: {
       return { ...state, messages: [...state.messages, action.payload] };
     }

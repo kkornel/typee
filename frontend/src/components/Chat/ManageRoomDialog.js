@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import DeleteForever from '@material-ui/icons/DeleteForever';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,10 +13,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextDivider from './TextDivider';
 import TextField from '@material-ui/core/TextField';
-import Backdrop from '@material-ui/core/Backdrop';
+
+import FullPageSpinner from '../ui/FullPageSpinner';
 
 export default function ManageRoomDialog({
   room,
+  loading,
   dialogData,
   resetError,
   handleDialogClose,
@@ -26,14 +27,12 @@ export default function ManageRoomDialog({
   const classes = useStyles();
 
   const inputRef = React.useRef(null);
+
   const [file, setFile] = React.useState(null);
   const [name, setName] = React.useState('');
   const [deleteCurrent, setDeleteCurrent] = React.useState(false);
 
-  const [loading, setLoading] = React.useState(false);
-
   const handleSave = () => {
-    setLoading(true);
     handleSaveClicked(name, file, deleteCurrent);
   };
 
@@ -52,13 +51,13 @@ export default function ManageRoomDialog({
   };
 
   const onExit = () => {
-    setLoading(false);
-    // setFile(null);
-    // setName('');
-    // inputRef.current.value = null;
+    setFile(null);
+    setName('');
+    setDeleteCurrent(false);
+    inputRef.current.value = null;
   };
 
-  const onDeleteSelectedChange = (event) => {
+  const onDeleteSelectedChange = () => {
     setFile(null);
     inputRef.current.value = null;
   };
@@ -77,8 +76,9 @@ export default function ManageRoomDialog({
       aria-labelledby="form-dialog-name"
       PaperProps={{ classes: { root: classes.paper } }}
     >
+      {loading && <FullPageSpinner />}
       <DialogTitle>
-        Manage room <i>{room?.name}</i>
+        Manage room <i>{room.name}</i>
       </DialogTitle>
       <DialogContent>
         <DialogContentText className={classes.content}>
@@ -88,7 +88,7 @@ export default function ManageRoomDialog({
           label="Room's name"
           value={name}
           onChange={onTitleChange}
-          placeholder={room?.name}
+          placeholder={room.name}
           error={!!dialogData.error}
           helperText={dialogData.error}
           fullWidth
@@ -121,11 +121,11 @@ export default function ManageRoomDialog({
             ref={inputRef}
           />
         </Box>
-        {room?.avatar && !file && (
+        {room.avatar && !file && (
           <Box style={{ marginTop: '8px' }}>
             <Box style={{ marginBottom: '4px' }}>Current avatar:</Box>
             <Box>
-              <img src={room?.avatarURL} className={classes.img} />
+              <img src={room.avatarURL} className={classes.img} />
             </Box>
             <FormControlLabel
               className={classes.formControl}
@@ -158,11 +158,6 @@ export default function ManageRoomDialog({
             }
             label="Delete selected avatar"
           />
-        )}
-        {loading && (
-          <Backdrop style={{ zIndex: 200 }} open={loading}>
-            <CircularProgress color="inherit" />
-          </Backdrop>
         )}
       </DialogContent>
       <DialogActions>
