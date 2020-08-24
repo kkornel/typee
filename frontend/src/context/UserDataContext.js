@@ -2,10 +2,49 @@ import React from 'react';
 
 const LAST_OPENED_ROOM_KEY = 'lastOpenedRoom';
 
+const ACTIONS = {
+  SET_ROOMS: 'SET_ROOMS',
+  UPDATE_ROOM: 'UPDATE_ROOM',
+};
+
+const initialState = {
+  rooms: {},
+};
+
 const UserDataContext = React.createContext();
 
+const userDataReducer = (state, action) => {
+  console.log('userDataReducer', state, action);
+  switch (action.type) {
+    case ACTIONS.SET_ROOMS: {
+      const rooms = action.payload.reduce((accumulator, currentValue) => {
+        return {
+          ...accumulator,
+          [currentValue._id]: currentValue,
+        };
+      }, {});
+      console.log('userDataReducer state', state);
+      console.log('userDataReducer rooms', rooms);
+      return { ...state, rooms: { ...state.rooms, ...rooms } };
+    }
+    case ACTIONS.UPDATE_ROOM: {
+      // TODO: Here it's loading whole room, with users, messages etc.
+      // Is it necessary?
+      console.log('userDataReducer new', state);
+      console.log('userDataReducer old', {
+        ...state,
+        rooms: { ...state.rooms, [action.payload._id]: action.payload },
+      });
+      return {
+        ...state,
+        rooms: { ...state.rooms, [action.payload._id]: action.payload },
+      };
+    }
+  }
+};
+
 function UserDataProvider(props) {
-  const [rooms, setRooms] = React.useState([]);
+  const [state, dispatch] = React.useReducer(userDataReducer, initialState);
 
   const setLastOpenedRoom = React.useCallback((lastOpenedRoom) => {
     localStorage.setItem(LAST_OPENED_ROOM_KEY, lastOpenedRoom);
@@ -17,12 +56,12 @@ function UserDataProvider(props) {
 
   const value = React.useMemo(
     () => ({
+      state,
+      dispatch,
       getLastOpenedRoom,
       setLastOpenedRoom,
-      rooms,
-      setRooms,
     }),
-    [getLastOpenedRoom, setLastOpenedRoom, rooms, setRooms]
+    [state, getLastOpenedRoom, setLastOpenedRoom]
   );
 
   return <UserDataContext.Provider value={value} {...props} />;
@@ -30,12 +69,10 @@ function UserDataProvider(props) {
 
 function useUserData() {
   const context = React.useContext(UserDataContext);
-
   if (context === undefined) {
     throw new Error('useUser must be used within a UserProvider');
   }
-
   return context;
 }
 
-export { UserDataProvider, useUserData };
+export { ACTIONS, useUserData, UserDataProvider };

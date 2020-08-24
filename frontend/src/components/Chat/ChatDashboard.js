@@ -12,14 +12,23 @@ import Dialog from './Dialog';
 import UserList from './UserList';
 import RoomList from './RoomList';
 
-import { useUserData } from '../../context/UserDataContext';
-import { useRoomData, ACTIONS } from '../../utils/useRoomData';
+import {
+  useUserData,
+  ACTIONS as USER_DATA_ACTIONS,
+} from '../../context/UserDataContext';
+
+import {
+  useRoomData,
+  ACTIONS as ROOM_DATA_ACTIONS,
+} from '../../context/RoomDataContext';
 import FullPageSpinner from '../../components/ui/FullPageSpinner';
 
 export default function ChatDashboard({ user, socket }) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { messages, currentRoom, users, dispatch } = useRoomData();
+  // const { messages, currentRoom, users, dispatch } = useRoomData();
+  const [roomDataState, roomDataDispatch] = useRoomData();
+  const { currentRoom, users } = roomDataState;
   const userData = useUserData();
 
   const [dialogData, setDialogData] = React.useState({
@@ -48,33 +57,43 @@ export default function ChatDashboard({ user, socket }) {
 
   const onNewMessage = React.useCallback(
     (message) => {
-      dispatch({ type: ACTIONS.NEW_MESSAGE, payload: message });
+      roomDataDispatch({
+        type: ROOM_DATA_ACTIONS.NEW_MESSAGE,
+        payload: message,
+      });
     },
-    [dispatch]
+    [roomDataDispatch]
   );
 
   const onNewUserData = React.useCallback(
     ({ rooms }) => {
       console.log('onNewUserData', rooms);
-      userData.setRooms(rooms);
+      // userData.setRooms(rooms);
+      userData.dispatch({ type: USER_DATA_ACTIONS.SET_ROOMS, payload: rooms });
     },
-    [userData.setRooms]
+    [userData.dispatch]
   );
 
   const onUserStatusChanged = React.useCallback(
     (user) => {
       console.log('onUserStatusChanged', user);
-      dispatch({ type: ACTIONS.USER_STATUS_CHANGED, payload: user });
+      roomDataDispatch({
+        type: ROOM_DATA_ACTIONS.USER_STATUS_CHANGED,
+        payload: user,
+      });
     },
-    [dispatch]
+    [roomDataDispatch]
   );
 
   const onNewRoomData = React.useCallback(
     ({ users }) => {
       console.log('onNewRoomData', users);
-      dispatch({ type: ACTIONS.USER_LIST_CHANGED, payload: users });
+      roomDataDispatch({
+        type: ROOM_DATA_ACTIONS.USER_LIST_CHANGED,
+        payload: users,
+      });
     },
-    [dispatch]
+    [roomDataDispatch]
   );
 
   const joinRoomCallback = ({ error, room, rooms }) => {
@@ -92,9 +111,10 @@ export default function ChatDashboard({ user, socket }) {
       socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
     }
 
-    dispatch({ type: ACTIONS.LOAD_ROOM, payload: room });
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.LOAD_ROOM, payload: room });
     userData.setLastOpenedRoom(room.name);
-    userData.setRooms(rooms);
+    userData.dispatch({ type: USER_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+    // userData.setRooms(rooms);
 
     handleDialogClose();
   };
@@ -114,7 +134,10 @@ export default function ChatDashboard({ user, socket }) {
       socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
     }
 
-    dispatch({ type: ACTIONS.SET_CURRENT_ROOM, payload: room });
+    roomDataDispatch({
+      type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
+      payload: room,
+    });
     userData.setRooms(rooms);
     userData.setLastOpenedRoom(room.name);
 
@@ -182,7 +205,7 @@ export default function ChatDashboard({ user, socket }) {
       <Grid container spacing={0}>
         <Grid item className={classes.channels}>
           <RoomList
-            rooms={userData.rooms}
+            rooms={userData.state.rooms}
             handleRoomClick={handleRoomClick}
             handleAddClick={handleAddRoomClick}
           />
@@ -198,7 +221,7 @@ export default function ChatDashboard({ user, socket }) {
               isAuthor={currentRoom?.author === user._id}
               onLeaveClick={onLeaveClick}
             />
-            <MessageArea messages={messages} />
+            <MessageArea messages={roomDataState.messages} />
             <MessageInput handleMessageSubmit={handleSubmit} />
           </Box>
         </Grid>

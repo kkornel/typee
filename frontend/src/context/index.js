@@ -5,6 +5,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 
 import { AuthProvider } from './AuthContext';
 import { UserDataProvider } from './UserDataContext';
+import { RoomDataProvider } from './RoomDataContext';
 import theme from '../utils/theme';
 
 function AppProviders({ children }) {
@@ -13,7 +14,9 @@ function AppProviders({ children }) {
       <SnackbarProvider maxSnack={3}>
         <AuthProvider>
           {/* {children} */}
-          <UserDataProvider>{children}</UserDataProvider>
+          <UserDataProvider>
+            <RoomDataProvider>{children}</RoomDataProvider>
+          </UserDataProvider>
         </AuthProvider>
       </SnackbarProvider>
     </ThemeProvider>

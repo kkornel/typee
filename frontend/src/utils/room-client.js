@@ -8,8 +8,8 @@ async function updateRoom(name, data) {
   //   body: { file },
   // });
   const response = await axios.post(`/api/v1/rooms/${name}`, data);
-  console.log('room-client updateRoom', response);
-  return response;
+  console.log('room-client updateRoom', response.data);
+  return response.data;
 }
 
 export { updateRoom };

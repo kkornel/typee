@@ -23,11 +23,9 @@ export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
     }
   };
 
-  console.log('123123', rooms);
-
   return (
     <Box className={classes.roomList}>
-      {rooms.map(({ _id, name: roomName, avatarURL }) => {
+      {Object.values(rooms).map(({ _id, name: roomName, avatarURL }) => {
         return (
           <Box className={classes.room} key={_id}>
             <Tooltip title={roomName}>

@@ -9,15 +9,26 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import { updateRoom } from '../../utils/room-client';
 import ManageRoomDialog from './ManageRoomDialog';
+import {
+  useUserData,
+  ACTIONS as USER_DATA_ACTIONS,
+} from '../../context/UserDataContext';
+// import { useRoomData, ACTIONS } from '../../utils/useRoomData';
+import {
+  useRoomData,
+  ACTIONS as ROOM_DATA_ACTIONS,
+} from '../../context/RoomDataContext';
 
 export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
   const classes = useStyles();
 
+  const userData = useUserData();
+  const [roomDataState, roomDataDispatch] = useRoomData();
+  const { messages, currentRoom, users } = roomDataState;
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useState(true);
 
   const [dialogData, setDialogData] = React.useState({
-    open: true,
+    open: false,
     error: null,
   });
 
@@ -28,22 +39,24 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
   };
 
   const handleSaveClicked = async (newName, file, deleteCurrent) => {
-    console.log(newName, deleteCurrent, file);
-    if (newName.startsWith('a')) {
-      setDialogData({ ...dialogData, error: 'Name taken' });
-    } else {
-      setDialogData({ ...dialogData, error: null });
-    }
     const data = new FormData();
     data.append('newName', newName);
     data.append('file', file);
     data.append('deleteCurrent', JSON.stringify(deleteCurrent));
+
     try {
-      const res = await updateRoom(room.name, data);
-      console.log('handleSaveClicked red', res);
+      const updatedRoom = await updateRoom(room.name, data);
+      setDialogData({ ...dialogData, open: false });
+      userData.dispatch({
+        type: USER_DATA_ACTIONS.UPDATE_ROOM,
+        payload: updatedRoom,
+      });
+      roomDataDispatch({
+        type: ROOM_DATA_ACTIONS.ROOM_UPDATED,
+        payload: updatedRoom,
+      });
     } catch (e) {
-      console.log('!!!', e);
-      console.log('!!!', e.response.data);
+      console.log('Update Room ERROR', e.response.data);
       setDialogData({ ...dialogData, error: e.response.data.message });
     }
   };
@@ -62,8 +75,7 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
   };
 
   const handleManageClick = () => {
-    console.log('handleManageClick');
-    setOpen(true);
+    setDialogData({ ...dialogData, open: true });
     handleClose();
   };
 
