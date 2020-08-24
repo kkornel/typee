@@ -47,10 +47,6 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
         type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
         payload: updatedRoom,
       });
-      roomDataDispatch({
-        type: ROOM_DATA_ACTIONS.ROOM_UPDATED,
-        payload: updatedRoom,
-      });
     } catch (error) {
       console.log('Update Room ERROR', error.response.data);
       setDialogData({ ...dialogData, error: error.response.data.message });

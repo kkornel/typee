@@ -25,7 +25,7 @@ export default function ChatDashboard({ user, socket }) {
 
   const { enqueueSnackbar } = useSnackbar();
   const [roomDataState, roomDataDispatch] = useRoomData();
-  const { currentRoom, users } = roomDataState;
+  const { currentRoom } = roomDataState;
   const { getLastOpenedRoom, setLastOpenedRoom } = useUserData();
 
   const [dialogData, setDialogData] = React.useState({
@@ -211,7 +211,7 @@ export default function ChatDashboard({ user, socket }) {
           <Button onClick={socket.disconnet}>disconnet</Button>
         </Grid>
         <Grid item xs={1}>
-          <UserList users={users} />
+          <UserList users={currentRoom.users} />
         </Grid>
         <Grid item xs>
           <Box className={classes.messages}>
@@ -220,7 +220,7 @@ export default function ChatDashboard({ user, socket }) {
               isAuthor={currentRoom.author === user._id}
               onLeaveClick={onLeaveClick}
             />
-            <MessageArea messages={roomDataState.messages} />
+            <MessageArea messages={currentRoom.messages} />
             <MessageInput handleMessageSubmit={handleSubmit} />
           </Box>
         </Grid>
