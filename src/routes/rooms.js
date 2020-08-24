@@ -55,18 +55,20 @@ router.post(
         room.name = newName;
       }
 
+      // deleteCurrent is of type String because of how FormData works
+      // if (deleteCurrent === 'true') {
+      if (deleteCurrent) {
+        const response = await cloudinary.uploader.destroy(
+          `rooms/${room._id.toString()}`
+        );
+
+        console.log(response);
+
+        room.avatar = undefined;
+        room.avatarURL = undefined;
+      }
+
       if (file) {
-        if (room.avatar || room.avatarURL) {
-          const response = await cloudinary.uploader.destroy(
-            `rooms/${room._id.toString()}`
-          );
-
-          console.log(response);
-
-          room.avatar = undefined;
-          room.avatarURL = undefined;
-        }
-
         const buffer = await sharp(file.buffer)
           .resize({ width: 250, height: 250 })
           .png()
@@ -95,19 +97,6 @@ router.post(
         } catch (e) {
           console.log(e);
         }
-      }
-
-      // deleteCurrent is of type String because of how FormData works
-      // if (deleteCurrent === 'true') {
-      if (deleteCurrent) {
-        const response = await cloudinary.uploader.destroy(
-          `rooms/${room._id.toString()}`
-        );
-
-        console.log(response);
-
-        room.avatar = undefined;
-        room.avatarURL = undefined;
       }
 
       await room.save();

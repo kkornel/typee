@@ -28,10 +28,6 @@ export default function ManageRoomDialog({
   const [name, setName] = React.useState('');
   const [deleteCurrent, setDeleteCurrent] = React.useState(false);
 
-  React.useEffect(() => {
-    setDeleteCurrent(false);
-  }, [file]);
-
   const handleSave = () => {
     handleSaveClicked(name, file, deleteCurrent);
   };
@@ -46,8 +42,8 @@ export default function ManageRoomDialog({
   };
 
   const onChangeHandler = (event) => {
-    console.log(event.target.files);
     setFile(event.target.files[0]);
+    setDeleteCurrent(true);
   };
 
   const onExit = () => {
@@ -103,7 +99,7 @@ export default function ManageRoomDialog({
         <TextDivider style={{ margin: '10px 4px' }}>Avatar</TextDivider>
         <Box>
           <DialogContentText className={classes.content}>
-            Change room image:
+            Change room avatar:
           </DialogContentText>
           {file && (
             <Box>
@@ -120,7 +116,8 @@ export default function ManageRoomDialog({
           />
         </Box>
         {room?.avatar && !file && (
-          <Box style={{ marginTop: '20px' }}>
+          <Box style={{ marginTop: '8px' }}>
+            <Box style={{ marginBottom: '4px' }}>Current avatar:</Box>
             <Box>
               <img src={room?.avatarURL} className={classes.img} />
             </Box>
@@ -229,7 +226,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   formControl: {
-    marginTop: '6px',
+    marginTop: '2px',
   },
   interactiveNormalButton: {
     color: theme.palette.interactiveNormal,
