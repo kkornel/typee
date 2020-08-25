@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+import CurrentRoomNullComponent from './CurrentRoomNullComponent';
 import Dialog from './Dialog';
 import MessageArea from './MessageArea';
 import MessageAreaBar from './MessageAreaBar';
@@ -14,11 +15,12 @@ import UserList from './UserList';
 import RoomList from './RoomList';
 
 import { useUserData } from '../../context/UserDataContext';
-
 import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
 } from '../../context/RoomDataContext';
+
+import _ from 'lodash';
 
 export default function ChatDashboard({ user, socket }) {
   const classes = useStyles();
@@ -40,6 +42,7 @@ export default function ChatDashboard({ user, socket }) {
     socket.onNewRoomData(onNewRoomData);
     socket.onNewUserData(onNewUserData);
     socket.onRoomUpdated(onRoomUpdated);
+    socket.onRoomDeleted(onRoomDeleted);
     socket.onUserStatusChanged(onUserStatusChanged);
     socket.requestUserData(user._id);
     socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
@@ -48,6 +51,14 @@ export default function ChatDashboard({ user, socket }) {
   const onLeaveClick = () => {
     console.log('onLeaveClick');
   };
+
+  const onRoomDeleted = React.useCallback((room) => {
+    console.log('onRoomDeleted', room);
+    roomDataDispatch({
+      type: ROOM_DATA_ACTIONS.ROOM_DELETED,
+      payload: room,
+    });
+  });
 
   const connectCallback = ({ error, user }) => {
     console.log('connectCallback', error, user);
@@ -199,7 +210,7 @@ export default function ChatDashboard({ user, socket }) {
 
   const handleRoomClick = (roomName) => {
     // if (roomName === currentRoom?.name) {
-    if (roomName === currentRoom.name) {
+    if (currentRoom && roomName === currentRoom.name) {
       return;
     }
 
@@ -222,21 +233,35 @@ export default function ChatDashboard({ user, socket }) {
           />
           <Button onClick={socket.disconnet}>disconnet</Button>
         </Grid>
-        <Grid item xs={1}>
-          <UserList users={currentRoom.users} />
-        </Grid>
-        <Grid item xs>
-          <Box className={classes.messages}>
-            <MessageAreaBar
-              room={currentRoom}
-              isAuthor={currentRoom.author === user._id}
-              onLeaveClick={onLeaveClick}
-              roomUpdated={socket.roomUpdated}
-            />
-            <MessageArea messages={currentRoom.messages} />
-            <MessageInput handleMessageSubmit={handleSubmit} />
-          </Box>
-        </Grid>
+        {currentRoom ? (
+          <React.Fragment>
+            <Grid item xs={1}>
+              <UserList users={currentRoom.users} />
+            </Grid>
+            <Grid item xs>
+              <Box className={classes.messages}>
+                <MessageAreaBar
+                  room={currentRoom}
+                  isAuthor={currentRoom.author === user._id}
+                  onLeaveClick={onLeaveClick}
+                  roomUpdated={socket.roomUpdated}
+                  deleteRoom={socket.deleteRoom}
+                />
+                <MessageArea messages={currentRoom.messages} />
+                <MessageInput handleMessageSubmit={handleSubmit} />
+              </Box>
+            </Grid>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {/* <Grid item xs={1}></Grid> */}
+            <Grid item xs>
+              <Box className={classes.messages}>
+                <CurrentRoomNullComponent />
+              </Box>
+            </Grid>
+          </React.Fragment>
+        )}
       </Grid>
       <Dialog
         dialogData={dialogData}

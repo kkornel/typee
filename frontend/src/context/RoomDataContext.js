@@ -11,14 +11,16 @@ const ACTIONS = {
   USER_STATUS_CHANGED: 'USER_STATUS_CHANGED',
   SET_ROOMS: 'SET_ROOMS',
   UPDATE_ROOM: 'UPDATE_ROOM',
+  ROOM_DELETED: 'ROOM_DELETED',
 };
 
 const initialState = {
   rooms: {},
-  currentRoom: {
-    messages: [],
-    users: [],
-  },
+  currentRoom: undefined,
+  // currentRoom: {
+  //   messages: [],
+  //   users: [],
+  // },
 };
 
 const RoomDataContext = React.createContext();
@@ -95,6 +97,24 @@ function roomDataReducer(state, action) {
       return {
         ...state,
         currentRoom: action.payload,
+      };
+    }
+    case ACTIONS.ROOM_DELETED: {
+      // Omit the room that was deleted
+      const rooms = _.omit(state.rooms, [action.payload._id]);
+
+      // If the deleted room is the current selected room
+      // set the current room to undefined
+      // so the user will be brought to 'default' page
+      const currentRoom =
+        state.currentRoom._id === action.payload._id
+          ? undefined
+          : state.currentRoom;
+
+      return {
+        ...state,
+        rooms,
+        currentRoom,
       };
     }
     default: {

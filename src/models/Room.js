@@ -40,6 +40,16 @@ const roomSchema = new Schema({
   },
 });
 
+roomSchema.pre('remove', async function (next) {
+  await this.populate('messages').execPopulate();
+
+  this.messages.forEach((message) => {
+    message.remove();
+  });
+
+  next();
+});
+
 roomSchema.methods.getUsersInRoom = async function () {
   await this.populate('users.user', '_id username online').execPopulate();
   const users = this.users.map((user) => user.user);

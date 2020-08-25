@@ -23,6 +23,7 @@ export default function ManageRoomDialog({
   resetError,
   handleDialogClose,
   handleSaveClicked,
+  handleDeleteRoom,
 }) {
   const classes = useStyles();
 
@@ -66,6 +67,21 @@ export default function ManageRoomDialog({
 
   const onDeleteCurrentChange = () => {
     setDeleteCurrent(!deleteCurrent);
+  };
+
+  const [confirmName, setConfirmName] = React.useState('');
+  const [confirmNameError, setConfirmNameError] = React.useState(false);
+
+  const onConfirmNameChange = (event) => {
+    setConfirmName(event.target.value);
+  };
+
+  const handleDelete = () => {
+    const correctConfirmation = room.name === confirmName;
+    setConfirmNameError(!correctConfirmation);
+    if (correctConfirmation) {
+      handleDeleteRoom(room.name);
+    }
   };
 
   return (
@@ -161,6 +177,38 @@ export default function ManageRoomDialog({
             label="Delete selected avatar"
           />
         )}
+        <TextDivider style={{ margin: '10px 4px' }} border="1px solid red">
+          DELETE
+        </TextDivider>
+        <Box>
+          <DialogContentText className={classes.content}>
+            Are you sure you want delete this room? <br />
+          </DialogContentText>
+          <TextField
+            label="Type room's name to confirm"
+            value={confirmName}
+            onChange={onConfirmNameChange}
+            error={confirmNameError}
+            helperText={confirmNameError ? 'Provided name is incorrect' : ''}
+            fullWidth
+            id="name"
+            type="text"
+            margin="dense"
+            variant="outlined"
+            className={classes.deleteInput}
+            InputProps={{ classes: { root: classes.paper } }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={handleDelete}
+            className={classes.deleteButton}
+          >
+            DELETE ROOM
+          </Button>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button
@@ -182,23 +230,22 @@ export default function ManageRoomDialog({
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& label.Mui-focused': {
-      color: theme.palette.purple,
-    },
-    '& input:valid + fieldset': {
-      borderColor: theme.palette.purpleAlt,
-    },
     '& .MuiFormLabel-root': {
       color: theme.palette.interactiveNormal,
     },
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: theme.palette.purple,
+    '& label.Mui-focused': {
+      color: theme.palette.purple,
     },
-    '& .MuiInput-underline:before': {
-      borderBottomColor: theme.palette.purple,
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: theme.palette.purple,
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: theme.palette.purpleAlt,
+      },
+      '&:hover fieldset': {
+        borderColor: theme.palette.purple,
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: theme.palette.purple,
+      },
     },
   },
   paper: {
@@ -241,6 +288,34 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: theme.palette.interactiveHover,
       backgroundColor: theme.palette.interactiveMuted,
+    },
+  },
+  deleteInput: {
+    '& .MuiFormLabel-root': {
+      color: theme.palette.red,
+    },
+    '& label.Mui-focused': {
+      color: theme.palette.red,
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: theme.palette.textMuted,
+      },
+      '&:hover fieldset': {
+        borderColor: theme.palette.red,
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: theme.palette.red,
+      },
+    },
+  },
+  deleteButton: {
+    marginTop: '8px',
+    color: theme.palette.interactiveHover,
+    backgroundColor: theme.palette.interactiveMuted,
+    '&:hover': {
+      color: theme.palette.textNormal,
+      backgroundColor: theme.palette.red,
     },
   },
 }));

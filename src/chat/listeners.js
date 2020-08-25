@@ -10,6 +10,7 @@ const {
   connectUser,
   disconnectUser,
   getRoom,
+  deleteRoom,
 } = require('./users');
 
 const User = require('../models/User');
@@ -17,6 +18,21 @@ const User = require('../models/User');
 const connectionEvent = (io) => {
   io.on('connection', (socket) => {
     console.log('New connection', socket.id);
+
+    socket.on('deleteRoom', async ({ roomName }, callback) => {
+      console.log('deleteRoom', roomName);
+
+      const { error, room } = await deleteRoom(roomName);
+
+      if (error) {
+        console.log(error);
+        return callback({ error });
+      }
+
+      io.to(room.name).emit('roomDeleted', room);
+
+      callback({ room });
+    });
 
     socket.on('connectUser', async ({ userId }, callback) => {
       const { error, user } = await connectUser(userId, socket.id);

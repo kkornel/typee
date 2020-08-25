@@ -4,6 +4,16 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const Message = require('../models/Message');
 
+const getRoom = async (roomName) => {
+  const room = await Room.findOne({ name: roomName }).select('-avatar');
+
+  if (!room) {
+    return { error: `Room ${roomName} doesn't exist.` };
+  }
+
+  return { room };
+};
+
 const createRoom = async (roomName, authorId, socketId) => {
   const alreadyExists = await Room.findOne({ name: roomName });
 
@@ -24,10 +34,10 @@ const createRoom = async (roomName, authorId, socketId) => {
 };
 
 const joinRoom = async (roomName, userId, socketId) => {
-  const room = await Room.findOne({ name: roomName }).select('-avatar');
+  const { error, room } = await getRoom(roomName);
 
-  if (!room) {
-    return { error: `Room ${roomName} doesn't exist.` };
+  if (error) {
+    return { error };
   }
 
   const alreadyInRoom = room.users.findIndex((user) =>
@@ -54,10 +64,10 @@ const joinRoom = async (roomName, userId, socketId) => {
 };
 
 const leaveRoom = async (roomName, userId, socketId) => {
-  const room = await Room.findOne({ name: roomName });
+  const { error, room } = await getRoom(roomName);
 
-  if (!room) {
-    return { error: `Room ${roomName} doesn't exist.` };
+  if (error) {
+    return { error };
   }
 
   // const index = room.users.findIndex((user) => user.user === userId);
@@ -69,10 +79,10 @@ const leaveRoom = async (roomName, userId, socketId) => {
 };
 
 const createMessage = async (text, roomName, authorId) => {
-  const room = await Room.findOne({ name: roomName });
+  const { error, room } = await getRoom(roomName);
 
-  if (!room) {
-    return { error: `Room ${roomName} doesn't exist.` };
+  if (error) {
+    return { error };
   }
 
   const newMessage = await new Message({ author: authorId, text }).save();
@@ -147,12 +157,14 @@ const disconnectUser = async (socketId) => {
   return { user };
 };
 
-const getRoom = async (roomName) => {
-  const room = await Room.findOne({ name: roomName });
+const deleteRoom = async (roomName) => {
+  const { error, room } = await getRoom(roomName);
 
-  if (!room) {
-    return { error: `Room ${roomName} doesn't exist.` };
+  if (error) {
+    return { error };
   }
+
+  await room.remove();
 
   return { room };
 };
@@ -169,4 +181,5 @@ module.exports = {
   connectUser,
   disconnectUser,
   getRoom,
+  deleteRoom,
 };

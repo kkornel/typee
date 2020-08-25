@@ -19,6 +19,7 @@ export default function MessageAreaBar({
   isAuthor,
   onLeaveClick,
   roomUpdated,
+  deleteRoom,
 }) {
   const classes = useStyles();
 
@@ -27,7 +28,7 @@ export default function MessageAreaBar({
 
   const [roomDataState, roomDataDispatch] = useRoomData();
   const [dialogData, setDialogData] = React.useState({
-    open: false,
+    open: true,
     error: null,
   });
 
@@ -89,6 +90,18 @@ export default function MessageAreaBar({
     }
   };
 
+  const handleDeleteRoom = (roomName) => {
+    deleteRoom(roomName, handleDeleteRoomCallback);
+  };
+
+  const handleDeleteRoomCallback = ({ error, room }) => {
+    if (error) {
+      console.log('handleDeleteRoomCallback', error);
+    }
+
+    console.log(`The room ${room.name} has been deleted.`);
+  };
+
   return (
     <Box className={classes.messagesBar}>
       <Box className={classes.title}>
@@ -126,6 +139,7 @@ export default function MessageAreaBar({
         resetError={resetError}
         handleDialogClose={handleDialogClose}
         handleSaveClicked={handleSaveClicked}
+        handleDeleteRoom={handleDeleteRoom}
       />
     </Box>
   );

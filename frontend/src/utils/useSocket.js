@@ -43,6 +43,10 @@ function useSocket(endpoint = ENDPOINT) {
     socket.emit('leave', { roomName, userId }, callback);
   }
 
+  function deleteRoom(roomName, callback) {
+    socket.emit('deleteRoom', { roomName }, callback);
+  }
+
   function roomUpdated(oldName, roomName, callback) {
     socket.emit('roomUpdated', { oldName, roomName }, callback);
   }
@@ -67,6 +71,10 @@ function useSocket(endpoint = ENDPOINT) {
     socket.on('userStatusChanged', callback);
   }
 
+  function onRoomDeleted(callback) {
+    socket.on('roomDeleted', callback);
+  }
+
   function disconnet() {
     socket.disconnect();
   }
@@ -85,6 +93,8 @@ function useSocket(endpoint = ENDPOINT) {
     onNewUserData,
     onUserStatusChanged,
     disconnet,
+    deleteRoom,
+    onRoomDeleted,
   };
 }
 
