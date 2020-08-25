@@ -48,7 +48,7 @@ export default function MessageAreaBar({
       setLoading(true);
       const updatedRoom = await updateRoom(room.name, data);
       setDialogData({ ...dialogData, open: false });
-      roomUpdated(room.name, updatedRoom.name);
+      roomUpdated(room.name, updatedRoom.name, roomUpdatedCallback);
       roomDataDispatch({
         type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
         payload: updatedRoom,
@@ -81,6 +81,12 @@ export default function MessageAreaBar({
 
   const resetError = () => {
     setDialogData({ ...dialogData, error: null });
+  };
+
+  const roomUpdatedCallback = ({ error }) => {
+    if (error) {
+      console.log('roomUpdatedCallback', error);
+    }
   };
 
   return (

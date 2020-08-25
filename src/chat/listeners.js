@@ -69,30 +69,22 @@ const connectionEvent = (io) => {
         return callback(error);
       }
 
-      const users = room.users;
-
-      console.log('roomUpdated old new', oldName, roomName);
       if (oldName !== roomName) {
+        console.log('roomUpdated old new', oldName, roomName);
         console.log('oldName !== roomName');
 
-        users.forEach((user) => {
+        // Switching users to new room if the room name has changed,
+        // because otherwise users wouldn't get the new messages
+        room.users.forEach((user) => {
           io.sockets.sockets[user.socketId].leave(oldName);
           io.sockets.sockets[user.socketId].join(roomName);
         });
-        // io.sockets.sockets[socket.id].leave(roomName);
-        // io.sockets.sockets[socket.id].join('roomName');
+
+        io.to(room.name).emit(
+          'message',
+          generateSystemMessage(`Room has been renamed to ${roomName}`)
+        );
       }
-
-      // // console.log(io.sockets.adapter.rooms);
-      // console.log(io.sockets.sockets);
-      // console.log(io.sockets[users[0].socketId]);
-      // // console.log(socket.rooms);
-      // console.log(users);
-      // console.log(users[0].socketId);
-
-      // users.forEach((user) => {
-      //   io.sockets.sockets[user.socketId].leave(oldName);
-      // });
 
       socket.broadcast.to(roomName).emit('roomUpdated', room);
     });
@@ -166,29 +158,6 @@ const connectionEvent = (io) => {
       socket.broadcast
         .to(room.name)
         .emit('roomData', await generateRoomData(room.name));
-
-      // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-      // console.log('##############################################');
-      // console.log(io.sockets.adapter.rooms);
-      // console.log('##############################################');
-      // console.log(io.sockets.adapter.rooms[roomName]);
-      // console.log('##############################################');
-      // console.log(io.sockets.sockets[socket.id]);
-      // console.log('##############################################');
-      // console.log(io.sockets.adapter.rooms);
-      // io.sockets.sockets[socket.id].leave(roomName);
-      // io.sockets.sockets[socket.id].join('roomName');
-      // console.log('##############################################');
-      // console.log('##############################################');
-      // // console.log(io.sockets.sockets[socket.id]);
-      // console.log(io.sockets.adapter.rooms);
-      // console.log('##############################################');
-      // console.log('##############################################');
-      // // console.log(socket);
-      // console.log('##############################################');
-      // console.log('##############################################');
-      // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     });
 
     socket.on('leave', async ({ roomName, userId }, callback) => {
