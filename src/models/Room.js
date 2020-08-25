@@ -49,6 +49,7 @@ roomSchema.methods.getUsersInRoom = async function () {
 roomSchema.methods.toJSON = function () {
   const roomObject = this.toObject();
   delete roomObject.__v;
+  delete avatar;
   return roomObject;
 };
 

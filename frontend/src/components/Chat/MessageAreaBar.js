@@ -14,7 +14,12 @@ import {
   ACTIONS as ROOM_DATA_ACTIONS,
 } from '../../context/RoomDataContext';
 
-export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
+export default function MessageAreaBar({
+  room,
+  isAuthor,
+  onLeaveClick,
+  roomUpdated,
+}) {
   const classes = useStyles();
 
   const [loading, setLoading] = React.useState(false);
@@ -43,6 +48,7 @@ export default function MessageAreaBar({ room, isAuthor, onLeaveClick }) {
       setLoading(true);
       const updatedRoom = await updateRoom(room.name, data);
       setDialogData({ ...dialogData, open: false });
+      roomUpdated(room.name, updatedRoom.name);
       roomDataDispatch({
         type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
         payload: updatedRoom,

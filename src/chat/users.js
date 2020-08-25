@@ -8,9 +8,7 @@ const createRoom = async (roomName, authorId, socketId) => {
   const alreadyExists = await Room.findOne({ name: roomName });
 
   if (alreadyExists) {
-    return {
-      error: `Room ${roomName} already exists.`,
-    };
+    return { error: `Room ${roomName} already exists.` };
   }
 
   const room = new Room({ name: roomName, author: authorId });
@@ -26,12 +24,10 @@ const createRoom = async (roomName, authorId, socketId) => {
 };
 
 const joinRoom = async (roomName, userId, socketId) => {
-  const room = await Room.findOne({ name: roomName });
+  const room = await Room.findOne({ name: roomName }).select('-avatar');
 
   if (!room) {
-    return {
-      error: `Room ${roomName} doesn't exist.`,
-    };
+    return { error: `Room ${roomName} doesn't exist.` };
   }
 
   const alreadyInRoom = room.users.findIndex((user) =>
@@ -54,18 +50,14 @@ const joinRoom = async (roomName, userId, socketId) => {
   const roomWithUsers = JSON.parse(JSON.stringify(room));
   roomWithUsers.users = await room.getUsersInRoom();
 
-  return {
-    room: roomWithUsers,
-  };
+  return { room: roomWithUsers };
 };
 
 const leaveRoom = async (roomName, userId, socketId) => {
   const room = await Room.findOne({ name: roomName });
 
   if (!room) {
-    return {
-      error: `Room ${name} doesn't exist.`,
-    };
+    return { error: `Room ${roomName} doesn't exist.` };
   }
 
   // const index = room.users.findIndex((user) => user.user === userId);
@@ -80,9 +72,7 @@ const createMessage = async (text, roomName, authorId) => {
   const room = await Room.findOne({ name: roomName });
 
   if (!room) {
-    return {
-      error: `Room ${roomName} doesn't exist.`,
-    };
+    return { error: `Room ${roomName} doesn't exist.` };
   }
 
   const newMessage = await new Message({ author: authorId, text }).save();
@@ -157,6 +147,16 @@ const disconnectUser = async (socketId) => {
   return { user };
 };
 
+const getRoom = async (roomName) => {
+  const room = await Room.findOne({ name: roomName });
+
+  if (!room) {
+    return { error: `Room ${roomName} doesn't exist.` };
+  }
+
+  return { room };
+};
+
 module.exports = {
   createRoom,
   joinRoom,
@@ -168,4 +168,5 @@ module.exports = {
   getUserData,
   connectUser,
   disconnectUser,
+  getRoom,
 };

@@ -39,6 +39,7 @@ export default function ChatDashboard({ user, socket }) {
     socket.onNewMessage(onNewMessage);
     socket.onNewRoomData(onNewRoomData);
     socket.onNewUserData(onNewUserData);
+    socket.onRoomUpdated(onRoomUpdated);
     socket.onUserStatusChanged(onUserStatusChanged);
     socket.requestUserData(user._id);
     socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
@@ -51,6 +52,17 @@ export default function ChatDashboard({ user, socket }) {
   const connectCallback = ({ error, user }) => {
     console.log('connectCallback', error, user);
   };
+
+  const onRoomUpdated = React.useCallback(
+    (room) => {
+      console.log('onRoomUpdated', room);
+      roomDataDispatch({
+        type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
+        payload: room,
+      });
+    },
+    [roomDataDispatch]
+  );
 
   const onNewMessage = React.useCallback(
     (message) => {
@@ -219,6 +231,7 @@ export default function ChatDashboard({ user, socket }) {
               room={currentRoom}
               isAuthor={currentRoom.author === user._id}
               onLeaveClick={onLeaveClick}
+              roomUpdated={socket.roomUpdated}
             />
             <MessageArea messages={currentRoom.messages} />
             <MessageInput handleMessageSubmit={handleSubmit} />

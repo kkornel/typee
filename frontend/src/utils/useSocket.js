@@ -1,6 +1,7 @@
 // import React from 'react';
 
 import io from 'socket.io-client';
+import { Paper } from '@material-ui/core';
 
 const ENDPOINT = 'http://localhost:5000';
 
@@ -38,7 +39,16 @@ function useSocket(endpoint = ENDPOINT) {
   }
 
   function leaveRoom(userId, roomName, callback) {
+    console.log('LEAVEROOM', userId, roomName);
     socket.emit('leave', { roomName, userId }, callback);
+  }
+
+  function roomUpdated(oldName, roomName, callback) {
+    socket.emit('roomUpdated', { oldName, roomName }, callback);
+  }
+
+  function onRoomUpdated(callback) {
+    socket.on('roomUpdated', callback);
   }
 
   function onNewMessage(callback) {
@@ -68,6 +78,8 @@ function useSocket(endpoint = ENDPOINT) {
     createRoom,
     joinRoom,
     leaveRoom,
+    roomUpdated,
+    onRoomUpdated,
     onNewMessage,
     onNewRoomData,
     onNewUserData,

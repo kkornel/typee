@@ -47,7 +47,9 @@ export default function ManageRoomDialog({
 
   const onChangeHandler = (event) => {
     setFile(event.target.files[0]);
-    setDeleteCurrent(true);
+    if (room.avatarURL) {
+      setDeleteCurrent(true);
+    }
   };
 
   const onExit = () => {
@@ -121,7 +123,7 @@ export default function ManageRoomDialog({
             ref={inputRef}
           />
         </Box>
-        {room.avatar && !file && (
+        {room.avatarURL && !file && (
           <Box style={{ marginTop: '8px' }}>
             <Box style={{ marginBottom: '4px' }}>Current avatar:</Box>
             <Box>
