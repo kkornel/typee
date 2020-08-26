@@ -79,12 +79,9 @@ function roomDataReducer(state, action) {
       };
     }
     case ACTIONS.USER_STATUS_CHANGED: {
-      const users = state.currentRoom.users.find((user) => {
-        if (user._id === action.payload._id) {
-          user.online = action.payload.online;
-        }
-        return user;
-      });
+      const users = [...state.currentRoom.users];
+      const index = users.findIndex((user) => user._id === action.payload._id);
+      users[index] = action.payload;
       return {
         ...state,
         currentRoom: {
