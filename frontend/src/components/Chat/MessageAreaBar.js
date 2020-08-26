@@ -71,7 +71,7 @@ export default function MessageAreaBar({
   };
 
   const handleLeaveClick = () => {
-    onLeaveClick();
+    onLeaveClick(room.name);
     handleClose();
   };
 
@@ -124,10 +124,13 @@ export default function MessageAreaBar({
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
-          <StyledMenuItem onClick={handleLeaveClick}>Leave room</StyledMenuItem>
-          {isAuthor && (
+          {isAuthor ? (
             <StyledMenuItem onClick={handleManageClick}>
               Manage room
+            </StyledMenuItem>
+          ) : (
+            <StyledMenuItem onClick={handleLeaveClick}>
+              Leave room
             </StyledMenuItem>
           )}
         </StyledMenu>

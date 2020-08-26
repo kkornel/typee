@@ -150,7 +150,11 @@ const connectionEvent = (io) => {
 
     socket.on('join', async ({ roomName, userId }, callback) => {
       console.log('join', roomName, userId);
-      const { error, room } = await joinRoom(roomName, userId, socket.id);
+      const { error, room, alreadyWasInRoom } = await joinRoom(
+        roomName,
+        userId,
+        socket.id
+      );
 
       if (error) {
         return callback({ error });
@@ -162,13 +166,26 @@ const connectionEvent = (io) => {
       const user = await User.findById(userId);
 
       socket.join(room.name);
-      socket.emit(
-        'message',
-        generateSystemMessage(`Welcome to the ${room.name}`)
-      );
-      socket.broadcast
-        .to(room.name)
-        .emit('message', generateSystemMessage(`${user.username} has joined!`));
+
+      if (!alreadyWasInRoom) {
+        socket.emit(
+          'message',
+          generateSystemMessage(`Welcome to the ${room.name}`)
+        );
+        socket.broadcast
+          .to(room.name)
+          .emit(
+            'message',
+            generateSystemMessage(`${user.username} has joined!`)
+          );
+      } else {
+        // socket.broadcast
+        //   .to(room.name)
+        //   .emit(
+        //     'message',
+        //     generateSystemMessage(`${user.username} came online!`)
+        //   );
+      }
 
       // TODO: Generate room data to the others
       socket.broadcast
@@ -184,7 +201,7 @@ const connectionEvent = (io) => {
         return callback({ error });
       }
 
-      callback();
+      callback({ room });
 
       const user = await User.findById(userId);
 

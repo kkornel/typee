@@ -12,6 +12,7 @@ const ACTIONS = {
   SET_ROOMS: 'SET_ROOMS',
   UPDATE_ROOM: 'UPDATE_ROOM',
   ROOM_DELETED: 'ROOM_DELETED',
+  LEAVE_ROOM: 'LEAVE_ROOM',
 };
 
 const initialState = {
@@ -94,6 +95,16 @@ function roomDataReducer(state, action) {
       return {
         ...state,
         currentRoom: action.payload,
+      };
+    }
+    case ACTIONS.LEAVE_ROOM: {
+      // Omit the room that was left
+      const rooms = _.omit(state.rooms, [action.payload._id]);
+
+      return {
+        ...state,
+        rooms,
+        currentRoom: undefined,
       };
     }
     case ACTIONS.ROOM_DELETED: {

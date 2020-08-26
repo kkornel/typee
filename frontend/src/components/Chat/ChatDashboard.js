@@ -48,16 +48,23 @@ export default function ChatDashboard({ user, socket }) {
     socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
   }, []);
 
-  const onLeaveClick = () => {
+  const onLeaveClick = (roomName) => {
     console.log('onLeaveClick');
+    socket.leaveRoom(user._id, roomName, leaveCallback);
+  };
+
+  const leaveCallback = ({ error, room }) => {
+    if (error) {
+      console.log('leaveCallback ERROR', error);
+    }
+
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.LEAVE_ROOM, payload: room });
+    console.log(`Left ${room.name} successfully.`);
   };
 
   const onRoomDeleted = React.useCallback((room) => {
     console.log('onRoomDeleted', room);
-    roomDataDispatch({
-      type: ROOM_DATA_ACTIONS.ROOM_DELETED,
-      payload: room,
-    });
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
   });
 
   const connectCallback = ({ error, user }) => {
@@ -128,8 +135,8 @@ export default function ChatDashboard({ user, socket }) {
 
     // TODO: hmm?
     if (currentRoom) {
-      console.log("There is some room so I'll leave it");
-      socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
+      console.log("TODO: (??) There is some room so I'll leave it");
+      // socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
     }
 
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.LOAD_ROOM, payload: room });
@@ -152,8 +159,8 @@ export default function ChatDashboard({ user, socket }) {
 
     // TODO: how to store rooms and room?
     if (currentRoom) {
-      console.log("There is some room so I'll leave it");
-      socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
+      console.log("TODO: (??) There is some room so I'll leave it");
+      // socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
     }
 
     roomDataDispatch({
@@ -170,10 +177,6 @@ export default function ChatDashboard({ user, socket }) {
     handleDialogClose();
 
     // TODO: Open this room page
-  };
-
-  const leaveCallback = (somedata) => {
-    console.log('leaveCallback', somedata);
   };
 
   console.log('&&& ChatDashboard RE-RENDER');

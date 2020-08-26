@@ -44,7 +44,9 @@ const joinRoom = async (roomName, userId, socketId) => {
     user.user.equals(userId)
   );
 
-  if (alreadyInRoom === -1) {
+  const alreadyWasInRoom = alreadyInRoom !== -1;
+
+  if (!alreadyWasInRoom) {
     room.users.push({ user: userId, socketId });
   } else {
     room.users[alreadyInRoom].socketId = socketId;
@@ -60,7 +62,7 @@ const joinRoom = async (roomName, userId, socketId) => {
   const roomWithUsers = JSON.parse(JSON.stringify(room));
   roomWithUsers.users = await room.getUsersInRoom();
 
-  return { room: roomWithUsers };
+  return { room: roomWithUsers, alreadyWasInRoom };
 };
 
 const leaveRoom = async (roomName, userId, socketId) => {
@@ -70,10 +72,11 @@ const leaveRoom = async (roomName, userId, socketId) => {
     return { error };
   }
 
-  // const index = room.users.findIndex((user) => user.user === userId);
+  const index = room.users.findIndex((user) => user.user.toString() === userId);
 
-  // room.users.splice(index, 1);
-  // await room.save();
+  room.users.splice(index, 1);
+
+  await room.save();
 
   return { room };
 };
