@@ -18,16 +18,19 @@ function useSocket(endpoint = ENDPOINT) {
   // }
 
   function connect(userId, callback) {
-    console.log('connect');
     socket.emit('connectUser', { userId }, callback);
+  }
+
+  function disconnet() {
+    socket.disconnect();
+  }
+
+  function requestUserData(userId, callback) {
+    socket.emit('userDataRequest', { userId });
   }
 
   function sendMessage(text, roomName, authorId, callback) {
     socket.emit('message', { text, roomName, authorId }, callback);
-  }
-
-  function requestUserData(userId) {
-    socket.emit('userDataRequest', { userId });
   }
 
   function createRoom(authorId, roomName, callback) {
@@ -38,17 +41,16 @@ function useSocket(endpoint = ENDPOINT) {
     socket.emit('join', { roomName, userId }, callback);
   }
 
+  function roomUpdated(oldName, roomName, callback) {
+    socket.emit('roomUpdated', { oldName, roomName }, callback);
+  }
+
   function leaveRoom(userId, roomName, callback) {
-    console.log('LEAVEROOM', userId, roomName);
     socket.emit('leave', { roomName, userId }, callback);
   }
 
   function deleteRoom(roomName, callback) {
     socket.emit('deleteRoom', { roomName }, callback);
-  }
-
-  function roomUpdated(oldName, roomName, callback) {
-    socket.emit('roomUpdated', { oldName, roomName }, callback);
   }
 
   function onRoomUpdated(callback) {
@@ -73,10 +75,6 @@ function useSocket(endpoint = ENDPOINT) {
 
   function onRoomDeleted(callback) {
     socket.on('roomDeleted', callback);
-  }
-
-  function disconnet() {
-    socket.disconnect();
   }
 
   return {

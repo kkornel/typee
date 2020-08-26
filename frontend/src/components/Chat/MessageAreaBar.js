@@ -7,8 +7,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import { updateRoom } from '../../utils/room-client';
 import ManageRoomDialog from './ManageRoomDialog';
+
+import { updateRoom } from '../../utils/room-client';
 import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
@@ -32,13 +33,7 @@ export default function MessageAreaBar({
     error: null,
   });
 
-  const handleDialogClose = () => {
-    if (dialogData.open) {
-      setDialogData({ open: false });
-    }
-  };
-
-  const handleSaveClicked = async (newName, file, deleteCurrent) => {
+  const handleSaveClick = async (newName, file, deleteCurrent) => {
     const data = new FormData();
 
     data.append('newName', newName);
@@ -47,9 +42,12 @@ export default function MessageAreaBar({
 
     try {
       setLoading(true);
+
       const updatedRoom = await updateRoom(room.name, data);
+
       setDialogData({ ...dialogData, open: false });
-      roomUpdated(room.name, updatedRoom.name, roomUpdatedCallback);
+
+      roomUpdated(room.name, updatedRoom.name);
       roomDataDispatch({
         type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
         payload: updatedRoom,
@@ -80,26 +78,18 @@ export default function MessageAreaBar({
     handleClose();
   };
 
-  const resetError = () => {
-    setDialogData({ ...dialogData, error: null });
-  };
-
-  const roomUpdatedCallback = ({ error }) => {
-    if (error) {
-      console.log('roomUpdatedCallback', error);
+  const handleDialogClose = () => {
+    if (dialogData.open) {
+      setDialogData({ open: false });
     }
   };
 
   const handleDeleteRoom = (roomName) => {
-    deleteRoom(roomName, handleDeleteRoomCallback);
+    deleteRoom(roomName);
   };
 
-  const handleDeleteRoomCallback = ({ error, room }) => {
-    if (error) {
-      console.log('handleDeleteRoomCallback', error);
-    }
-
-    console.log(`The room ${room.name} has been deleted.`);
+  const resetError = () => {
+    setDialogData({ ...dialogData, error: null });
   };
 
   return (
@@ -141,7 +131,7 @@ export default function MessageAreaBar({
         dialogData={dialogData}
         resetError={resetError}
         handleDialogClose={handleDialogClose}
-        handleSaveClicked={handleSaveClicked}
+        handleSaveClick={handleSaveClick}
         handleDeleteRoom={handleDeleteRoom}
       />
     </Box>

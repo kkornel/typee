@@ -3,16 +3,15 @@ import React from 'react';
 import _ from 'lodash';
 
 const ACTIONS = {
-  NEW_MESSAGE: 'NEW_MESSAGE',
+  LEAVE_ROOM: 'LEAVE_ROOM',
   LOAD_MESSAGES: 'LOAD_MESSAGES',
+  NEW_MESSAGE: 'NEW_MESSAGE',
+  ROOM_DELETED: 'ROOM_DELETED',
   SET_CURRENT_ROOM: 'SET_CURRENT_ROOM',
-  USER_LIST_CHANGED: 'USER_LIST_CHANGED',
-  LOAD_ROOM: 'LOAD_ROOM',
-  USER_STATUS_CHANGED: 'USER_STATUS_CHANGED',
   SET_ROOMS: 'SET_ROOMS',
   UPDATE_ROOM: 'UPDATE_ROOM',
-  ROOM_DELETED: 'ROOM_DELETED',
-  LEAVE_ROOM: 'LEAVE_ROOM',
+  USER_LIST_CHANGED: 'USER_LIST_CHANGED',
+  USER_STATUS_CHANGED: 'USER_STATUS_CHANGED',
 };
 
 const initialState = {
@@ -30,6 +29,55 @@ function roomDataReducer(state, action) {
   console.log(`roomDataReducer old state`, state);
   console.log(`roomDataReducer ${action.type}`, action.payload);
   switch (action.type) {
+    case ACTIONS.LEAVE_ROOM: {
+      // Omit the room that was left
+      const rooms = _.omit(state.rooms, [action.payload._id]);
+
+      return {
+        ...state,
+        rooms,
+        currentRoom: undefined,
+      };
+    }
+    case ACTIONS.LOAD_MESSAGES: {
+      return {
+        ...state,
+        currentRoom: {
+          ...state.currentRoom,
+          messages: [...action.payload],
+        },
+      };
+    }
+    case ACTIONS.NEW_MESSAGE: {
+      return {
+        ...state,
+        currentRoom: {
+          ...state.currentRoom,
+          messages: [...state.currentRoom.messages, action.payload],
+        },
+      };
+    }
+    case ACTIONS.ROOM_DELETED: {
+      // Omit the room that was deleted
+      const rooms = _.omit(state.rooms, [action.payload._id]);
+
+      // If the deleted room is the current selected room
+      // set the current room to undefined
+      // so the user will be brought to 'default' page
+      const currentRoom =
+        state.currentRoom._id === action.payload._id
+          ? undefined
+          : state.currentRoom;
+
+      return {
+        ...state,
+        rooms,
+        currentRoom,
+      };
+    }
+    case ACTIONS.SET_CURRENT_ROOM: {
+      return { ...state, currentRoom: action.payload };
+    }
     case ACTIONS.SET_ROOMS: {
       const rooms = _.keyBy(action.payload, '_id');
       return { ...state, rooms: { ...state.rooms, ...rooms } };
@@ -48,27 +96,6 @@ function roomDataReducer(state, action) {
           avatarURL,
         },
       };
-    }
-    case ACTIONS.NEW_MESSAGE: {
-      return {
-        ...state,
-        currentRoom: {
-          ...state.currentRoom,
-          messages: [...state.currentRoom.messages, action.payload],
-        },
-      };
-    }
-    case ACTIONS.LOAD_MESSAGES: {
-      return {
-        ...state,
-        currentRoom: {
-          ...state.currentRoom,
-          messages: [...action.payload],
-        },
-      };
-    }
-    case ACTIONS.SET_CURRENT_ROOM: {
-      return { ...state, currentRoom: action.payload };
     }
     case ACTIONS.USER_LIST_CHANGED: {
       return {
@@ -89,40 +116,6 @@ function roomDataReducer(state, action) {
           ...state.currentRoom,
           users,
         },
-      };
-    }
-    case ACTIONS.LOAD_ROOM: {
-      return {
-        ...state,
-        currentRoom: action.payload,
-      };
-    }
-    case ACTIONS.LEAVE_ROOM: {
-      // Omit the room that was left
-      const rooms = _.omit(state.rooms, [action.payload._id]);
-
-      return {
-        ...state,
-        rooms,
-        currentRoom: undefined,
-      };
-    }
-    case ACTIONS.ROOM_DELETED: {
-      // Omit the room that was deleted
-      const rooms = _.omit(state.rooms, [action.payload._id]);
-
-      // If the deleted room is the current selected room
-      // set the current room to undefined
-      // so the user will be brought to 'default' page
-      const currentRoom =
-        state.currentRoom._id === action.payload._id
-          ? undefined
-          : state.currentRoom;
-
-      return {
-        ...state,
-        rooms,
-        currentRoom,
       };
     }
     default: {

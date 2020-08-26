@@ -6,7 +6,7 @@ const messageSchema = new Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    // required: true,
   },
   text: {
     type: String,
@@ -18,6 +18,10 @@ const messageSchema = new Schema({
     type: Date,
     default: Date.now,
     required: true,
+  },
+  systemMessage: {
+    type: Boolean,
+    default: false,
   },
 });
 

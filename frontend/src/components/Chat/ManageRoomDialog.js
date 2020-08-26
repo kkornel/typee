@@ -22,7 +22,7 @@ export default function ManageRoomDialog({
   dialogData,
   resetError,
   handleDialogClose,
-  handleSaveClicked,
+  handleSaveClick,
   handleDeleteRoom,
 }) {
   const classes = useStyles();
@@ -33,17 +33,16 @@ export default function ManageRoomDialog({
   const [name, setName] = React.useState('');
   const [deleteCurrent, setDeleteCurrent] = React.useState(false);
 
+  const [confirmName, setConfirmName] = React.useState('');
+  const [confirmNameError, setConfirmNameError] = React.useState(false);
+
   const handleSave = () => {
-    handleSaveClicked(name, file, deleteCurrent);
+    handleSaveClick(name, file, deleteCurrent);
   };
 
   const onTitleChange = (event) => {
     setName(event.target.value);
     resetError();
-  };
-
-  const handleClose = () => {
-    handleDialogClose();
   };
 
   const onChangeHandler = (event) => {
@@ -53,11 +52,16 @@ export default function ManageRoomDialog({
     }
   };
 
-  const onExit = () => {
-    setFile(null);
-    setName('');
-    setDeleteCurrent(false);
-    inputRef.current.value = null;
+  const onConfirmNameChange = (event) => {
+    setConfirmName(event.target.value);
+  };
+
+  const handleDeleteClick = () => {
+    const correctConfirmation = room.name === confirmName;
+    setConfirmNameError(!correctConfirmation);
+    if (correctConfirmation) {
+      handleDeleteRoom(room.name);
+    }
   };
 
   const onDeleteSelectedChange = () => {
@@ -69,19 +73,15 @@ export default function ManageRoomDialog({
     setDeleteCurrent(!deleteCurrent);
   };
 
-  const [confirmName, setConfirmName] = React.useState('');
-  const [confirmNameError, setConfirmNameError] = React.useState(false);
-
-  const onConfirmNameChange = (event) => {
-    setConfirmName(event.target.value);
+  const handleClose = () => {
+    handleDialogClose();
   };
 
-  const handleDelete = () => {
-    const correctConfirmation = room.name === confirmName;
-    setConfirmNameError(!correctConfirmation);
-    if (correctConfirmation) {
-      handleDeleteRoom(room.name);
-    }
+  const onExit = () => {
+    setFile(null);
+    setName('');
+    setDeleteCurrent(false);
+    inputRef.current.value = null;
   };
 
   return (
@@ -203,7 +203,7 @@ export default function ManageRoomDialog({
           />
           <Button
             variant="contained"
-            onClick={handleDelete}
+            onClick={handleDeleteClick}
             className={classes.deleteButton}
           >
             DELETE ROOM

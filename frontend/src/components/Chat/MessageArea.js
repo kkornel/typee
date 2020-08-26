@@ -19,6 +19,8 @@ export default function MessageArea({ messages }) {
     messagesEndRef.current.scrollIntoView({ behaviour: 'smooth' });
   };
 
+  console.log('qqqqqqqqq', messages);
+
   return (
     <Box className={classes.messagesList}>
       {messages.map((message) => {
