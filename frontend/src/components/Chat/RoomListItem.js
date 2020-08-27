@@ -1,51 +1,95 @@
 import React from 'react';
 
+import classNames from 'classnames';
+
 import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
 
-import RoomListItem from './RoomListItem';
-import RoomListDivider from './RoomListDivider';
-import RoomListAddIcon from './RoomListAddIcon';
-import RoomListHomeIcon from './RoomListHomeIcon';
+import ArrowTooltip from './ArrowTooltip';
+import RoomListItemPill from './RoomListItemPill';
 
-export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
+import { useRoomData } from '../../context/RoomDataContext';
+
+export default function RoomListItem({ room, handleRoomClick }) {
   const classes = useStyles();
 
+  const [roomDataState] = useRoomData();
+
+  const isCurrentRoom = roomDataState.currentRoom?._id === room._id;
+
+  const onRoomIconClick = (event) => {
+    if (event.target.tagName === 'IMG') {
+      handleRoomClick(event.target.offsetParent.offsetParent.value);
+    } else if (event.target.tagName === 'DIV') {
+      handleRoomClick(event.target.offsetParent.value);
+    }
+  };
+
   return (
-    <Box className={classes.roomList}>
-      <RoomListHomeIcon />
-      <RoomListDivider />
-      {Object.values(rooms).map((room) => (
-        <RoomListItem
-          room={room}
-          handleRoomClick={handleRoomClick}
-          key={room._id}
-        />
-      ))}
-      <RoomListDivider />
-      <RoomListAddIcon handleAddClick={handleAddClick} />
+    <Box className={classes.room} key={room._id}>
+      {isCurrentRoom && <RoomListItemPill />}
+      <ArrowTooltip title={room.name}>
+        <IconButton
+          value={room.name}
+          aria-label={room.name}
+          className={classes.roomIcon}
+          onClick={onRoomIconClick}
+        >
+          {room.avatarURL ? (
+            <Avatar
+              className={classes.roomIconAvatar}
+              src={room.avatarURL}
+            ></Avatar>
+          ) : (
+            <Avatar
+              className={classNames(
+                classes.roomIconAvatar,
+                isCurrentRoom ? classes.roomIconAvatarCurrent : ''
+              )}
+            >
+              {room.name[0]}
+              {room.name[room.name.length - 1]}
+            </Avatar>
+          )}
+        </IconButton>
+      </ArrowTooltip>
     </Box>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
-  roomList: {
-    paddingTop: '12px',
-    background: theme.palette.backgroundTertiary,
-    maxHeight: 'calc(100vh - 64px) !important',
-    overflowX: 'hidden',
-    height: '100%',
-    // minWidth: '64px',
-    // asdasda
-    width: '100%',
-    overflowY: 'scroll',
-    paddingRight:
-      '17px' /* Increase/decrease this value for cross-browser compatibility */,
-    boxSizing: 'content-box' /* So the width will be 100% + 17px */,
+  room: {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    // width: '64px',
+    width: '72px',
+    // margin: '0 0 8px',
+  },
+  roomIcon: {
+    // padding: '8px',
+    // padding: '4px 8px 4px 8px',
+    padding: '4px 12px 4px 12px',
+  },
+  roomIconAvatar: {
+    width: '48px',
+    height: '48px',
+    color: theme.palette.textNormal,
+    background: theme.palette.backgroundPrimary,
+    '&:hover': {
+      background: theme.palette.purple,
+      color: theme.palette.headerPrimary,
+    },
+  },
+  roomIconAvatarCurrent: {
+    background: theme.palette.purple,
+    color: theme.palette.headerPrimary,
   },
 }));
 
-// My old RoomList
+// From Discord
 // const useStyles = makeStyles((theme) => ({
 //   divider: {
 //     background: 'hsla(0,0%,100%,0.06)',

@@ -1,11 +1,10 @@
 import React from 'react';
 
+import { useSnackbar } from 'notistack';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-
-import { useSnackbar } from 'notistack';
 
 import CurrentRoomNullComponent from './CurrentRoomNullComponent';
 import Dialog from './Dialog';
@@ -259,7 +258,7 @@ export default function ChatDashboard({ user, socket }) {
   return (
     <Box className={classes.chat}>
       <Grid container spacing={0}>
-        <Grid item className={classes.channels}>
+        <Grid item className={classes.rooms}>
           <RoomList
             rooms={roomDataState.rooms}
             handleRoomClick={handleRoomClick}
@@ -317,8 +316,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     zIndex: '-2',
   },
-  channels: {
-    width: '64px',
+  rooms: {
+    // width: '64px',
+    width: '72px',
     // sadasdas
     height: 'calc(100vh - 64px) !important',
     // height: '100%',
