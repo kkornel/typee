@@ -4,7 +4,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
 import UserListItem from './UserListItem';
-import TextDivider from './TextDivider';
+import UserListHeader from './UserListHeader';
+
+// usersListHeader
+// usersListHeaderSpan
+// usersListItemContent
+// usersListItemContentNameInner
+// usersListItemContentNameInnerSpan
+// usersListItemContentSubtext
+// usersListItemContentNameInnerDiv
 
 export default function UserList({ users }) {
   const classes = useStyles();
@@ -14,11 +22,24 @@ export default function UserList({ users }) {
 
   return (
     <Box className={classes.usersList}>
+      <UserListHeader text={`Online-${online.length}`} />
       {online.map((user) => (
         <UserListItem user={user} key={user._id} />
       ))}
-      <TextDivider>Offline</TextDivider>
       {online.map((user) => (
+        <UserListItem user={user} key={user._id} />
+      ))}
+      {online.map((user) => (
+        <UserListItem user={user} key={user._id} />
+      ))}
+      <UserListHeader text={`Offline-${offline.length}`} />
+      {offline.map((user) => (
+        <UserListItem user={user} key={user._id} />
+      ))}
+      {offline.map((user) => (
+        <UserListItem user={user} key={user._id} />
+      ))}
+      {offline.map((user) => (
         <UserListItem user={user} key={user._id} />
       ))}
     </Box>
@@ -27,12 +48,17 @@ export default function UserList({ users }) {
 
 const useStyles = makeStyles((theme) => ({
   usersList: {
-    background: theme.palette.backgroundSecondary,
-    maxHeight: 'calc(100vh - 64px) !important',
-    overflowX: 'hidden',
-    height: '100%',
-    overflowY: 'auto',
-    zIndex: '1',
     position: 'relative',
+    maxHeight: 'calc(100vh - 64px) !important',
+    minWidth: '64px',
+    height: '100%',
+    zIndex: '1',
+    margin: '0',
+    padding: '0',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    scrollbarWidth: 'thin',
+    scrollbarColor: `${theme.palette.scrollbarThinThumb} ${theme.palette.scrollbarThinTrack}`,
+    background: theme.palette.backgroundSecondary,
   },
 }));

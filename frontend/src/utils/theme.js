@@ -35,6 +35,8 @@ const theme = createMuiTheme({
     channelsDefault: '#8e9297',
     activityCardBackground: '#202225',
     textBoxMarkdownSyntax: '#8e9297',
+    scrollbarThinThumb: '#202225',
+    scrollbarThinTrack: 'transparent',
     // AUTH
     signInOR: '#616161',
     signUpText: '#424242',

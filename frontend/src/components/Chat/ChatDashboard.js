@@ -265,7 +265,7 @@ export default function ChatDashboard({ user, socket }) {
             handleRoomClick={handleRoomClick}
             handleAddClick={handleAddRoomClick}
           />
-          <Button onClick={socket.disconnet}>disconnet</Button>
+          {/* <Button onClick={socket.disconnet}>disconnet</Button> */}
         </Grid>
         {currentRoom ? (
           <React.Fragment>
@@ -319,6 +319,10 @@ const useStyles = makeStyles((theme) => ({
   },
   channels: {
     width: '64px',
+    // sadasdas
+    height: 'calc(100vh - 64px) !important',
+    // height: '100%',
+    overflow: 'hidden',
   },
   messages: {
     alignItems: 'stretch',

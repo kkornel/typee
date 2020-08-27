@@ -67,6 +67,9 @@ const userSchema = new Schema(
         }
       },
     },
+    subtext: {
+      type: String,
+    },
     avatar: {
       type: Buffer,
     },

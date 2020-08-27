@@ -77,6 +77,13 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 'calc(100vh - 64px) !important',
     overflowX: 'hidden',
     height: '100%',
+    // minWidth: '64px',
+    // asdasda
+    width: '100%',
+    overflowY: 'scroll',
+    paddingRight:
+      '17px' /* Increase/decrease this value for cross-browser compatibility */,
+    boxSizing: 'content-box' /* So the width will be 100% + 17px */,
   },
   room: {},
   roomIcon: {
