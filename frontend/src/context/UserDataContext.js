@@ -16,29 +16,8 @@ const UserDataContext = React.createContext();
 const userDataReducer = (state, action) => {
   console.log('userDataReducer', state, action);
   switch (action.type) {
-    case ACTIONS.SET_ROOMS: {
-      const rooms = action.payload.reduce((accumulator, currentValue) => {
-        return {
-          ...accumulator,
-          [currentValue._id]: currentValue,
-        };
-      }, {});
-      console.log('userDataReducer state', state);
-      console.log('userDataReducer rooms', rooms);
-      return { ...state, rooms: { ...state.rooms, ...rooms } };
-    }
-    case ACTIONS.UPDATE_ROOM: {
-      // TODO: Here it's loading whole room, with users, messages etc.
-      // Is it necessary?
-      console.log('userDataReducer new', state);
-      console.log('userDataReducer old', {
-        ...state,
-        rooms: { ...state.rooms, [action.payload._id]: action.payload },
-      });
-      return {
-        ...state,
-        rooms: { ...state.rooms, [action.payload._id]: action.payload },
-      };
+    default: {
+      throw new Error(`Unhandled action type: ${action.type}`);
     }
   }
 };

@@ -26,7 +26,8 @@ export default function ChatDashboard({ user, socket }) {
   const { enqueueSnackbar } = useSnackbar();
   const [roomDataState, roomDataDispatch] = useRoomData();
   const { currentRoom } = roomDataState;
-  const { getLastOpenedRoom, setLastOpenedRoom } = useUserData();
+  const { setLastOpenedRoom } = useUserData();
+  // const { getLastOpenedRoom, setLastOpenedRoom } = useUserData();
 
   const [dialogData, setDialogData] = React.useState({
     open: false,

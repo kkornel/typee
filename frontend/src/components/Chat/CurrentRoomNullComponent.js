@@ -11,6 +11,7 @@ export default function CurrentRoomNullComponent() {
       <Box className={classes.imageBox}>
         <img
           src="https://thecoolhunter.net/wp-content/uploads/2018/12/TheSimpleLife_Original_900px.jpg"
+          alt="Supposed to show very important data"
           width="450px"
           height="450px"
         />

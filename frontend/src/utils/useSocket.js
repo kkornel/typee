@@ -1,7 +1,6 @@
 // import React from 'react';
 
 import io from 'socket.io-client';
-import { Paper } from '@material-ui/core';
 
 const ENDPOINT = 'http://localhost:5000';
 

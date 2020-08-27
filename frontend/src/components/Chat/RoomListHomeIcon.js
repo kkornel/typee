@@ -5,11 +5,11 @@ import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import EmojiFoodBeverageIcon from '@material-ui/icons/EmojiFoodBeverage';
-import ExploreIcon from '@material-ui/icons/Explore';
-import FingerprintIcon from '@material-ui/icons/Fingerprint';
+// import EmojiFoodBeverageIcon from '@material-ui/icons/EmojiFoodBeverage';
+// import ExploreIcon from '@material-ui/icons/Explore';
+// import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import IconButton from '@material-ui/core/IconButton';
-import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
+// import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 
 import ArrowTooltip from './ArrowTooltip';
 

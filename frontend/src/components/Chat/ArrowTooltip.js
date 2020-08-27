@@ -24,7 +24,7 @@ const useStylesBootstrap = makeStyles((theme) => ({
   },
   tooltip: {
     backgroundColor: theme.palette.common.black,
-    color: 'white',
+    color: theme.palette.headerPrimary,
     boxShadow: theme.shadows[1],
     fontSize: 16,
     fontWeight: 'bold',

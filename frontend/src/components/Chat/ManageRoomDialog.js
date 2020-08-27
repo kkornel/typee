@@ -127,7 +127,11 @@ export default function ManageRoomDialog({
           </DialogContentText>
           {file && (
             <Box>
-              <img src={URL.createObjectURL(file)} className={classes.img} />
+              <img
+                src={URL.createObjectURL(file)}
+                className={classes.img}
+                alt="Supposed to show very important data"
+              />
             </Box>
           )}
           <input
@@ -143,7 +147,11 @@ export default function ManageRoomDialog({
           <Box style={{ marginTop: '8px' }}>
             <Box style={{ marginBottom: '4px' }}>Current avatar:</Box>
             <Box>
-              <img src={room.avatarURL} className={classes.img} />
+              <img
+                src={room.avatarURL}
+                className={classes.img}
+                alt="Supposed to show very important data"
+              />
             </Box>
             <FormControlLabel
               className={classes.formControl}

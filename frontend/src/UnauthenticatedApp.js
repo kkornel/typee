@@ -5,7 +5,7 @@ import SignIn from './components/Auth/SignIn';
 import SignUp from './components/Auth/SignUp';
 import PasswordReset from './components/Auth/PasswordReset';
 import PasswordNew from './components/Auth/PasswordNew';
-import Dashboard from './components/Dashboard';
+// import Dashboard from './components/Dashboard';
 
 function UnauthenticatedApp() {
   const location = useLocation();

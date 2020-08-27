@@ -27,7 +27,7 @@ export default function MessageAreaBar({
   const [loading, setLoading] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const [roomDataState, roomDataDispatch] = useRoomData();
+  const [, roomDataDispatch] = useRoomData();
   const [dialogData, setDialogData] = React.useState({
     open: true,
     error: null,
