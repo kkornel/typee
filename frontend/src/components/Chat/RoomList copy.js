@@ -74,7 +74,8 @@ const useStyles = makeStyles((theme) => ({
   },
   roomList: {
     background: theme.palette.backgroundTertiary,
-    maxHeight: 'calc(100vh - 64px) !important',
+    // maxHeight: 'calc(100vh - 64px) !important',
+    height: '100vh',
     overflowX: 'hidden',
     height: '100%',
     // minWidth: '64px',

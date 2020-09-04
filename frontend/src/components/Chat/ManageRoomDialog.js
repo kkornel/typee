@@ -11,9 +11,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import TextDivider from './TextDivider';
 import TextField from '@material-ui/core/TextField';
 
+import HorizontalTextDivider from './HorizontalTextDivider';
+import TextDivider from './TextDivider';
 import FullPageSpinner from '../ui/FullPageSpinner';
 
 export default function ManageRoomDialog({
@@ -120,7 +121,11 @@ export default function ManageRoomDialog({
             shrink: true,
           }}
         />
-        <TextDivider style={{ margin: '10px 4px' }}>Avatar</TextDivider>
+        <HorizontalTextDivider
+          text={'Avatar'}
+          style={{ margin: '10px 4px', color: 'white' }}
+        />
+        {/* <TextDivider style={{ margin: '10px 4px' }}>Avatar</TextDivider> */}
         <Box>
           <DialogContentText className={classes.content}>
             Change room avatar:
@@ -185,9 +190,13 @@ export default function ManageRoomDialog({
             label="Delete selected avatar"
           />
         )}
-        <TextDivider style={{ margin: '10px 4px' }} border="1px solid red">
+        <HorizontalTextDivider
+          text={'DELETE'}
+          style={{ margin: '10px 4px', color: 'red' }}
+        />
+        {/* <TextDivider style={{ margin: '10px 4px' }} border="1px solid red">
           DELETE
-        </TextDivider>
+        </TextDivider> */}
         <Box>
           <DialogContentText className={classes.content}>
             Are you sure you want delete this room? <br />

@@ -10,7 +10,6 @@ import CurrentRoomNullComponent from './CurrentRoomNullComponent';
 import Dialog from './Dialog';
 import MessageArea from './MessageArea';
 import MessageAreaBar from './MessageAreaBar';
-import MessageInput from './MessageInput';
 import UserList from './UserList';
 import RoomList from './RoomList';
 
@@ -26,8 +25,8 @@ export default function ChatDashboard({ user, socket }) {
   const { enqueueSnackbar } = useSnackbar();
   const [roomDataState, roomDataDispatch] = useRoomData();
   const { currentRoom } = roomDataState;
-  const { setLastOpenedRoom } = useUserData();
-  // const { getLastOpenedRoom, setLastOpenedRoom } = useUserData();
+  // const { setLastOpenedRoom } = useUserData();
+  const { getLastOpenedRoom, setLastOpenedRoom } = useUserData();
 
   const [dialogData, setDialogData] = React.useState({
     open: false,
@@ -46,7 +45,7 @@ export default function ChatDashboard({ user, socket }) {
     socket.onUserStatusChanged(onUserStatusChanged);
 
     // TODO: is it necessary?
-    // socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
+    socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
   }, []);
 
   const connectCallback = ({ error, user }) => {
@@ -265,15 +264,14 @@ export default function ChatDashboard({ user, socket }) {
             handleRoomClick={handleRoomClick}
             handleAddClick={handleAddRoomClick}
           />
-          {/* <Button onClick={socket.disconnet}>disconnet</Button> */}
         </Grid>
         {currentRoom ? (
           <React.Fragment>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <UserList users={currentRoom.users} />
             </Grid>
             <Grid item xs>
-              <Box className={classes.messages}>
+              <Box className={classes.chatT}>
                 <MessageAreaBar
                   room={currentRoom}
                   isAuthor={currentRoom.author === user._id}
@@ -281,14 +279,17 @@ export default function ChatDashboard({ user, socket }) {
                   roomUpdated={roomUpdated}
                   deleteRoom={deleteRoom}
                 />
-                <MessageArea messages={currentRoom.messages} />
-                <MessageInput handleMessageSubmit={handleSubmit} />
+                <Box className={classes.content}>
+                  <MessageArea
+                    messages={currentRoom.messages}
+                    handleMessageSubmit={handleSubmit}
+                  />
+                </Box>
               </Box>
             </Grid>
           </React.Fragment>
         ) : (
           <React.Fragment>
-            {/* <Grid item xs={1}></Grid> */}
             <Grid item xs>
               <Box className={classes.messages}>
                 <CurrentRoomNullComponent />
@@ -309,27 +310,53 @@ export default function ChatDashboard({ user, socket }) {
 
 const useStyles = makeStyles((theme) => ({
   chat: {
-    background: 'red',
-    color: theme.palette.textNormal,
-    flexGrow: '1',
-    height: 'calc(100vh - 64px) !important',
     position: 'absolute',
+    height: '100vh',
     width: '100%',
     zIndex: '-2',
+    flexGrow: '1',
+    overflow: 'hidden',
+    background: 'red',
+    color: theme.palette.textNormal,
+    // height: 'calc(100vh - 64px) !important',
   },
   rooms: {
-    // width: '64px',
+    paddingBottom: '12px',
     width: '72px',
-    // sadasdas
-    height: 'calc(100vh - 64px) !important',
-    // height: '100%',
+    height: '100vh',
     overflow: 'hidden',
   },
-  messages: {
-    alignItems: 'stretch',
+  chatT: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
-    minWidth: '100%',
-    height: 'calc(100vh - 64px) !important',
+    flex: '1 1 auto',
+    height: '100vh',
+    overflow: 'hidden',
+    background: theme.palette.backgroundPrimary,
+    outline: 0,
+  },
+  content: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'stretch',
+    alignItems: 'stretch',
+    flex: '1 1 auto',
+    minWidth: 0,
+    minHeight: 0,
+    outline: 0,
+  },
+  messages: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'stretch',
+    flexDirection: 'column',
+    height: '100vh',
+    flex: '1 1 auto',
+    minWidth: 0,
+    minHeight: 0,
+    outline: 0,
+    overflow: 'hidden',
   },
 }));

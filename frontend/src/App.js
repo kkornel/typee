@@ -15,7 +15,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header />
+      {/* <Header /> */}
       <React.Suspense fallback={<FullPageSpinner />}>
         {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
       </React.Suspense>

@@ -45,13 +45,11 @@ export default function UserList({ users }) {
     </Box>
   );
 }
-
 const useStyles = makeStyles((theme) => ({
   usersList: {
     position: 'relative',
-    maxHeight: 'calc(100vh - 64px) !important',
-    minWidth: '64px',
-    height: '100%',
+    // maxHeight: 'calc(100vh - 64px) !important',
+    height: '100vh',
     zIndex: '1',
     margin: '0',
     padding: '0',

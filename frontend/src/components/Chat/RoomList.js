@@ -30,9 +30,11 @@ export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
 
 const useStyles = makeStyles((theme) => ({
   roomList: {
-    paddingTop: '12px',
     background: theme.palette.backgroundTertiary,
-    maxHeight: 'calc(100vh - 64px) !important',
+    // maxHeight: 'calc(100vh - 64px) !important',
+    paddingTop: '12px',
+
+    height: '100vh',
     overflowX: 'hidden',
     height: '100%',
     // minWidth: '64px',

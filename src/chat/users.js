@@ -143,7 +143,9 @@ const joinRoom = async (roomName, userId, socketId) => {
   await room
     .populate('messages', '_id author text createdAt systemMessage')
     .execPopulate();
-  await room.populate('messages.author', '_id username').execPopulate();
+  await room
+    .populate('messages.author', '_id username subtext avatarURL')
+    .execPopulate();
 
   // I'm doing this, because I want to have only user list under property 'users',
   // not any socketId or ObjectId, but there is no way to manipulate Mongo Document,

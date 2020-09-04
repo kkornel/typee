@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
+import ArrowTooltip from './ArrowTooltip';
+
 export default function UserListItem({ user }) {
   const classes = useStyles();
 
@@ -19,10 +21,19 @@ export default function UserListItem({ user }) {
       <Box className={classes.usersListItemInner}>
         <Box className={classes.usersListItemInnerAvatar}>
           <Box className={classes.usersListItemInnerAvatarWrapper}>
-            <Avatar
-              className={classes.usersListItemInnerAvatarImg}
-              src={user.avatarURL}
-            />
+            <ArrowTooltip title={user.username}>
+              {user.avatarURL ? (
+                <Avatar
+                  className={classes.usersListItemInnerAvatarImg}
+                  src={user.avatarURL}
+                />
+              ) : (
+                <Avatar className={classes.usersListItemInnerAvatarWrapper}>
+                  {user.username[0]}
+                  {user.username[1]}
+                </Avatar>
+              )}
+            </ArrowTooltip>
             {/* <img
                 className={classes.usersListItemInnerAvatarImg}
                 width="40"
@@ -81,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   usersListItem: {
     position: 'relative',
     display: 'block',
-    maxWidth: '224px',
+    maxWidth: '100%',
     margin: '0 8px',
     padding: '1px 0',
     outline: '0',

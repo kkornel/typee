@@ -29,7 +29,7 @@ export default function MessageAreaBar({
 
   const [, roomDataDispatch] = useRoomData();
   const [dialogData, setDialogData] = React.useState({
-    open: true,
+    open: false,
     error: null,
   });
 
@@ -155,6 +155,19 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 const useStyles = makeStyles((theme) => ({
+  messagesBar: {
+    display: 'flex',
+    borderBottom: `1px solid ${theme.palette.border}`,
+    height: '48px',
+    background: theme.palette.backgroundPrimary,
+    flex: '0 0 auto',
+    alignItems: 'center',
+    display: 'flex',
+    width: '100%',
+    height: '48px',
+    outline: 0,
+    minWidth: 0,
+  },
   title: {
     textAlign: 'center',
     flex: 1,
@@ -162,14 +175,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 'auto',
     marginBottom: 'auto',
   },
+  header: {
+    marginTop: '0',
+    marginBottom: '0',
+    display: 'inline',
+  },
   settingsBox: {
     marginLeft: 'auto',
   },
-  messagesBar: {
-    display: 'flex',
-    borderBottom: `1px solid ${theme.palette.border}`,
-    height: '48px',
-    background: theme.palette.backgroundPrimary,
-  },
-  header: { marginTop: '0', marginBottom: '0', display: 'inline' },
 }));

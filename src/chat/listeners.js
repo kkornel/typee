@@ -75,7 +75,7 @@ const connectionEvent = (io) => {
       }
 
       io.to(roomName).emit('message', message);
-      callback();
+      callback({ error });
     });
 
     socket.on('create', async ({ roomName, authorId }, callback) => {
