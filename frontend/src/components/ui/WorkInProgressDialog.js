@@ -25,18 +25,37 @@ export default function WorkInProgressDialog({
       aria-labelledby="form-dialog-name"
       PaperProps={{ classes: { root: classes.paper } }}
     >
-      <DialogTitle>WORK IN PROGRESS</DialogTitle>
+      <DialogTitle
+        style={{
+          textAlign: 'center',
+          color: '#FFFF33',
+          textDecoration: 'underline',
+        }}
+      >
+        WORK IN PROGRESS
+      </DialogTitle>
       <DialogContent>
         <Box className={classes.image}>
           <img
             className={classes.img}
-            src="https://img.freepik.com/free-vector/cartoon-funny-monkey-illustration_6996-1222.jpg?size=338&ext=jpg"
-            alt="Supposed to show very important data"
+            src="https://i.imgur.com/8Gvrl4P.png"
+            alt="It is supposed to show very important data, but it doesn't :("
           />
         </Box>
-        <DialogContentText className={classes.content}>
-          {text}
-        </DialogContentText>
+        <Box className={classes.content}>
+          <p>
+            Our team of qualified engineers is aware that you've chosen{' '}
+            <b>
+              <i>{text || 'screenshot.png'}</i>
+            </b>
+            , but unfortunately they don't know how to handle those files{' '}
+            <b>
+              <u>YET</u>
+            </b>
+            .
+          </p>
+          <p>They're doing everything they can, stay tuned...</p>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button
@@ -59,12 +78,12 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.textNormal,
   },
   img: {
-    width: '338px',
-    height: '338px',
+    // width: '532px',
+    // height: '323px',
   },
   image: {
-    marginLeft: '110px',
-    marginBottom: '15px',
+    // marginLeft: '110px',
+    // marginBottom: '15px',
     // margin: 'auto',
     // width: '50%',
   },

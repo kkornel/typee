@@ -68,9 +68,7 @@ export default function MessageInput({ handleMessageSubmit }) {
   };
 
   const onChangeHandler = (event) => {
-    setText(
-      `Our team of qualified engineers is aware that you've chosen ${event.target.files[0].name}, but unfortunately they don't know how to handle those files YET. They're doing everything they can, stay tuned...`
-    );
+    setText(`${event.target.files[0].name}`);
     setOpen(true);
   };
 
