@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
-import CurrentRoomNullComponent from './CurrentRoomNullComponent';
+import CurrentRoomNullComponent from './home/CurrentRoomNullComponent';
 import AddRoomDialog from './room/AddRoomDialog';
 import MessageArea from './message/MessageArea';
 import MessageAreaBar from './message/MessageAreaBar';
@@ -299,13 +299,15 @@ export default function ChatDashboard({ user, socket }) {
             </Grid>
           </React.Fragment>
         ) : (
-          <React.Fragment>
-            <Grid item xs>
-              <Box className={classes.messages}>
-                <CurrentRoomNullComponent />
-              </Box>
-            </Grid>
-          </React.Fragment>
+          <CurrentRoomNullComponent />
+
+          // <React.Fragment>
+          //   {/* <Grid item xs> */}
+          //   {/* <Box className={classes.messages}> */}
+          //   <CurrentRoomNullComponent />
+          //   {/* </Box> */}
+          //   {/* </Grid> */}
+          // </React.Fragment>
         )}
       </Grid>
       <AddRoomDialog
