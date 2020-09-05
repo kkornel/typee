@@ -140,6 +140,11 @@ export default function ChatDashboard({ user, socket }) {
 
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.LEAVE_ROOM, payload: room });
 
+    enqueueSnackbar(`You left ${room.name}.`, {
+      variant: 'info',
+      autoHideDuration: 2000,
+    });
+
     console.log(`Left ${room.name} successfully.`);
   };
 
@@ -147,6 +152,11 @@ export default function ChatDashboard({ user, socket }) {
     if (error) {
       console.log('handleDeleteRoomCallback', error);
     }
+
+    enqueueSnackbar(`Room ${room.name} deleted.`, {
+      variant: 'error',
+      autoHideDuration: 2000,
+    });
 
     console.log(`The room ${room.name} has been deleted.`);
   };
