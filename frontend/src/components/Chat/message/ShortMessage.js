@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import moment from 'moment';
 
-export default function MessageShort({ message }) {
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+
+export default function ShortMessage({ message }) {
   const classes = useStyles();
 
   const gifRegex = /((<gif>)(.*)(<\/gif>))/;
@@ -22,7 +23,13 @@ export default function MessageShort({ message }) {
   const processMsg = (text) => {
     const matches = text.match(gifRegex);
     if (matches) {
-      return <img src={matches[3]} style={{ marginTop: '4px' }} />;
+      return (
+        <img
+          src={matches[3]}
+          style={{ marginTop: '4px' }}
+          alt={`It is supposed to show GIPHY, but it doesn't!`}
+        />
+      );
     }
     return text;
   };

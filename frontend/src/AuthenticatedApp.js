@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import FourOhFour from './components/404';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/chat/Dashboard';
 
 function AuthenticatedApp() {
   return (

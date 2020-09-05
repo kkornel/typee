@@ -7,11 +7,11 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
 import CurrentRoomNullComponent from './CurrentRoomNullComponent';
-import Dialog from './Dialog';
-import MessageArea from './MessageArea';
-import MessageAreaBar from './MessageAreaBar';
-import UserList from './UserList';
-import RoomList from './RoomList';
+import AddRoomDialog from './room/AddRoomDialog';
+import MessageArea from './message/MessageArea';
+import MessageAreaBar from './message/MessageAreaBar';
+import UserList from './user/UserList';
+import RoomList from './room/RoomList';
 
 import { useUserData } from '../../context/UserDataContext';
 import {
@@ -298,7 +298,7 @@ export default function ChatDashboard({ user, socket }) {
           </React.Fragment>
         )}
       </Grid>
-      <Dialog
+      <AddRoomDialog
         dialogData={dialogData}
         handleDialogClose={handleDialogClose}
         handleJoinRoomClick={handleJoinRoomClick}

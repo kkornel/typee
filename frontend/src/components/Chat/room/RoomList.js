@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
 
     height: '100vh',
     overflowX: 'hidden',
-    height: '100%',
     // minWidth: '64px',
     // asdasda
     width: '100%',

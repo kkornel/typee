@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { useAuth } from '../context/AuthContext';
-import { useSocket } from '../utils/useSocket';
+import { useAuth } from '../../context/AuthContext';
+import { useSocket } from '../../utils/useSocket';
 
-import ChatDashboard from './Chat/ChatDashboard';
+import ChatDashboard from './ChatDashboard';
 
 function Dashboard() {
   const { user } = useAuth();

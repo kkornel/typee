@@ -24,8 +24,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 
-import { useUser } from '../context/UserContext';
-import { useAuth } from '../context/AuthContext';
+import { useUser } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 
 import {
   joinRoom,
@@ -34,7 +34,7 @@ import {
   roomDataHandler,
   messageHandler,
   sendMessage,
-} from '../utils/useSocket';
+} from '../../utils/useSocket';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;

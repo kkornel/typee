@@ -11,12 +11,12 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import IconButton from '@material-ui/core/IconButton';
 // import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 
-import ArrowTooltip from './ArrowTooltip';
+import ArrowTooltip from '../../ui/ArrowTooltip';
 
 import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../context/RoomDataContext';
+} from '../../../context/RoomDataContext';
 
 export default function RoomListHomeIcon() {
   const classes = useStyles();

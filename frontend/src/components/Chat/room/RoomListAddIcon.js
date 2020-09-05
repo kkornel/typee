@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 
-import ArrowTooltip from './ArrowTooltip';
+import ArrowTooltip from '../../ui/ArrowTooltip';
 
 export default function RoomListAddIcon({ handleAddClick }) {
   const classes = useStyles();

@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default function ({
+export default function AddRoomDialog({
   dialogData,
   handleDialogClose,
   handleJoinRoomClick,

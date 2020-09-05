@@ -7,13 +7,13 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import ManageRoomDialog from './ManageRoomDialog';
+import ManageRoomDialog from '../room/ManageRoomDialog';
 
-import { updateRoom } from '../../utils/room-client';
+import { updateRoom } from '../../../utils/room-client';
 import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../context/RoomDataContext';
+} from '../../../context/RoomDataContext';
 
 export default function MessageAreaBar({
   room,
@@ -162,9 +162,7 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.backgroundPrimary,
     flex: '0 0 auto',
     alignItems: 'center',
-    display: 'flex',
     width: '100%',
-    height: '48px',
     outline: 0,
     minWidth: 0,
   },

@@ -7,8 +7,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 
-import ArrowTooltip from './ArrowTooltip';
-import UserInfoDialog from './UserInfoDialog';
+import ArrowTooltip from '../../ui/ArrowTooltip';
+import UserInfoDialog from '../user/UserInfoDialog';
 
 export default function Message({ message }) {
   const classes = useStyles();
@@ -23,7 +23,13 @@ export default function Message({ message }) {
   const processMsg = (text) => {
     const matches = text.match(gifRegex);
     if (matches) {
-      return <img src={matches[3]} style={{ marginTop: '4px' }} />;
+      return (
+        <img
+          src={matches[3]}
+          style={{ marginTop: '4px' }}
+          alt={`It is supposed to show GIPHY, but it doesn't!`}
+        />
+      );
     }
     return text;
   };
@@ -57,6 +63,7 @@ export default function Message({ message }) {
           <Avatar
             className={classes.messagesListItemAvatar}
             src={message.author.avatarURL}
+            alt={`It is supposed to show user avatar, but it doesn't!`}
           />
         ) : (
           <Avatar className={classes.messagesListItemAvatar}>

@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
-import ArrowTooltip from './ArrowTooltip';
+import ArrowTooltip from '../../ui/ArrowTooltip';
 
 export default function UserListItem({ user }) {
   const classes = useStyles();

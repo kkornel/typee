@@ -13,9 +13,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 
-import HorizontalTextDivider from './HorizontalTextDivider';
-import TextDivider from './TextDivider';
-import FullPageSpinner from '../ui/FullPageSpinner';
+import HorizontalTextDivider from '../../ui/HorizontalTextDivider';
+import FullPageSpinner from '../../ui/FullPageSpinner';
 
 export default function ManageRoomDialog({
   room,

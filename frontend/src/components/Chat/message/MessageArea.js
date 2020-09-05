@@ -6,10 +6,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
 import Message from './Message';
-import MessageShort from './MessageShort';
+import ShortMessage from './ShortMessage';
 import MessageInput from './MessageInput';
 import SystemMessage from './SystemMessage';
-import HorizontalTextDivider from './HorizontalTextDivider';
+import HorizontalTextDivider from '../../ui/HorizontalTextDivider';
 
 export default function MessageArea({ messages, handleMessageSubmit }) {
   const classes = useStyles();
@@ -28,7 +28,7 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
 
   const getMessage = (message, idx) => {
     if (idx !== 0 && message.author._id === messages[idx - 1].author._id) {
-      return <MessageShort key={message._id} message={message} />;
+      return <ShortMessage key={message._id} message={message} />;
     }
     return <Message key={message._id} message={message} />;
   };
@@ -39,7 +39,7 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
 
   const renderMessage = (message, currentIdx) => {
     let renderNewDateDivider =
-      currentIdx == 0 ||
+      currentIdx === 0 ||
       !moment(message.createdAt).isSame(
         messages[currentIdx - 1].createdAt,
         'day'
@@ -48,10 +48,13 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
     if (message.systemMessage) {
       if (renderNewDateDivider) {
         return (
-          <>
-            <HorizontalTextDivider text={getDate(message.createdAt)} />
+          <React.Fragment key={currentIdx + message._id}>
+            <HorizontalTextDivider
+              key={message._id + currentIdx}
+              text={getDate(message.createdAt)}
+            />
             <SystemMessage key={message._id} message={message} />
-          </>
+          </React.Fragment>
         );
       }
       return <SystemMessage key={message._id} message={message} />;
@@ -59,10 +62,13 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
 
     if (renderNewDateDivider) {
       return (
-        <>
-          <HorizontalTextDivider text={getDate(message.createdAt)} />
+        <React.Fragment key={currentIdx + message._id}>
+          <HorizontalTextDivider
+            key={message._id + currentIdx}
+            text={getDate(message.createdAt)}
+          />
           <Message key={message._id} message={message} />
-        </>
+        </React.Fragment>
       );
     }
     return getMessage(message, currentIdx);

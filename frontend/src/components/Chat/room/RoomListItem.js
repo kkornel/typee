@@ -7,10 +7,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 
-import ArrowTooltip from './ArrowTooltip';
+import ArrowTooltip from '../../ui/ArrowTooltip';
 import RoomListItemPill from './RoomListItemPill';
 
-import { useRoomData } from '../../context/RoomDataContext';
+import { useRoomData } from '../../../context/RoomDataContext';
 
 export default function RoomListItem({ room, handleRoomClick }) {
   const classes = useStyles();

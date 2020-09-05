@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 
-import SignIn from './components/Auth/SignIn';
-import SignUp from './components/Auth/SignUp';
-import PasswordReset from './components/Auth/PasswordReset';
-import PasswordNew from './components/Auth/PasswordNew';
-// import Dashboard from './components/Dashboard';
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import PasswordReset from './components/auth/PasswordReset';
+import PasswordNew from './components/auth/PasswordNew';
+// import Dashboard from './components/chat/Dashboard';
 
 function UnauthenticatedApp() {
   const location = useLocation();

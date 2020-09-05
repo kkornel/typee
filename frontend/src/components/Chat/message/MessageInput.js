@@ -7,6 +7,7 @@ import Picker from 'react-giphy-picker';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
@@ -16,15 +17,16 @@ import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
 import SendIcon from '@material-ui/icons/Send';
 
-import { useRoomData } from '../../context/RoomDataContext';
-import WorkInProgressDialog from './WorkInProgressDialog';
+import { useRoomData } from '../../../context/RoomDataContext';
+import WorkInProgressDialog from '../../ui/WorkInProgressDialog';
 
 export default function MessageInput({ handleMessageSubmit }) {
   const classes = useStyles();
 
-  const [roomDataState, roomDataDispatch] = useRoomData();
+  const [roomDataState] = useRoomData();
   const inputPlaceHolder = `Message #${roomDataState.currentRoom.name}`;
 
+  const inputRef = React.useRef(null);
   const [inputValue, setInputValue] = React.useState('');
 
   const [open, setOpen] = React.useState(false);
@@ -32,8 +34,18 @@ export default function MessageInput({ handleMessageSubmit }) {
   const [showEmojiPicker, setShowEmojisPicker] = React.useState(false);
   const [showGiphyPicker, setShowGiphyPicker] = React.useState(false);
 
+  React.useEffect(() => {
+    document.addEventListener('keydown', onEnterClicked, false);
+
+    return () => {
+      document.removeEventListener('keydown', onEnterClicked, false);
+    };
+  }, [inputValue]);
+
   const handleSubmit = (event) => {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
 
     if (!inputValue) {
       return;
@@ -41,6 +53,18 @@ export default function MessageInput({ handleMessageSubmit }) {
 
     handleMessageSubmit(inputValue);
     setInputValue('');
+  };
+
+  const onEnterClicked = (event) => {
+    if (!showEmojiPicker) {
+      return;
+    }
+
+    if (event.keyCode === 13) {
+      setShowEmojisPicker(false);
+      handleSubmit();
+      focusInput();
+    }
   };
 
   const onChangeHandler = (event) => {
@@ -67,6 +91,15 @@ export default function MessageInput({ handleMessageSubmit }) {
     setShowEmojisPicker(!showEmojiPicker);
   };
 
+  const addGif = (ev) => {
+    // const prev_url = ev.preview_gif.url;
+    const downsized_url = ev.downsized.url;
+    const gif = `<gif>${downsized_url}</gif>`;
+    handleMessageSubmit(gif);
+    setShowGiphyPicker(false);
+    focusInput();
+  };
+
   const showGiphy = () => {
     if (showEmojiPicker) {
       setShowEmojisPicker(false);
@@ -74,11 +107,8 @@ export default function MessageInput({ handleMessageSubmit }) {
     setShowGiphyPicker(!showGiphyPicker);
   };
 
-  const addGif = (ev) => {
-    // const prev_url = ev.preview_gif.url;
-    const downsized_url = ev.downsized.url;
-    const gif = `<gif>${downsized_url}</gif>`;
-    handleMessageSubmit(gif);
+  const focusInput = () => {
+    inputRef.current.children[0].focus();
   };
 
   return (
@@ -104,6 +134,7 @@ export default function MessageInput({ handleMessageSubmit }) {
             value={inputValue}
             onChange={(event) => setInputValue(event.target.value)}
             placeholder={inputPlaceHolder}
+            ref={inputRef}
           />
           <IconButton className={classes.iconButton} onClick={showGiphy}>
             <GifIcon />
@@ -113,17 +144,19 @@ export default function MessageInput({ handleMessageSubmit }) {
           </IconButton>
           <Box className={classes.emojiPicker}>
             {showEmojiPicker && (
-              <EmojiPicker
-                // set="twitter"
-                native={true}
-                theme="dark"
-                color="#7289da"
-                style={{ background: '#2f3136' }}
-                onSelect={addEmoji}
-                // emoji="octopus"
-                emoji="space_invader"
-                title="Octopus"
-              />
+              <ClickAwayListener onClickAway={() => setShowEmojisPicker(false)}>
+                <EmojiPicker
+                  // set="twitter"
+                  native={true}
+                  theme="dark"
+                  color="#7289da"
+                  style={{ background: '#2f3136' }}
+                  onSelect={addEmoji}
+                  // emoji="octopus"
+                  emoji="space_invader"
+                  title="Octopus"
+                />
+              </ClickAwayListener>
             )}
           </Box>
           <Box className={classes.emojiPicker}>
