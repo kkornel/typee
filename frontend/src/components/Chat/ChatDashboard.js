@@ -6,8 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
-import CurrentRoomNullComponent from './home/CurrentRoomNullComponent';
 import AddRoomDialog from './room/AddRoomDialog';
+import HomeDashboard from './home/HomeDashboard';
 import MessageArea from './message/MessageArea';
 import MessageAreaBar from './message/MessageAreaBar';
 import UserList from './user/UserList';
@@ -45,7 +45,7 @@ export default function ChatDashboard({ user, socket }) {
     socket.onUserStatusChanged(onUserStatusChanged);
 
     // TODO: is it necessary?
-    socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
+    // socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
   }, []);
 
   const connectCallback = ({ error, user }) => {
@@ -299,7 +299,7 @@ export default function ChatDashboard({ user, socket }) {
             </Grid>
           </React.Fragment>
         ) : (
-          <CurrentRoomNullComponent />
+          <HomeDashboard socket={socket} />
 
           // <React.Fragment>
           //   {/* <Grid item xs> */}

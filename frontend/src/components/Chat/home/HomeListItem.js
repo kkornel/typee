@@ -6,11 +6,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import ArrowTooltip from '../../ui/ArrowTooltip';
 import Box from '@material-ui/core/Box';
 
-export default function HomeListItem({ icon, text }) {
+export default function HomeListItem({ icon, text, onClick }) {
   const classes = useStyles();
 
   return (
-    <Box className={classNames(classes.listItem)}>
+    <Box className={classNames(classes.listItem)} onClick={onClick}>
       <Box className={classes.listItemInner}>
         <Box className={classes.listItemAvatar}>
           <ArrowTooltip title={text}>

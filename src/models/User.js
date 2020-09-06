@@ -158,7 +158,8 @@ userSchema.statics.findByCredentials = async (email, password) => {
 };
 
 userSchema.methods.getRooms = async function () {
-  await this.populate('rooms', '_id name avatarURL').execPopulate();
+  await this.populate('rooms', '-messages').execPopulate();
+  await this.populate('rooms.author').execPopulate();
   return this.rooms;
 };
 
