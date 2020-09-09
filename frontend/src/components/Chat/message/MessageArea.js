@@ -27,7 +27,11 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
   };
 
   const getMessage = (message, idx) => {
-    if (idx !== 0 && message.author._id === messages[idx - 1].author._id) {
+    if (
+      idx !== 0 &&
+      messages[idx - 1].author &&
+      message.author._id === messages[idx - 1].author._id
+    ) {
       return <ShortMessage key={message._id} message={message} />;
     }
     return <Message key={message._id} message={message} />;

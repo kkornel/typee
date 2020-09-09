@@ -8,6 +8,10 @@ const messageSchema = new Schema({
     ref: 'User',
     // required: true,
   },
+  room: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Room',
+  },
   text: {
     type: String,
   },

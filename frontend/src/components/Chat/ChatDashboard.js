@@ -25,7 +25,6 @@ export default function ChatDashboard({ user, socket }) {
   const { enqueueSnackbar } = useSnackbar();
   const [roomDataState, roomDataDispatch] = useRoomData();
   const { currentRoom } = roomDataState;
-  // const { setLastOpenedRoom } = useUserData();
   const { getLastOpenedRoom, setLastOpenedRoom } = useUserData();
 
   const [dialogData, setDialogData] = React.useState({
@@ -35,11 +34,11 @@ export default function ChatDashboard({ user, socket }) {
 
   React.useEffect(() => {
     console.log('useEffect');
+
     socket.connect(user._id, connectCallback);
-    socket.requestUserData(user._id, requestUserDataCallback);
+    // socket.requestUserData(user._id, requestUserDataCallback);
     socket.onNewMessage(onNewMessage);
     socket.onNewRoomData(onNewRoomData);
-    socket.onNewUserData(onNewUserData);
     socket.onRoomUpdated(onRoomUpdated);
     socket.onRoomDeleted(onRoomDeleted);
     socket.onUserStatusChanged(onUserStatusChanged);
@@ -48,18 +47,48 @@ export default function ChatDashboard({ user, socket }) {
     // socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
   }, []);
 
-  const connectCallback = ({ error, user }) => {
+  const handleSubmit = (text) => {
+    socket.sendMessage(text, currentRoom._id, user._id, submitCallback);
+  };
+
+  const handleCreateRoomClick = (roomName) => {
+    socket.createRoom(user._id, roomName, createRoomCallback);
+  };
+
+  const handleJoinRoomClick = (roomName) => {
+    socket.joinRoom(user._id, roomName, joinRoomCallback);
+  };
+
+  const roomUpdated = (oldName, newName) => {
+    socket.roomUpdated(oldName, newName, roomUpdatedCallback);
+  };
+
+  const handleLeaveClick = (roomName) => {
+    socket.leaveRoom(user._id, roomName, leaveRoomCallback);
+  };
+
+  const deleteRoom = (roomName) => {
+    socket.deleteRoom(roomName, deleteRoomCallback);
+  };
+
+  const connectCallback = ({ error, user, rooms }) => {
     if (error) {
       return console.log('connectCallback ERROR', error);
     }
 
-    console.log('Successfully connected to the server.', user);
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+
+    console.log('Successfully connected to the server.');
   };
 
-  const requestUserDataCallback = ({ error }) => {
+  const requestUserDataCallback = ({ error, user, rooms }) => {
     if (error) {
       console.log('requestUserDataCallback ERROR', error);
     }
+
+    // TODO: Here eventually set new data with dispatch
+
+    console.log('User data received.');
   };
 
   const submitCallback = ({ error }) => {
@@ -78,12 +107,6 @@ export default function ChatDashboard({ user, socket }) {
       });
     }
 
-    // TODO: how to store rooms and room?
-    if (currentRoom) {
-      console.log("TODO: (??) There is some room so I'll leave it");
-      // socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
-    }
-
     roomDataDispatch({
       type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
       payload: room,
@@ -97,7 +120,7 @@ export default function ChatDashboard({ user, socket }) {
     });
     handleDialogClose();
 
-    console.log('Room created successfully.', room, rooms);
+    console.log('Room created successfully.');
   };
 
   const joinRoomCallback = ({ error, room, rooms }) => {
@@ -108,21 +131,21 @@ export default function ChatDashboard({ user, socket }) {
       });
     }
 
-    // TODO: hmm?
-    if (currentRoom) {
-      console.log("TODO: (??) There is some room so I'll leave it");
-      // socket.leaveRoom(user._id, currentRoom.name, leaveCallback);
-    }
-
     roomDataDispatch({
       type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
       payload: room,
     });
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+
     setLastOpenedRoom(room.name);
 
+    // If user joins room for the first time,
+    // he needs new room list to be generated
+    if (rooms) {
+      roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+    }
+
     handleDialogClose();
-    console.log('Joined to room successfully.', room, rooms);
+    console.log('Joined to room successfully.');
   };
 
   const roomUpdatedCallback = ({ error }) => {
@@ -153,6 +176,8 @@ export default function ChatDashboard({ user, socket }) {
       console.log('handleDeleteRoomCallback', error);
     }
 
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
+
     enqueueSnackbar(`Room ${room.name} deleted.`, {
       variant: 'error',
       autoHideDuration: 2000,
@@ -161,7 +186,7 @@ export default function ChatDashboard({ user, socket }) {
     console.log(`The room ${room.name} has been deleted.`);
   };
 
-  // ##############################################
+  //#region callbacks
 
   const onUserStatusChanged = React.useCallback(
     (user) => {
@@ -170,14 +195,6 @@ export default function ChatDashboard({ user, socket }) {
         type: ROOM_DATA_ACTIONS.USER_STATUS_CHANGED,
         payload: user,
       });
-    },
-    [roomDataDispatch]
-  );
-
-  const onNewUserData = React.useCallback(
-    ({ rooms }) => {
-      console.log('onNewUserData', rooms);
-      roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
     },
     [roomDataDispatch]
   );
@@ -219,28 +236,15 @@ export default function ChatDashboard({ user, socket }) {
     [roomDataDispatch]
   );
 
-  // ##############################################
-
-  const roomUpdated = (oldName, newName) => {
-    socket.roomUpdated(oldName, newName, roomUpdatedCallback);
-  };
-
-  const deleteRoom = (roomName) => {
-    socket.deleteRoom(roomName, deleteRoomCallback);
-  };
+  //#endregion
 
   console.log('ChatDashboard RE-RENDER');
 
-  const handleCreateRoomClick = (dialogValue) => {
-    socket.createRoom(user._id, dialogValue, createRoomCallback);
-  };
-
-  const handleJoinRoomClick = (dialogValue) => {
-    socket.joinRoom(user._id, dialogValue, joinRoomCallback);
-  };
-
-  const handleLeaveClick = (roomName) => {
-    socket.leaveRoom(user._id, roomName, leaveRoomCallback);
+  const handleHomeClick = () => {
+    roomDataDispatch({
+      type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
+      payload: undefined,
+    });
   };
 
   const handleRoomClick = (roomName) => {
@@ -249,10 +253,6 @@ export default function ChatDashboard({ user, socket }) {
     }
 
     socket.joinRoom(user._id, roomName, joinRoomCallback);
-  };
-
-  const handleSubmit = (inputValue) => {
-    socket.sendMessage(inputValue, currentRoom.name, user._id, submitCallback);
   };
 
   const handleAddRoomClick = () => {
@@ -271,6 +271,7 @@ export default function ChatDashboard({ user, socket }) {
         <Grid item className={classes.rooms}>
           <RoomList
             rooms={roomDataState.rooms}
+            handleHomeClick={handleHomeClick}
             handleRoomClick={handleRoomClick}
             handleAddClick={handleAddRoomClick}
           />
@@ -300,14 +301,6 @@ export default function ChatDashboard({ user, socket }) {
           </React.Fragment>
         ) : (
           <HomeDashboard socket={socket} />
-
-          // <React.Fragment>
-          //   {/* <Grid item xs> */}
-          //   {/* <Box className={classes.messages}> */}
-          //   <CurrentRoomNullComponent />
-          //   {/* </Box> */}
-          //   {/* </Grid> */}
-          // </React.Fragment>
         )}
       </Grid>
       <AddRoomDialog

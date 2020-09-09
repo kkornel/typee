@@ -49,13 +49,28 @@ function roomDataReducer(state, action) {
       };
     }
     case ACTIONS.NEW_MESSAGE: {
-      return {
+      const message = action.payload;
+
+      const currentRoom = state.currentRoom
+        ? {
+            ...state.currentRoom,
+            messages: [...state.currentRoom.messages, message],
+          }
+        : null;
+
+      const newState = {
         ...state,
-        currentRoom: {
-          ...state.currentRoom,
-          messages: [...state.currentRoom.messages, action.payload],
+        rooms: {
+          ...state.rooms,
+          [message.room]: {
+            ...state.rooms[message.room],
+            messages: [...state.rooms[message.room].messages, message],
+          },
         },
+        currentRoom,
       };
+      console.log('state', newState);
+      return newState;
     }
     case ACTIONS.ROOM_DELETED: {
       // Omit the room that was deleted
@@ -80,42 +95,62 @@ function roomDataReducer(state, action) {
     }
     case ACTIONS.SET_ROOMS: {
       const rooms = _.keyBy(action.payload, '_id');
-      return { ...state, rooms: { ...state.rooms, ...rooms } };
+      const newState = { ...state, rooms };
+      console.log('state', newState);
+      return newState;
     }
     case ACTIONS.UPDATE_ROOM: {
       // TODO: Here it's loading whole room, with users, messages etc.
       // Is it necessary?
-      const { name, avatar, avatarURL } = action.payload;
-      return {
+      const { name, avatarURL } = action.payload;
+      const currentRoom = state.currentRoom
+        ? {
+            ...state.currentRoom,
+            name,
+            avatarURL,
+          }
+        : null;
+      const st = {
         ...state,
-        rooms: { ...state.rooms, [action.payload._id]: action.payload },
-        currentRoom: {
-          ...state.currentRoom,
-          name,
-          avatar,
-          avatarURL,
-        },
+        rooms: { ...state.rooms, [action.payload._id]: { ...action.payload } },
+        currentRoom,
       };
+
+      console.log('!!!', currentRoom);
+      console.log('!!!', st);
+
+      return st;
     }
     case ACTIONS.USER_LIST_CHANGED: {
+      const currentRoom = state.currentRoom
+        ? {
+            ...state.currentRoom,
+            users: action.payload,
+          }
+        : null;
+
       return {
         ...state,
-        currentRoom: {
-          ...state.currentRoom,
-          users: action.payload,
-        },
+        currentRoom,
       };
     }
     case ACTIONS.USER_STATUS_CHANGED: {
+      if (!state.currentRoom) {
+        return { ...state };
+      }
+
       const users = [...state.currentRoom.users];
       const index = users.findIndex((user) => user._id === action.payload._id);
       users[index] = action.payload;
+      const currentRoom = state.currentRoom
+        ? {
+            ...state.currentRoom,
+            users,
+          }
+        : null;
       return {
         ...state,
-        currentRoom: {
-          ...state.currentRoom,
-          users,
-        },
+        currentRoom,
       };
     }
     default: {

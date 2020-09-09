@@ -49,7 +49,10 @@ router.post(
         throw new ErrorResponse(409, 'Name already taken', 'ALREADY_EXISTS');
       }
 
-      const room = await Room.findOne({ name });
+      const room = await Room.findOne({ name }).populate([
+        { path: 'author' },
+        { path: 'users.user' },
+      ]);
 
       if (newName) {
         room.name = newName;

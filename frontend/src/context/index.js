@@ -6,6 +6,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { AuthProvider } from './AuthContext';
 import { UserDataProvider } from './UserDataContext';
 import { RoomDataProvider } from './RoomDataContext';
+import { SocketProvider } from './SocketContext';
 import theme from '../utils/theme';
 
 function AppProviders({ children }) {
@@ -15,7 +16,11 @@ function AppProviders({ children }) {
         <AuthProvider>
           {/* {children} */}
           <UserDataProvider>
-            <RoomDataProvider>{children}</RoomDataProvider>
+            <RoomDataProvider>
+              {/* <SocketProvider> */}
+              {children}
+              {/* </SocketProvider> */}
+            </RoomDataProvider>
           </UserDataProvider>
         </AuthProvider>
       </SnackbarProvider>

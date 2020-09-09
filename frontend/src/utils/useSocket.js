@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 
 import io from 'socket.io-client';
 
@@ -25,11 +25,11 @@ function useSocket(endpoint = ENDPOINT) {
   }
 
   function requestUserData(userId, callback) {
-    socket.emit('userDataRequest', { userId });
+    socket.emit('userDataRequest', { userId }, callback);
   }
 
-  function sendMessage(text, roomName, authorId, callback) {
-    socket.emit('message', { text, roomName, authorId }, callback);
+  function sendMessage(text, roomId, authorId, callback) {
+    socket.emit('message', { text, roomId, authorId }, callback);
   }
 
   function createRoom(authorId, roomName, callback) {
@@ -52,6 +52,10 @@ function useSocket(endpoint = ENDPOINT) {
     socket.emit('deleteRoom', { roomName }, callback);
   }
 
+  function removeUser(roomId, userId, callback) {
+    socket.emit('removeUser', { roomId, userId }, callback);
+  }
+
   function onRoomUpdated(callback) {
     socket.on('roomUpdated', callback);
   }
@@ -62,10 +66,6 @@ function useSocket(endpoint = ENDPOINT) {
 
   function onNewRoomData(callback) {
     socket.on('roomData', callback);
-  }
-
-  function onNewUserData(callback) {
-    socket.on('newUserData', callback);
   }
 
   function onUserStatusChanged(callback) {
@@ -84,10 +84,10 @@ function useSocket(endpoint = ENDPOINT) {
     joinRoom,
     leaveRoom,
     roomUpdated,
+    removeUser,
     onRoomUpdated,
     onNewMessage,
     onNewRoomData,
-    onNewUserData,
     onUserStatusChanged,
     disconnet,
     deleteRoom,

@@ -73,6 +73,9 @@ const userSchema = new Schema(
     avatar: {
       type: Buffer,
     },
+    avatarUrl: {
+      type: String,
+    },
     jwtTokens: [
       // It is an array, because user can log in from multiple devices,
       // so every connection from every device has different token.
@@ -159,7 +162,12 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 userSchema.methods.getRooms = async function () {
   await this.populate('rooms', '-messages').execPopulate();
+  // console.log(this.rooms);
   await this.populate('rooms.author').execPopulate();
+  // await this.populate({
+  // path: rooms,
+  // populate: { path: author },
+  // }).execPopulate();
   return this.rooms;
 };
 

@@ -8,12 +8,17 @@ import RoomListDivider from './RoomListDivider';
 import RoomListAddIcon from './RoomListAddIcon';
 import RoomListHomeIcon from './RoomListHomeIcon';
 
-export default function RoomList({ rooms, handleRoomClick, handleAddClick }) {
+export default function RoomList({
+  rooms,
+  handleHomeClick,
+  handleRoomClick,
+  handleAddClick,
+}) {
   const classes = useStyles();
 
   return (
     <Box className={classes.roomList}>
-      <RoomListHomeIcon />
+      <RoomListHomeIcon handleHomeClick={handleHomeClick} />
       <RoomListDivider />
       {Object.values(rooms).map((room) => (
         <RoomListItem

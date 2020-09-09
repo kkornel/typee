@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 
 import ArrowTooltip from '../../ui/ArrowTooltip';
 
-export default function UserListItemTest({ user }) {
+export default function UserListItemTest({ user, onRemoveClick }) {
   const classes = useStyles();
 
   return (
@@ -17,15 +17,16 @@ export default function UserListItemTest({ user }) {
       <Box className={classes.usersListItemInner}>
         <Box className={classes.usersListItemInnerAvatar}>
           <Box className={classes.usersListItemInnerAvatarWrapper}>
-            <ArrowTooltip title={'Kornel'}>
-              {user?.avatarURL ? (
+            <ArrowTooltip title={user.username}>
+              {user.avatarURL ? (
                 <Avatar
                   className={classes.usersListItemInnerAvatarImg}
                   src={user.avatarURL}
                 />
               ) : (
                 <Avatar className={classes.usersListItemInnerAvatarWrapper}>
-                  KK
+                  {user.username[0]}
+                  {user.username[1]}
                 </Avatar>
               )}
             </ArrowTooltip>
@@ -50,12 +51,17 @@ export default function UserListItemTest({ user }) {
                   classes.contentOverflow
                 )}
               >
-                Kornel
+                {user.username}
               </span>
             </Box>
           </Box>
         </Box>
-        <Button className={classes.deleteButton}>Remove</Button>
+        <Button
+          className={classes.deleteButton}
+          onClick={() => onRemoveClick(user._id)}
+        >
+          Remove
+        </Button>
       </Box>
     </Box>
   );

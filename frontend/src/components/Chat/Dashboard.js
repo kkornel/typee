@@ -8,7 +8,6 @@ import ChatDashboard from './ChatDashboard';
 function Dashboard() {
   const { user } = useAuth();
   const socket = useSocket();
-
   console.log('&&& Dashboard RE-RENDER');
 
   return <ChatDashboard socket={socket} user={user} />;

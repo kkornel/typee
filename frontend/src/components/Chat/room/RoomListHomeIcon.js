@@ -13,23 +13,13 @@ import IconButton from '@material-ui/core/IconButton';
 
 import ArrowTooltip from '../../ui/ArrowTooltip';
 
-import {
-  useRoomData,
-  ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../../context/RoomDataContext';
+import { useRoomData } from '../../../context/RoomDataContext';
 
-export default function RoomListHomeIcon() {
+export default function RoomListHomeIcon({ handleHomeClick }) {
   const classes = useStyles();
 
-  const [roomDataState, roomDataDispatch] = useRoomData();
+  const [roomDataState] = useRoomData();
   const isCurrentRoom = roomDataState.currentRoom;
-
-  const handleHomeClick = () => {
-    roomDataDispatch({
-      type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
-      payload: undefined,
-    });
-  };
 
   return (
     <Box className={classes.roomHomeBox}>

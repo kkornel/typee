@@ -12,11 +12,34 @@ const getUser = async (userId) => {
   return { user };
 };
 
+const getUserById = async (userId) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return { error: `Couldn't find user with id: ${userId}.` };
+  }
+
+  return { user };
+};
+
 const getRoom = async (roomName) => {
-  const room = await Room.findOne({ name: roomName }).select('-avatar');
+  const room = await Room.findOne({ name: roomName });
 
   if (!room) {
     return { error: `Room ${roomName} doesn't exist.` };
+  }
+
+  return { room };
+};
+
+const getRoomById = async (roomId) => {
+  const room = await Room.findById(roomId).populate([
+    { path: 'author' },
+    { path: 'users.user' },
+  ]);
+
+  if (!room) {
+    return { error: `Room with id ${roomId} doesn't exist.` };
   }
 
   return { room };
@@ -54,38 +77,57 @@ const disconnectUser = async (socketId) => {
   return { user };
 };
 
-const getUserData = async (userId) => {
-  const user = await User.findById(userId);
+const getUserRooms = async (userId) => {
+  const rooms = await Room.find({ 'users.user': userId }).populate([
+    { path: 'author' },
+    { path: ' users.user' },
+  ]);
 
-  if (!user) {
-    return { error: `Couldn't find user with id: ${userId}.` };
-  }
-
-  const rooms = await user.getRooms();
   return { rooms };
 };
 
-const generateRoomData = async (roomName) => {
-  const room = await Room.findOne({ name: roomName });
-  const users = await room.getUsersInRoom();
-  return { users };
-};
-
-const createMessage = async (text, roomName, authorId) => {
-  const { error, room } = await getRoom(roomName);
+const getUserData = async (userId) => {
+  const { error, user } = await getUserById(userId);
 
   if (error) {
     return { error };
   }
 
-  const message = await new Message({ author: authorId, text }).save();
+  const rooms = await Room.find({ 'users.user': userId }).populate([
+    { path: 'author' },
+    { path: 'users.user' },
+  ]);
+
+  return { user, rooms };
+};
+
+const generateRoomData = async (roomId) => {
+  const room = await Room.findById(roomId);
+  const users = await room.getUsersInRoom();
+  return { users };
+};
+
+const createMessage = async (text, roomId, authorId) => {
+  const { error, room } = await getRoomById(roomId);
+
+  if (error) {
+    return { error };
+  }
+
+  const message = await new Message({
+    author: authorId,
+    text,
+    room: roomId,
+  }).save();
 
   room.messages.push(message);
   await room.save();
 
-  await message.populate('author', '_id username').execPopulate();
+  await message
+    .populate('author', '_id username avatarUrl subtext')
+    .execPopulate();
 
-  return { message };
+  return { message, room };
 };
 
 const createSystemMessage = async (text, roomName) => {
@@ -95,7 +137,11 @@ const createSystemMessage = async (text, roomName) => {
     return { error };
   }
 
-  const message = await new Message({ text, systemMessage: true }).save();
+  const message = await new Message({
+    text,
+    systemMessage: true,
+    room: room._id,
+  }).save();
 
   room.messages.push(message);
   await room.save();
@@ -140,9 +186,7 @@ const joinRoom = async (roomName, userId, socketId) => {
   }
 
   await room.save();
-  await room
-    .populate('messages', '_id author text createdAt systemMessage')
-    .execPopulate();
+  await room.populate('messages').execPopulate();
   await room
     .populate('messages.author', '_id username subtext avatarURL')
     .execPopulate();
@@ -186,10 +230,12 @@ const deleteRoom = async (roomName) => {
 
 module.exports = {
   getUser,
+  getUserById,
   getRoom,
   connectUser,
   disconnectUser,
   getUserData,
+  getUserRooms,
   generateRoomData,
   createMessage,
   createSystemMessage,

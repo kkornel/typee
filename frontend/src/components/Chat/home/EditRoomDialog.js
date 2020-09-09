@@ -17,16 +17,32 @@ import HorizontalTextDivider from '../../ui/HorizontalTextDivider';
 import FullPageSpinner from '../../ui/FullPageSpinner';
 import UserListItemTest from './UserListItemTest';
 
+import {
+  useRoomData,
+  ACTIONS as ROOM_DATA_ACTIONS,
+} from '../../../context/RoomDataContext';
+
+import { useAuth } from '../../../context/AuthContext';
+
+import { updateRoom } from '../../../utils/room-client';
+
 export default function EditRoomDialog({
-  loading,
+  socket,
   dialogData,
-  resetError,
   onDialogClose,
-  onSaveClick,
+  onSuccessfulUpdate,
 }) {
   const classes = useStyles();
 
-  const { open, error, room } = dialogData;
+  const [roomDataState, roomDataDispatch] = useRoomData();
+
+  const { open, roomId } = dialogData;
+  const room = roomDataState.rooms[roomId];
+
+  const [error, setError] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+  const { user: currentUser } = useAuth();
 
   const inputRef = React.useRef(null);
 
@@ -34,8 +50,53 @@ export default function EditRoomDialog({
   const [name, setName] = React.useState('');
   const [deleteCurrent, setDeleteCurrent] = React.useState(false);
 
-  const handleSave = () => {
-    onSaveClick(name, file, deleteCurrent);
+  const participants = Object.values(room.users).filter(
+    ({ user }) => user._id !== currentUser._id
+  );
+
+  const handleSave = async () => {
+    // TODO: validate
+    if (name.length >= 25) {
+      return setError('Maximum length is 25');
+    }
+
+    const data = new FormData();
+
+    data.append('newName', name);
+    data.append('file', file);
+    data.append('deleteCurrent', JSON.stringify(deleteCurrent));
+
+    try {
+      setLoading(true);
+      const updatedRoom = await updateRoom(room.name, data);
+      roomDataDispatch({
+        type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
+        payload: updatedRoom,
+      });
+      onRoomUpdated(room.name, updatedRoom.name);
+      setLoading(false);
+      onSuccessfulUpdate();
+    } catch (error) {
+      console.log('Edit Room ERROR', error.response.data);
+      setLoading(false);
+      setError(error.response.data.message);
+    }
+  };
+
+  const onRoomUpdated = (oldName, newName) => {
+    socket.roomUpdated(oldName, newName, roomUpdatedCallback);
+  };
+
+  const roomUpdatedCallback = ({ error }) => {
+    if (error) {
+      return console.log('roomUpdatedCallback', error);
+    }
+
+    console.log('Room updated successfully.');
+  };
+
+  const resetError = () => {
+    setError(null);
   };
 
   const onTitleChange = (event) => {
@@ -66,10 +127,19 @@ export default function EditRoomDialog({
     inputRef.current.value = null;
   };
 
+  const onRemoveClick = (userId) => {
+    socket.removeUser(room._id, userId, removeUserCallback);
+  };
+
+  const removeUserCallback = ({ user, room, room2 }) => {
+    console.log(user, room, room2);
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.UPDATE_ROOM, payload: room });
+  };
+
   return (
     <Dialog
       open={open}
-      onDialogClose={onDialogClose}
+      onClose={onDialogClose}
       onExit={onExit}
       maxWidth={'xs'}
       fullWidth={true}
@@ -78,7 +148,7 @@ export default function EditRoomDialog({
     >
       {loading && <FullPageSpinner />}
       <DialogTitle>
-        Edit room <i>{room?.name}</i>
+        Edit room <i>{room.name}</i>
       </DialogTitle>
       <DialogContent>
         <DialogContentText className={classes.content}>
@@ -88,7 +158,7 @@ export default function EditRoomDialog({
           label="Room's name"
           value={name}
           onChange={onTitleChange}
-          placeholder={room?.name}
+          placeholder={room.name}
           error={!!error}
           helperText={error}
           fullWidth
@@ -129,12 +199,12 @@ export default function EditRoomDialog({
             ref={inputRef}
           />
         </Box>
-        {room?.avatarURL && !file && (
+        {room.avatarURL && !file && (
           <Box style={{ marginTop: '8px' }}>
             <Box style={{ marginBottom: '4px' }}>Current avatar:</Box>
             <Box>
               <img
-                src={room?.avatarURL}
+                src={room.avatarURL}
                 className={classes.img}
                 alt="Supposed to show very important data"
               />
@@ -171,84 +241,25 @@ export default function EditRoomDialog({
             label="Delete selected avatar"
           />
         )}
-        <HorizontalTextDivider
-          text={'Participants'}
-          style={{ margin: '10px 4px', color: 'white' }}
-        />
-        <Box className={classes.participants}>
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-          <UserListItemTest />
-        </Box>
+        {participants.length > 0 && (
+          <React.Fragment>
+            <HorizontalTextDivider
+              text={'Participants'}
+              style={{ margin: '10px 4px', color: 'white' }}
+            />
+            <Box className={classes.participants}>
+              {participants.map(({ user }) => {
+                return (
+                  <UserListItemTest
+                    key={user._id}
+                    user={user}
+                    onRemoveClick={onRemoveClick}
+                  />
+                );
+              })}
+            </Box>
+          </React.Fragment>
+        )}
       </DialogContent>
       <DialogActions>
         <Button
