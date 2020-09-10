@@ -10,7 +10,7 @@ import HomeListItem from './HomeListItem';
 import UserListHeader from '../user/UserListHeader';
 import HorizontalLineDivider from '../../ui/HorizontalLineDivider';
 
-export default function HomeTabList({ setSelectedTab }) {
+export default function HomeTabList({ selectedTab, setSelectedTab }) {
   const classes = useStyles();
 
   return (
@@ -21,16 +21,19 @@ export default function HomeTabList({ setSelectedTab }) {
         icon={<ForumIcon />}
         text="Rooms"
         onClick={() => setSelectedTab('rooms')}
+        selected={selectedTab === 'rooms'}
       />
       <HomeListItem
         icon={<PeopleIcon />}
         text="Friends"
         onClick={() => setSelectedTab('friends')}
+        selected={selectedTab === 'friends'}
       />
       <HomeListItem
         icon={<SettingsIcon />}
         text="Settings"
         onClick={() => setSelectedTab('settings')}
+        selected={selectedTab === 'settings'}
       />
     </Box>
   );

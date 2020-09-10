@@ -6,11 +6,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import ArrowTooltip from '../../ui/ArrowTooltip';
 import Box from '@material-ui/core/Box';
 
-export default function HomeListItem({ icon, text, onClick }) {
+export default function HomeListItem({ icon, text, onClick, selected }) {
   const classes = useStyles();
 
+  const listItemClass = selected ? classes.selected : '';
+
   return (
-    <Box className={classNames(classes.listItem)} onClick={onClick}>
+    <Box
+      className={classNames(classes.listItem, listItemClass)}
+      onClick={onClick}
+    >
       <Box className={classes.listItemInner}>
         <Box className={classes.listItemAvatar}>
           <ArrowTooltip title={text}>
@@ -56,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.interactiveHover,
       cursor: 'pointer',
     },
+  },
+  selected: {
+    background: theme.palette.interactiveMuted,
+    color: theme.palette.interactiveHover,
   },
   listItemInner: {
     display: 'flex',

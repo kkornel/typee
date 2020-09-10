@@ -24,7 +24,10 @@ export default function HomeDashboard({ socket }) {
   return (
     <React.Fragment>
       <Grid item xs={2}>
-        <HomeTabList setSelectedTab={setSelectedTab} />
+        <HomeTabList
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+        />
       </Grid>
       <Grid item xs>
         {renderContent()}

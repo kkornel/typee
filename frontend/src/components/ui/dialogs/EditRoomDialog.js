@@ -2,7 +2,6 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteForever from '@material-ui/icons/DeleteForever';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,9 +12,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 
-import HorizontalTextDivider from '../../ui/HorizontalTextDivider';
-import FullPageSpinner from '../../ui/FullPageSpinner';
-import UserListItemTest from './UserListItemTest';
+import FullPageSpinner from '../FullPageSpinner';
+import HorizontalTextDivider from '../HorizontalTextDivider';
+import ParticipantListItem from '../../chat/home/ParticipantListItem';
+
+import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 
 import {
   useRoomData,
@@ -23,7 +24,6 @@ import {
 } from '../../../context/RoomDataContext';
 
 import { useAuth } from '../../../context/AuthContext';
-
 import { updateRoom } from '../../../utils/room-client';
 
 export default function EditRoomDialog({
@@ -36,7 +36,7 @@ export default function EditRoomDialog({
 
   const [roomDataState, roomDataDispatch] = useRoomData();
 
-  const { open, roomId } = dialogData;
+  const { openEdit, roomId } = dialogData;
   const room = roomDataState.rooms[roomId];
 
   const [error, setError] = React.useState('');
@@ -138,7 +138,7 @@ export default function EditRoomDialog({
 
   return (
     <Dialog
-      open={open}
+      open={openEdit}
       onClose={onDialogClose}
       onExit={onExit}
       maxWidth={'xs'}
@@ -176,7 +176,6 @@ export default function EditRoomDialog({
           text={'Avatar'}
           style={{ margin: '10px 4px', color: 'white' }}
         />
-        {/* <TextDivider style={{ margin: '10px 4px' }}>Avatar</TextDivider> */}
         <Box>
           <DialogContentText className={classes.content}>
             Change room avatar:
@@ -250,7 +249,7 @@ export default function EditRoomDialog({
             <Box className={classes.participants}>
               {participants.map(({ user }) => {
                 return (
-                  <UserListItemTest
+                  <ParticipantListItem
                     key={user._id}
                     user={user}
                     onRemoveClick={onRemoveClick}
@@ -262,18 +261,12 @@ export default function EditRoomDialog({
         )}
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={onDialogClose}
-          className={classes.interactiveNormalButton}
-        >
+        <InteractiveNormalButton onClick={onDialogClose}>
           Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          className={classes.interactiveNormalButton}
-        >
+        </InteractiveNormalButton>
+        <InteractiveNormalButton onClick={handleSave}>
           Save
-        </Button>
+        </InteractiveNormalButton>
       </DialogActions>
     </Dialog>
   );
@@ -282,14 +275,14 @@ export default function EditRoomDialog({
 const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiFormLabel-root': {
-      color: theme.palette.interactiveNormal,
+      color: theme.palette.purple,
     },
     '& label.Mui-focused': {
       color: theme.palette.purple,
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        borderColor: theme.palette.purpleAlt,
+        borderColor: theme.palette.textMuted,
       },
       '&:hover fieldset': {
         borderColor: theme.palette.purple,
@@ -333,12 +326,5 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     marginTop: '2px',
-  },
-  interactiveNormalButton: {
-    color: theme.palette.interactiveNormal,
-    '&:hover': {
-      color: theme.palette.interactiveHover,
-      backgroundColor: theme.palette.interactiveMuted,
-    },
   },
 }));

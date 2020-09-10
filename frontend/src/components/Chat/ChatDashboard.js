@@ -114,7 +114,7 @@ export default function ChatDashboard({ user, socket }) {
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
     setLastOpenedRoom(room.name);
 
-    enqueueSnackbar(`Room ${room.name} created.`, {
+    enqueueSnackbar(`Room ${room.name} created`, {
       variant: 'success',
       autoHideDuration: 2000,
     });
@@ -163,7 +163,7 @@ export default function ChatDashboard({ user, socket }) {
 
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.LEAVE_ROOM, payload: room });
 
-    enqueueSnackbar(`You left ${room.name}.`, {
+    enqueueSnackbar(`You left ${room.name}`, {
       variant: 'info',
       autoHideDuration: 2000,
     });
@@ -178,7 +178,7 @@ export default function ChatDashboard({ user, socket }) {
 
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
 
-    enqueueSnackbar(`Room ${room.name} deleted.`, {
+    enqueueSnackbar(`Room ${room.name} deleted`, {
       variant: 'error',
       autoHideDuration: 2000,
     });

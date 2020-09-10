@@ -5,11 +5,11 @@ import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 
 import ArrowTooltip from '../../ui/ArrowTooltip';
+import InteractiveDangerButton from '../../ui/buttons/InteractiveDangerButton';
 
-export default function UserListItemTest({ user, onRemoveClick }) {
+export default function ParticipantListItem({ user, onRemoveClick }) {
   const classes = useStyles();
 
   return (
@@ -56,12 +56,12 @@ export default function UserListItemTest({ user, onRemoveClick }) {
             </Box>
           </Box>
         </Box>
-        <Button
-          className={classes.deleteButton}
+        <InteractiveDangerButton
           onClick={() => onRemoveClick(user._id)}
+          style={{ height: '28px' }}
         >
           Remove
-        </Button>
+        </InteractiveDangerButton>
       </Box>
     </Box>
   );
@@ -136,37 +136,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'block',
     outline: '0',
     // fontFamily: 'Roboto',
-  },
-  usersListItemContentSubtext: {
-    marginTop: '-2px',
-    outline: '0',
-  },
-  usersListItemContentSubtextInner: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '12px',
-    lineHeight: '16px',
-    fontWeight: '500',
-    outline: '0',
-    color: theme.palette.channelsDefault,
-  },
-  usersListItemContentNameInnerDiv: {
-    flex: '0 1 auto',
-    outline: '0',
+    color: theme.palette.textNormal,
   },
   contentOverflow: {
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-  },
-  deleteButton: {
-    color: theme.palette.interactiveHover,
-    backgroundColor: theme.palette.interactiveMuted,
-    height: '28px',
-    '&:hover': {
-      color: theme.palette.textNormal,
-      backgroundColor: theme.palette.red,
-    },
   },
   offline: {
     opacity: '0.3',

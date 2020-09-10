@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '12px',
     fontWeight: 600,
     fontFamily: 'Roboto',
+    letterSpacing: '0.5px',
     '&::before': {
       background: theme.palette.backgroundAccent,
       content: '""',

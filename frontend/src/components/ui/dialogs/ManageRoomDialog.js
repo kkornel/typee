@@ -16,6 +16,9 @@ import TextField from '@material-ui/core/TextField';
 import HorizontalTextDivider from '../../ui/HorizontalTextDivider';
 import FullPageSpinner from '../../ui/FullPageSpinner';
 
+import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
+import InteractiveDangerButton from '../buttons/InteractiveDangerButton';
+
 export default function ManageRoomDialog({
   room,
   loading,
@@ -35,6 +38,10 @@ export default function ManageRoomDialog({
 
   const [confirmName, setConfirmName] = React.useState('');
   const [confirmNameError, setConfirmNameError] = React.useState(false);
+
+  // const participants = Object.values(room.users).filter(
+  //   ({ user }) => user._id !== currentUser._id
+  // );
 
   const handleSave = () => {
     handleSaveClick(name, file, deleteCurrent);
@@ -91,7 +98,6 @@ export default function ManageRoomDialog({
       onExit={onExit}
       maxWidth={'xs'}
       fullWidth={true}
-      aria-labelledby="form-dialog-name"
       PaperProps={{ classes: { root: classes.paper } }}
     >
       {loading && <FullPageSpinner />}
@@ -124,7 +130,6 @@ export default function ManageRoomDialog({
           text={'Avatar'}
           style={{ margin: '10px 4px', color: 'white' }}
         />
-        {/* <TextDivider style={{ margin: '10px 4px' }}>Avatar</TextDivider> */}
         <Box>
           <DialogContentText className={classes.content}>
             Change room avatar:
@@ -191,11 +196,8 @@ export default function ManageRoomDialog({
         )}
         <HorizontalTextDivider
           text={'DELETE'}
-          style={{ margin: '10px 4px', color: 'red' }}
+          style={{ margin: '10px 4px', color: '#f04747' }}
         />
-        {/* <TextDivider style={{ margin: '10px 4px' }} border="1px solid red">
-          DELETE
-        </TextDivider> */}
         <Box>
           <DialogContentText className={classes.content}>
             Are you sure you want delete this room? <br />
@@ -217,28 +219,21 @@ export default function ManageRoomDialog({
               shrink: true,
             }}
           />
-          <Button
-            variant="contained"
+          <InteractiveDangerButton
             onClick={handleDeleteClick}
-            className={classes.deleteButton}
+            style={{ marginTop: '8px' }}
           >
-            DELETE ROOM
-          </Button>
+            Delete room
+          </InteractiveDangerButton>
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          className={classes.interactiveNormalButton}
-        >
+        <InteractiveNormalButton onClick={handleClose}>
           Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          className={classes.interactiveNormalButton}
-        >
+        </InteractiveNormalButton>
+        <InteractiveNormalButton onClick={handleSave}>
           Save
-        </Button>
+        </InteractiveNormalButton>
       </DialogActions>
     </Dialog>
   );
@@ -247,14 +242,14 @@ export default function ManageRoomDialog({
 const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiFormLabel-root': {
-      color: theme.palette.interactiveNormal,
+      color: theme.palette.purple,
     },
     '& label.Mui-focused': {
       color: theme.palette.purple,
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        borderColor: theme.palette.purpleAlt,
+        borderColor: theme.palette.textMuted,
       },
       '&:hover fieldset': {
         borderColor: theme.palette.purple,
@@ -299,13 +294,6 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     marginTop: '2px',
   },
-  interactiveNormalButton: {
-    color: theme.palette.interactiveNormal,
-    '&:hover': {
-      color: theme.palette.interactiveHover,
-      backgroundColor: theme.palette.interactiveMuted,
-    },
-  },
   deleteInput: {
     '& .MuiFormLabel-root': {
       color: theme.palette.red,
@@ -323,15 +311,6 @@ const useStyles = makeStyles((theme) => ({
       '&.Mui-focused fieldset': {
         borderColor: theme.palette.red,
       },
-    },
-  },
-  deleteButton: {
-    marginTop: '8px',
-    color: theme.palette.interactiveHover,
-    backgroundColor: theme.palette.interactiveMuted,
-    '&:hover': {
-      color: theme.palette.textNormal,
-      backgroundColor: theme.palette.red,
     },
   },
 }));

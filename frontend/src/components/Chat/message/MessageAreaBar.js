@@ -7,7 +7,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import ManageRoomDialog from '../room/ManageRoomDialog';
+import ManageRoomDialog from '../../ui/dialogs/ManageRoomDialog';
 
 import { updateRoom } from '../../../utils/room-client';
 import {

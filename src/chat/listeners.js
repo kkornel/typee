@@ -217,7 +217,7 @@ const connectionEvent = (io) => {
 
       callback({ room });
 
-      const { user } = await getUser(userId);
+      const { user } = await getUserById(userId);
 
       const { message } = await createSystemMessage(
         `${user.username} has left the room!`,
@@ -227,7 +227,7 @@ const connectionEvent = (io) => {
       socket.broadcast.to(roomName).emit('message', message);
       socket.broadcast
         .to(roomName)
-        .emit('roomData', await generateRoomData(roomName));
+        .emit('roomData', await generateRoomData(room._id));
     });
 
     socket.on('deleteRoom', async ({ roomName }, callback) => {
@@ -240,7 +240,7 @@ const connectionEvent = (io) => {
         return callback({ error });
       }
 
-      io.to(room.name).emit('roomDeleted', room);
+      socket.broadcast.to(room.name).emit('roomDeleted', room);
 
       callback({ room });
     });

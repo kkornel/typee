@@ -80,7 +80,7 @@ function roomDataReducer(state, action) {
       // set the current room to undefined
       // so the user will be brought to 'default' page
       const currentRoom =
-        state.currentRoom._id === action.payload._id
+        state.currentRoom && state.currentRoom._id === action.payload._id
           ? undefined
           : state.currentRoom;
 
