@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSnackbar } from 'notistack';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -9,56 +10,24 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import ManageRoomDialog from '../../ui/dialogs/ManageRoomDialog';
 
-import { updateRoom } from '../../../utils/room-client';
-import {
-  useRoomData,
-  ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../../context/RoomDataContext';
-
 export default function MessageAreaBar({
+  socket,
   room,
   isAuthor,
-  onLeaveClick,
+  leaveRoom,
   roomUpdated,
   deleteRoom,
 }) {
   const classes = useStyles();
 
-  const [loading, setLoading] = React.useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const [, roomDataDispatch] = useRoomData();
   const [dialogData, setDialogData] = React.useState({
     open: false,
-    error: null,
+    room: room,
   });
-
-  const handleSaveClick = async (newName, file, deleteCurrent) => {
-    const data = new FormData();
-
-    data.append('newName', newName);
-    data.append('file', file);
-    data.append('deleteCurrent', JSON.stringify(deleteCurrent));
-
-    try {
-      setLoading(true);
-
-      const updatedRoom = await updateRoom(room.name, data);
-
-      setDialogData({ ...dialogData, open: false });
-
-      roomUpdated(room.name, updatedRoom.name);
-      roomDataDispatch({
-        type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
-        payload: updatedRoom,
-      });
-    } catch (error) {
-      console.log('Update Room ERROR', error.response.data);
-      setDialogData({ ...dialogData, error: error.response.data.message });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -69,7 +38,7 @@ export default function MessageAreaBar({
   };
 
   const handleLeaveClick = () => {
-    onLeaveClick(room.name);
+    leaveRoom(room.name);
     handleClose();
   };
 
@@ -78,18 +47,18 @@ export default function MessageAreaBar({
     handleClose();
   };
 
-  const handleDialogClose = () => {
+  const onDialogClose = () => {
     if (dialogData.open) {
       setDialogData({ open: false });
     }
   };
 
-  const handleDeleteRoom = (roomName) => {
-    deleteRoom(roomName);
-  };
-
-  const resetError = () => {
-    setDialogData({ ...dialogData, error: null });
+  const onSuccessfulUpdate = () => {
+    onDialogClose();
+    enqueueSnackbar(`Room updated`, {
+      variant: 'success',
+      autoHideDuration: 2000,
+    });
   };
 
   return (
@@ -125,15 +94,17 @@ export default function MessageAreaBar({
           )}
         </StyledMenu>
       </Box>
-      <ManageRoomDialog
-        room={room}
-        loading={loading}
-        dialogData={dialogData}
-        resetError={resetError}
-        handleDialogClose={handleDialogClose}
-        handleSaveClick={handleSaveClick}
-        handleDeleteRoom={handleDeleteRoom}
-      />
+      {dialogData.open && (
+        <ManageRoomDialog
+          room={room}
+          socket={socket}
+          dialogData={dialogData}
+          deleteRoom={deleteRoom}
+          roomUpdated={roomUpdated}
+          onDialogClose={onDialogClose}
+          onSuccessfulUpdate={onSuccessfulUpdate}
+        />
+      )}
     </Box>
   );
 }

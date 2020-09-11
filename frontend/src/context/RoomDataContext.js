@@ -1,5 +1,4 @@
 import React from 'react';
-
 import _ from 'lodash';
 
 const ACTIONS = {
@@ -17,10 +16,6 @@ const ACTIONS = {
 const initialState = {
   rooms: {},
   currentRoom: undefined,
-  // currentRoom: {
-  //   messages: [],
-  //   users: [],
-  // },
 };
 
 const RoomDataContext = React.createContext();
@@ -32,21 +27,24 @@ function roomDataReducer(state, action) {
     case ACTIONS.LEAVE_ROOM: {
       // Omit the room that was left
       const rooms = _.omit(state.rooms, [action.payload._id]);
-
-      return {
+      const newState = {
         ...state,
         rooms,
         currentRoom: undefined,
       };
+      console.log('roomDataReducer new state', newState);
+      return newState;
     }
     case ACTIONS.LOAD_MESSAGES: {
-      return {
+      const newState = {
         ...state,
         currentRoom: {
           ...state.currentRoom,
           messages: [...action.payload],
         },
       };
+      console.log('roomDataReducer new state', newState);
+      return newState;
     }
     case ACTIONS.NEW_MESSAGE: {
       const message = action.payload;
@@ -84,42 +82,42 @@ function roomDataReducer(state, action) {
           ? undefined
           : state.currentRoom;
 
-      return {
+      const newState = {
         ...state,
         rooms,
         currentRoom,
       };
+      console.log('roomDataReducer new state', newState);
+      return newState;
     }
     case ACTIONS.SET_CURRENT_ROOM: {
-      return { ...state, currentRoom: action.payload };
+      const newState = { ...state, currentRoom: action.payload };
+      console.log('roomDataReducer new state', newState);
+      return newState;
     }
     case ACTIONS.SET_ROOMS: {
       const rooms = _.keyBy(action.payload, '_id');
       const newState = { ...state, rooms };
-      console.log('state', newState);
+      console.log('roomDataReducer new state', newState);
       return newState;
     }
     case ACTIONS.UPDATE_ROOM: {
       // TODO: Here it's loading whole room, with users, messages etc.
       // Is it necessary?
-      const { name, avatarURL } = action.payload;
       const currentRoom = state.currentRoom
         ? {
             ...state.currentRoom,
-            name,
-            avatarURL,
+            ...action.payload,
           }
         : null;
-      const st = {
+
+      const newState = {
         ...state,
         rooms: { ...state.rooms, [action.payload._id]: { ...action.payload } },
         currentRoom,
       };
-
-      console.log('!!!', currentRoom);
-      console.log('!!!', st);
-
-      return st;
+      console.log('roomDataReducer new state', newState);
+      return newState;
     }
     case ACTIONS.USER_LIST_CHANGED: {
       const currentRoom = state.currentRoom
@@ -129,10 +127,12 @@ function roomDataReducer(state, action) {
           }
         : null;
 
-      return {
+      const newState = {
         ...state,
         currentRoom,
       };
+      console.log('roomDataReducer new state', newState);
+      return newState;
     }
     case ACTIONS.USER_STATUS_CHANGED: {
       if (!state.currentRoom) {
@@ -148,10 +148,13 @@ function roomDataReducer(state, action) {
             users,
           }
         : null;
-      return {
+
+      const newState = {
         ...state,
         currentRoom,
       };
+      console.log('roomDataReducer new state', newState);
+      return newState;
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);

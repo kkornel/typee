@@ -2,7 +2,6 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteForever from '@material-ui/icons/DeleteForever';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,24 +12,40 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 
-import HorizontalTextDivider from '../../ui/HorizontalTextDivider';
 import FullPageSpinner from '../../ui/FullPageSpinner';
-
+import HorizontalTextDivider from '../../ui/HorizontalTextDivider';
 import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 import InteractiveDangerButton from '../buttons/InteractiveDangerButton';
+import ParticipantListItem from './ui/ParticipantListItem';
+
+import {
+  useRoomData,
+  ACTIONS as ROOM_DATA_ACTIONS,
+} from '../../../context/RoomDataContext';
+import { useAuth } from '../../../context/AuthContext';
+import { updateRoom } from '../../../utils/room-client';
 
 export default function ManageRoomDialog({
   room,
-  loading,
+  socket,
   dialogData,
-  resetError,
-  handleDialogClose,
-  handleSaveClick,
-  handleDeleteRoom,
+  deleteRoom,
+  roomUpdated,
+  onDialogClose,
+  onSuccessfulUpdate,
 }) {
   const classes = useStyles();
 
   const inputRef = React.useRef(null);
+
+  const [roomDataState, roomDataDispatch] = useRoomData();
+
+  const { open } = dialogData;
+
+  const [error, setError] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+  const { user: currentUser } = useAuth();
 
   const [file, setFile] = React.useState(null);
   const [name, setName] = React.useState('');
@@ -39,12 +54,45 @@ export default function ManageRoomDialog({
   const [confirmName, setConfirmName] = React.useState('');
   const [confirmNameError, setConfirmNameError] = React.useState(false);
 
-  // const participants = Object.values(room.users).filter(
-  //   ({ user }) => user._id !== currentUser._id
-  // );
+  const participants = Object.values(room.users).filter(
+    (user) => user._id !== currentUser._id
+  );
 
-  const handleSave = () => {
-    handleSaveClick(name, file, deleteCurrent);
+  const handleSave = async () => {
+    // TODO: validate
+    if (name.length >= 25) {
+      return setError('Maximum length is 25');
+    }
+
+    const data = new FormData();
+
+    if (!file && !name && !deleteCurrent) {
+      return onDialogClose();
+    }
+
+    data.append('newName', name);
+    data.append('file', file);
+    data.append('deleteCurrent', JSON.stringify(deleteCurrent));
+
+    try {
+      setLoading(true);
+      const updatedRoom = await updateRoom(room.name, data);
+      roomDataDispatch({
+        type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
+        payload: updatedRoom,
+      });
+      roomUpdated(room.name, updatedRoom.name);
+      setLoading(false);
+      onSuccessfulUpdate();
+    } catch (error) {
+      console.log('Edit Room ERROR', error.response.data);
+      setLoading(false);
+      setError(error.response.data.message);
+    }
+  };
+
+  const resetError = () => {
+    setError(null);
   };
 
   const onTitleChange = (event) => {
@@ -59,18 +107,6 @@ export default function ManageRoomDialog({
     }
   };
 
-  const onConfirmNameChange = (event) => {
-    setConfirmName(event.target.value);
-  };
-
-  const handleDeleteClick = () => {
-    const correctConfirmation = room.name === confirmName;
-    setConfirmNameError(!correctConfirmation);
-    if (correctConfirmation) {
-      handleDeleteRoom(room.name);
-    }
-  };
-
   const onDeleteSelectedChange = () => {
     setFile(null);
     inputRef.current.value = null;
@@ -80,10 +116,6 @@ export default function ManageRoomDialog({
     setDeleteCurrent(!deleteCurrent);
   };
 
-  const handleClose = () => {
-    handleDialogClose();
-  };
-
   const onExit = () => {
     setFile(null);
     setName('');
@@ -91,10 +123,31 @@ export default function ManageRoomDialog({
     inputRef.current.value = null;
   };
 
+  const onRemoveClick = (userId) => {
+    socket.removeUser(room._id, userId, removeUserCallback);
+  };
+
+  const removeUserCallback = ({ room, user }) => {
+    console.log('removeUserCallback', room, user);
+    roomDataDispatch({ type: ROOM_DATA_ACTIONS.UPDATE_ROOM, payload: room });
+  };
+
+  const onConfirmNameChange = (event) => {
+    setConfirmName(event.target.value);
+  };
+
+  const handleDeleteClick = () => {
+    const correctConfirmation = room.name === confirmName;
+    setConfirmNameError(!correctConfirmation);
+    if (correctConfirmation) {
+      deleteRoom(room.name);
+    }
+  };
+
   return (
     <Dialog
-      open={dialogData.open}
-      onClose={handleClose}
+      open={open}
+      onClose={onDialogClose}
       onExit={onExit}
       maxWidth={'xs'}
       fullWidth={true}
@@ -113,8 +166,8 @@ export default function ManageRoomDialog({
           value={name}
           onChange={onTitleChange}
           placeholder={room.name}
-          error={!!dialogData.error}
-          helperText={dialogData.error}
+          error={!!error}
+          helperText={error}
           fullWidth
           id="name"
           type="text"
@@ -194,6 +247,25 @@ export default function ManageRoomDialog({
             label="Delete selected avatar"
           />
         )}
+        {participants.length > 0 && (
+          <React.Fragment>
+            <HorizontalTextDivider
+              text={'Participants'}
+              style={{ margin: '10px 4px', color: 'white' }}
+            />
+            <Box className={classes.participants}>
+              {participants.map((user) => {
+                return (
+                  <ParticipantListItem
+                    key={user._id}
+                    user={user}
+                    onRemoveClick={onRemoveClick}
+                  />
+                );
+              })}
+            </Box>
+          </React.Fragment>
+        )}
         <HorizontalTextDivider
           text={'DELETE'}
           style={{ margin: '10px 4px', color: '#f04747' }}
@@ -228,7 +300,7 @@ export default function ManageRoomDialog({
         </Box>
       </DialogContent>
       <DialogActions>
-        <InteractiveNormalButton onClick={handleClose}>
+        <InteractiveNormalButton onClick={onDialogClose}>
           Cancel
         </InteractiveNormalButton>
         <InteractiveNormalButton onClick={handleSave}>

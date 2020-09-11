@@ -3,9 +3,9 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import HomeTabList from './HomeTabList';
-import HomeRoomList from './HomeRoomList';
-import HomeFriendsList from './HomeFriendsList';
-import HomeSettings from './HomeSettings';
+import HomeRoomList from './rooms/HomeRoomList';
+import HomeFriendsList from './friends/HomeFriendsList';
+import HomeSettings from './settings/HomeSettings';
 
 export default function HomeDashboard({ socket }) {
   const [selectedTab, setSelectedTab] = React.useState('rooms');

@@ -1,12 +1,13 @@
 const {
-  getUser,
   getUserById,
-  getRoom,
+  getRoomByName,
   getRoomById,
+  getUserRoomsWithSockets,
+  getUserRoomsWithoutUserSockets,
+  getRoomWithoutUserSockets,
   connectUser,
   disconnectUser,
   getUserData,
-  getUserRooms,
   generateRoomData,
   createMessage,
   createSystemMessage,
@@ -14,8 +15,8 @@ const {
   joinRoom,
   leaveRoom,
   deleteRoom,
+  removeUser,
 } = require('./users');
-const Room = require('../models/Room');
 
 const connectionEvent = (io) => {
   io.on('connection', (socket) => {
@@ -23,35 +24,11 @@ const connectionEvent = (io) => {
     console.log('New connection', socket.id);
     console.log('==============================');
 
-    socket.on('removeUser', async ({ roomId, userId }, callback) => {
-      const { room } = await getRoomById(roomId);
-
-      const { user } = await getUser(userId);
-
-      // console.log('removeUser', room, user);
-
-      const room2 = room.users.filter((user1) => {
-        console.log(user1);
-        console.log(user1.user);
-        console.log(userId);
-
-        return user1.user._id.toString() !== userId;
-      });
-
-      room.users = room2;
-      await room.save();
-
-      callback({ user, room, room2 });
-
-      socket.broadcast.to(room.name).emit('roomUpdated', room);
-    });
-
     socket.on('connectUser', async ({ userId }, callback) => {
       console.log('connectUser', userId, socket.id);
 
       const { error, user } = await connectUser(userId, socket.id);
-
-      const { rooms } = await getUserRooms(userId);
+      const { rooms } = await getUserRoomsWithoutUserSockets(userId);
 
       callback({ error, user, rooms });
 
@@ -70,7 +47,7 @@ const connectionEvent = (io) => {
     socket.on('disconnect', async () => {
       const { error, user } = await disconnectUser(socket.id);
 
-      // console.log('disconnect', user._id, socket.id);
+      console.log('disconnect', user._id, socket.id);
 
       if (error) {
         console.log('disconnect ERROR', error);
@@ -123,7 +100,7 @@ const connectionEvent = (io) => {
         return callback({ error });
       }
 
-      const { rooms } = await getUserRooms(authorId);
+      const { rooms } = await getUserRoomsWithoutUserSockets(authorId);
       callback({ room, rooms });
 
       // Joining user immediately after creating room
@@ -144,7 +121,7 @@ const connectionEvent = (io) => {
         return callback({ error });
       }
 
-      const { rooms } = await getUserRooms(userId);
+      const { rooms } = await getUserRoomsWithoutUserSockets(userId);
       const { user } = await getUserById(userId);
 
       socket.join(room.name);
@@ -174,7 +151,7 @@ const connectionEvent = (io) => {
     socket.on('roomUpdated', async ({ oldName, roomName }, callback) => {
       console.log('roomUpdated', roomName);
 
-      const { error, room } = await getRoom(roomName);
+      const { error, room } = await getRoomByName(roomName);
 
       if (error) {
         console.log('roomUpdated ERROR', error);
@@ -203,6 +180,29 @@ const connectionEvent = (io) => {
       }
 
       socket.broadcast.to(roomName).emit('roomUpdated', room);
+    });
+
+    socket.on('removeUser', async ({ roomId, userId }, callback) => {
+      const { room, user } = await removeUser(roomId, userId);
+
+      callback({ room, user });
+
+      if (user.socketId) {
+        io.sockets.sockets[user.socketId].emit('roomDeleted', room);
+      }
+
+      const { room: roomWithUserSockets } = await getRoomById(roomId);
+      roomWithUserSockets.users.forEach((user) => {
+        // Sending room updated only to others that are left in the room
+        // except the owner, who is notified by callback
+        if (
+          user.socketId &&
+          user.socketId !== socket.id &&
+          io.sockets.sockets[user.socketId]
+        ) {
+          io.sockets.sockets[user.socketId].emit('roomUpdated', room);
+        }
+      });
     });
 
     socket.on('leave', async ({ roomName, userId }, callback) => {

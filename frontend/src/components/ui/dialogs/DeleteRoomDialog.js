@@ -16,6 +16,7 @@ import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
 } from '../../../context/RoomDataContext';
+import { useUserData } from '../../../context/UserDataContext';
 
 export default function DeleteRoomDialog({
   socket,
@@ -26,6 +27,8 @@ export default function DeleteRoomDialog({
   const classes = useStyles();
 
   const [roomDataState, roomDataDispatch] = useRoomData();
+
+  const { handleRoomDeleted } = useUserData();
 
   const { roomId, openDelete } = dialogData;
   const room = roomDataState.rooms[roomId];
@@ -52,6 +55,7 @@ export default function DeleteRoomDialog({
 
     onSuccessfulDelete(room);
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
+    handleRoomDeleted(room.name);
     console.log(`The room ${room.name} has been deleted.`);
   };
 

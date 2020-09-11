@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 
 import ArrowTooltip from '../../ui/ArrowTooltip';
 
-export default function UserListItem({ user }) {
+export default function UserListItem({ user, onUserClick }) {
   const classes = useStyles();
 
   return (
@@ -17,6 +17,7 @@ export default function UserListItem({ user }) {
         classes.usersListItem,
         user.online ? '' : classes.offline
       )}
+      onClick={() => onUserClick(user)}
     >
       <Box className={classes.usersListItemInner}>
         <Box className={classes.usersListItemInnerAvatar}>
@@ -34,12 +35,6 @@ export default function UserListItem({ user }) {
                 </Avatar>
               )}
             </ArrowTooltip>
-            {/* <img
-                className={classes.usersListItemInnerAvatarImg}
-                width="40"
-                height="32"
-                src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg"
-              /> */}
           </Box>
         </Box>
         <Box

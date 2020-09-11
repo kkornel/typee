@@ -1,5 +1,4 @@
 import React from 'react';
-
 import classNames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     display: 'block',
     maxWidth: '100%',
-    margin: '0 14px',
+    margin: '4px 14px',
     padding: '1px 0',
     outline: '0',
     // width: '100%',

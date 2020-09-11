@@ -2,16 +2,6 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const Message = require('../models/Message');
 
-const getUser = async (userId) => {
-  const user = await User.findById(userId);
-
-  if (!user) {
-    return { error: `Couldn't find user with id: ${userId}.` };
-  }
-
-  return { user };
-};
-
 const getUserById = async (userId) => {
   const user = await User.findById(userId);
 
@@ -22,11 +12,11 @@ const getUserById = async (userId) => {
   return { user };
 };
 
-const getRoom = async (roomName) => {
-  const room = await Room.findOne({ name: roomName });
+const getRoomByName = async (name) => {
+  const room = await Room.findOne({ name });
 
   if (!room) {
-    return { error: `Room ${roomName} doesn't exist.` };
+    return { error: `Room ${name} doesn't exist.` };
   }
 
   return { room };
@@ -43,6 +33,37 @@ const getRoomById = async (roomId) => {
   }
 
   return { room };
+};
+
+const getUserRoomsWithSockets = async (userId) => {
+  const rooms = await Room.find({ 'users.user': userId }).populate([
+    { path: 'author' },
+    { path: 'users.user' },
+  ]);
+
+  return { rooms };
+};
+
+const getUserRoomsWithoutUserSockets = async (userId) => {
+  const roomsWithSockets = await Room.find({ 'users.user': userId }).populate([
+    { path: 'author' },
+    { path: 'users.user' },
+  ]);
+
+  const rooms = await Promise.all(
+    roomsWithSockets.map(async (room) => await getRoomWithoutUserSockets(room))
+  );
+
+  return { rooms };
+};
+
+const getRoomWithoutUserSockets = async (room) => {
+  // I'm doing this, because I want to have only user list under property 'users',
+  // not any socketId or ObjectId, but there is no way to manipulate Mongo Document,
+  // so it it necessary to create new one by copying.
+  const roomWithUsers = JSON.parse(JSON.stringify(room));
+  roomWithUsers.users = await room.getUsersInRoom();
+  return roomWithUsers;
 };
 
 const connectUser = async (userId, socketId) => {
@@ -77,15 +98,6 @@ const disconnectUser = async (socketId) => {
   return { user };
 };
 
-const getUserRooms = async (userId) => {
-  const rooms = await Room.find({ 'users.user': userId }).populate([
-    { path: 'author' },
-    { path: ' users.user' },
-  ]);
-
-  return { rooms };
-};
-
 const getUserData = async (userId) => {
   const { error, user } = await getUserById(userId);
 
@@ -93,10 +105,7 @@ const getUserData = async (userId) => {
     return { error };
   }
 
-  const rooms = await Room.find({ 'users.user': userId }).populate([
-    { path: 'author' },
-    { path: 'users.user' },
-  ]);
+  const rooms = await getUserRoomsWithoutUserSockets(userId);
 
   return { user, rooms };
 };
@@ -131,7 +140,7 @@ const createMessage = async (text, roomId, authorId) => {
 };
 
 const createSystemMessage = async (text, roomName) => {
-  const { error, room } = await getRoom(roomName);
+  const { error, room } = await getRoomByName(roomName);
 
   if (error) {
     return { error };
@@ -160,14 +169,13 @@ const createRoom = async (roomName, authorId, socketId) => {
   room.users.push({ user: authorId, socketId });
   await room.save();
 
-  const roomWithUsers = JSON.parse(JSON.stringify(room));
-  roomWithUsers.users = await room.getUsersInRoom();
+  const roomWithUsers = await getRoomWithoutUserSockets(room);
 
   return { room: roomWithUsers };
 };
 
 const joinRoom = async (roomName, userId, socketId) => {
-  const { error, room } = await getRoom(roomName);
+  const { error, room } = await getRoomByName(roomName);
 
   if (error) {
     return { error };
@@ -194,30 +202,27 @@ const joinRoom = async (roomName, userId, socketId) => {
   // I'm doing this, because I want to have only user list under property 'users',
   // not any socketId or ObjectId, but there is no way to manipulate Mongo Document,
   // so it it necessary to create new one by copying.
-  const roomWithUsers = JSON.parse(JSON.stringify(room));
-  roomWithUsers.users = await room.getUsersInRoom();
+  const roomWithUsers = await getRoomWithoutUserSockets(room);
 
   return { room: roomWithUsers, alreadyIsInRoom };
 };
 
 const leaveRoom = async (roomName, userId) => {
-  const { error, room } = await getRoom(roomName);
+  const { error, room } = await getRoomByName(roomName);
 
   if (error) {
     return { error };
   }
 
   const index = room.users.findIndex((user) => user.user.toString() === userId);
-
   room.users.splice(index, 1);
-
   await room.save();
 
   return { room };
 };
 
 const deleteRoom = async (roomName) => {
-  const { error, room } = await getRoom(roomName);
+  const { error, room } = await getRoomByName(roomName);
 
   if (error) {
     return { error };
@@ -228,14 +233,39 @@ const deleteRoom = async (roomName) => {
   return { room };
 };
 
+const removeUser = async (roomId, userId) => {
+  const { room } = await getRoomById(roomId);
+
+  const room2 = room.users.filter((usr) => usr.user._id.toString() !== userId);
+  const userSocket = room.users.find(
+    (usr) => usr.user._id.toString() === userId
+  );
+  room.users = room2;
+  await room.save();
+
+  await room.populate('messages').execPopulate();
+  await room
+    .populate('messages.author', '_id username subtext avatarURL')
+    .execPopulate();
+
+  // I'm doing this, because I want to have only user list under property 'users',
+  // not any socketId or ObjectId, but there is no way to manipulate Mongo Document,
+  // so it it necessary to create new one by copying.
+  const roomWithUsers = await getRoomWithoutUserSockets(room);
+
+  return { room: roomWithUsers, user: userSocket.user };
+};
+
 module.exports = {
-  getUser,
   getUserById,
-  getRoom,
+  getRoomByName,
+  getRoomById,
+  getUserRoomsWithSockets,
+  getUserRoomsWithoutUserSockets,
+  getRoomWithoutUserSockets,
   connectUser,
   disconnectUser,
   getUserData,
-  getUserRooms,
   generateRoomData,
   createMessage,
   createSystemMessage,
@@ -243,4 +273,5 @@ module.exports = {
   joinRoom,
   leaveRoom,
   deleteRoom,
+  removeUser,
 };

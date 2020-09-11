@@ -1,9 +1,7 @@
 import React from 'react';
-
 import 'emoji-mart/css/emoji-mart.css';
-import { Picker as EmojiPicker } from 'emoji-mart';
-
 import Picker from 'react-giphy-picker';
+import { Picker as EmojiPicker } from 'emoji-mart';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -18,7 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import SendIcon from '@material-ui/icons/Send';
 
 import { useRoomData } from '../../../context/RoomDataContext';
-import WorkInProgressDialog from '../../ui/WorkInProgressDialog';
+import WorkInProgressDialog from '../../ui/dialogs/WorkInProgressDialog';
 
 export default function MessageInput({ handleMessageSubmit }) {
   const classes = useStyles();

@@ -20,11 +20,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '4px',
     display: 'flex',
     justifyContent: 'center',
-    // width: '64px',
     width: '72px',
   },
   divider2: {
-    // width: '32px',
     width: '36px',
     height: '2px',
     borderRadius: '1px',

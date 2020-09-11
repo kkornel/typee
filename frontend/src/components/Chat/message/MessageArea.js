@@ -1,26 +1,39 @@
 import React from 'react';
-
 import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
-import Message from './Message';
-import ShortMessage from './ShortMessage';
-import MessageInput from './MessageInput';
-import SystemMessage from './SystemMessage';
 import HorizontalTextDivider from '../../ui/HorizontalTextDivider';
+import Message from './Message';
+import MessageInput from './MessageInput';
+import ShortMessage from './ShortMessage';
+import SystemMessage from './SystemMessage';
+import UserInfoDialog from '../../ui/dialogs/UserInfoDialog';
+
+import { dateFormat } from '../../../utils/dateUtils';
 
 export default function MessageArea({ messages, handleMessageSubmit }) {
   const classes = useStyles();
-
-  const dateFormat = 'MMMM D, YYYY';
 
   const messagesEndRef = React.useRef(null);
 
   React.useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const [dialogData, setDialogData] = React.useState({
+    open: false,
+    user: null,
+  });
+
+  const onUserClick = (user) => {
+    setDialogData({ open: true, user: user });
+  };
+
+  const handleDialogClose = () => {
+    setDialogData({ open: false, user: null });
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behaviour: 'smooth' });
@@ -34,7 +47,9 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
     ) {
       return <ShortMessage key={message._id} message={message} />;
     }
-    return <Message key={message._id} message={message} />;
+    return (
+      <Message key={message._id} message={message} onUserClick={onUserClick} />
+    );
   };
 
   const getDate = (createdAt) => {
@@ -71,7 +86,11 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
             key={message._id + currentIdx}
             text={getDate(message.createdAt)}
           />
-          <Message key={message._id} message={message} />
+          <Message
+            key={message._id}
+            message={message}
+            onUserClick={onUserClick}
+          />
         </React.Fragment>
       );
     }
@@ -93,6 +112,13 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
         </Box>
       </Box>
       <MessageInput handleMessageSubmit={handleMessageSubmit} />
+      {dialogData.open && (
+        <UserInfoDialog
+          user={dialogData.user}
+          handleDialogClose={handleDialogClose}
+          open={dialogData.open}
+        />
+      )}
     </Box>
   );
 }

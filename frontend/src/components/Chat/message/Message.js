@@ -1,5 +1,4 @@
 import React from 'react';
-
 import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,56 +7,18 @@ import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 
 import ArrowTooltip from '../../ui/ArrowTooltip';
-import UserInfoDialog from '../user/UserInfoDialog';
 
-export default function Message({ message }) {
+import { processMessage } from '../../../utils/messageUtils';
+import { longDateFormat, processDate } from '../../../utils/dateUtils';
+
+export default function Message({ message, onUserClick }) {
   const classes = useStyles();
-
-  const [open, setOpen] = React.useState(false);
-
-  const gifRegex = /((<gif>)(.*)(<\/gif>))/;
-  const timeFormat = 'h:mm A';
-  const dateFormat = 'DD/MM/YY | h:mm A';
-  const longDateFormat = 'dddd, MMMM D, YYYY h:mm A';
-
-  const processMsg = (text) => {
-    const matches = text.match(gifRegex);
-    if (matches) {
-      return (
-        <img
-          src={matches[3]}
-          style={{ marginTop: '4px' }}
-          alt={`It is supposed to show GIPHY, but it doesn't!`}
-        />
-      );
-    }
-    return text;
-  };
-
-  const processDate = (createdAt) => {
-    const date = moment(createdAt);
-    const diffHours = moment().diff(date, 'hours');
-    if (diffHours < 24) {
-      return `Today at ${date.format(timeFormat)}`;
-    } else if (diffHours < 48 && diffHours >= 24) {
-      return `Yesterday at ${date.format(timeFormat)}`;
-    }
-    return date.format(dateFormat);
-  };
-
-  const onUserClick = () => {
-    setOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Box className={classes.messagesListItem}>
       <IconButton
         className={classes.messagesListUserIconButton}
-        onClick={onUserClick}
+        onClick={() => onUserClick(message.author)}
       >
         {message.author.avatarURL ? (
           <Avatar
@@ -76,7 +37,7 @@ export default function Message({ message }) {
         <Box className={classes.messagesListItemInfo}>
           <Box
             className={classes.messagesListItemUsername}
-            onClick={onUserClick}
+            onClick={() => onUserClick(message.author)}
           >
             {message.author.username}
           </Box>
@@ -92,14 +53,9 @@ export default function Message({ message }) {
         </Box>
         <Box className={classes.flexDivider}></Box>
         <Box className={classes.messagesListItemContent}>
-          {processMsg(message.text)}
+          {processMessage(message.text)}
         </Box>
       </Box>
-      <UserInfoDialog
-        user={message.author}
-        handleDialogClose={handleDialogClose}
-        open={open}
-      />
     </Box>
   );
 }

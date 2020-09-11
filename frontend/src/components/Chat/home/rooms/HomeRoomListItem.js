@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
-import InteractiveNormalContainedButton from '../../ui/buttons/InteractiveNormalContainedButton';
-import InteractiveDangerContainedButton from '../../ui/buttons/InteractiveDangerContainedButton';
+import InteractiveNormalContainedButton from '../../../ui/buttons/InteractiveNormalContainedButton';
+import InteractiveDangerContainedButton from '../../../ui/buttons/InteractiveDangerContainedButton';
 
 export default function HomeRoomListItem({
   room,

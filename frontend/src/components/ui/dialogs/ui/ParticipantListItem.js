@@ -1,13 +1,12 @@
 import React from 'react';
-
 import classNames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
-import ArrowTooltip from '../../ui/ArrowTooltip';
-import InteractiveDangerButton from '../../ui/buttons/InteractiveDangerButton';
+import ArrowTooltip from '../../ArrowTooltip';
+import InteractiveDangerButton from '../../buttons/InteractiveDangerButton';
 
 export default function ParticipantListItem({ user, onRemoveClick }) {
   const classes = useStyles();

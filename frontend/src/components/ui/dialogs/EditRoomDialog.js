@@ -14,15 +14,13 @@ import TextField from '@material-ui/core/TextField';
 
 import FullPageSpinner from '../FullPageSpinner';
 import HorizontalTextDivider from '../HorizontalTextDivider';
-import ParticipantListItem from '../../chat/home/ParticipantListItem';
-
 import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
+import ParticipantListItem from './ui/ParticipantListItem';
 
 import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
 } from '../../../context/RoomDataContext';
-
 import { useAuth } from '../../../context/AuthContext';
 import { updateRoom } from '../../../utils/room-client';
 
@@ -51,7 +49,7 @@ export default function EditRoomDialog({
   const [deleteCurrent, setDeleteCurrent] = React.useState(false);
 
   const participants = Object.values(room.users).filter(
-    ({ user }) => user._id !== currentUser._id
+    (user) => user._id !== currentUser._id
   );
 
   const handleSave = async () => {
@@ -247,7 +245,7 @@ export default function EditRoomDialog({
               style={{ margin: '10px 4px', color: 'white' }}
             />
             <Box className={classes.participants}>
-              {participants.map(({ user }) => {
+              {participants.map((user) => {
                 return (
                   <ParticipantListItem
                     key={user._id}

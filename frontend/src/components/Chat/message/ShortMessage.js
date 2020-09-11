@@ -1,15 +1,14 @@
 import React from 'react';
-
 import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
+import { timeFormat } from '../../../utils/dateUtils';
+import { processMessage } from '../../../utils/messageUtils';
+
 export default function ShortMessage({ message }) {
   const classes = useStyles();
-
-  const gifRegex = /((<gif>)(.*)(<\/gif>))/;
-  const timeFormat = 'h:mm A';
 
   const changeColor = (event) => {
     const timeSpan = document.getElementById(message._id);
@@ -18,20 +17,6 @@ export default function ShortMessage({ message }) {
     } else if (event.type === 'mouseleave') {
       timeSpan.style.color = '#36393f';
     }
-  };
-
-  const processMsg = (text) => {
-    const matches = text.match(gifRegex);
-    if (matches) {
-      return (
-        <img
-          src={matches[3]}
-          style={{ marginTop: '4px' }}
-          alt={`It is supposed to show GIPHY, but it doesn't!`}
-        />
-      );
-    }
-    return text;
   };
 
   const processDate = (createdAt) => {
@@ -48,7 +33,7 @@ export default function ShortMessage({ message }) {
         {processDate(message.createdAt)}
       </Box>
       <Box className={classes.messagesListItemContent}>
-        {processMsg(message.text)}
+        {processMessage(message.text)}
       </Box>
     </Box>
   );

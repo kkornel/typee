@@ -1,31 +1,34 @@
 import React from 'react';
-
 import { useSnackbar } from 'notistack';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
-import AddRoomDialog from './room/AddRoomDialog';
+import AddRoomDialog from '../ui/dialogs/AddRoomDialog';
 import HomeDashboard from './home/HomeDashboard';
 import MessageArea from './message/MessageArea';
 import MessageAreaBar from './message/MessageAreaBar';
 import UserList from './user/UserList';
 import RoomList from './room/RoomList';
 
-import { useUserData } from '../../context/UserDataContext';
 import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
 } from '../../context/RoomDataContext';
+import { useUserData } from '../../context/UserDataContext';
 
 export default function ChatDashboard({ user, socket }) {
   const classes = useStyles();
-
   const { enqueueSnackbar } = useSnackbar();
+
   const [roomDataState, roomDataDispatch] = useRoomData();
   const { currentRoom } = roomDataState;
-  const { getLastOpenedRoom, setLastOpenedRoom } = useUserData();
+  const {
+    getLastOpenedRoom,
+    setLastOpenedRoom,
+    handleRoomDeleted,
+  } = useUserData();
 
   const [dialogData, setDialogData] = React.useState({
     open: false,
@@ -44,7 +47,10 @@ export default function ChatDashboard({ user, socket }) {
     socket.onUserStatusChanged(onUserStatusChanged);
 
     // TODO: is it necessary?
-    // socket.joinRoom(user._id, getLastOpenedRoom(), joinRoomCallback);
+    const lastOpenedRoom = getLastOpenedRoom();
+    if (lastOpenedRoom) {
+      socket.joinRoom(user._id, lastOpenedRoom, joinRoomCallback);
+    }
   }, []);
 
   const handleSubmit = (text) => {
@@ -63,7 +69,7 @@ export default function ChatDashboard({ user, socket }) {
     socket.roomUpdated(oldName, newName, roomUpdatedCallback);
   };
 
-  const handleLeaveClick = (roomName) => {
+  const leaveRoom = (roomName) => {
     socket.leaveRoom(user._id, roomName, leaveRoomCallback);
   };
 
@@ -87,7 +93,6 @@ export default function ChatDashboard({ user, socket }) {
     }
 
     // TODO: Here eventually set new data with dispatch
-
     console.log('User data received.');
   };
 
@@ -162,6 +167,7 @@ export default function ChatDashboard({ user, socket }) {
     }
 
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.LEAVE_ROOM, payload: room });
+    handleRoomDeleted(room.name);
 
     enqueueSnackbar(`You left ${room.name}`, {
       variant: 'info',
@@ -177,6 +183,7 @@ export default function ChatDashboard({ user, socket }) {
     }
 
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
+    handleRoomDeleted(room.name);
 
     enqueueSnackbar(`Room ${room.name} deleted`, {
       variant: 'error',
@@ -232,6 +239,7 @@ export default function ChatDashboard({ user, socket }) {
     (room) => {
       console.log('onRoomDeleted', room);
       roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
+      handleRoomDeleted(room.name);
     },
     [roomDataDispatch]
   );
@@ -284,11 +292,12 @@ export default function ChatDashboard({ user, socket }) {
             <Grid item xs>
               <Box className={classes.chatT}>
                 <MessageAreaBar
+                  socket={socket}
                   room={currentRoom}
                   isAuthor={currentRoom.author === user._id}
-                  onLeaveClick={handleLeaveClick}
-                  roomUpdated={roomUpdated}
+                  leaveRoom={leaveRoom}
                   deleteRoom={deleteRoom}
+                  roomUpdated={roomUpdated}
                 />
                 <Box className={classes.content}>
                   <MessageArea

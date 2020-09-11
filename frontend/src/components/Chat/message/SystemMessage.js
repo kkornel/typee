@@ -1,14 +1,13 @@
 import React from 'react';
-
 import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
+import { timeFormat } from '../../../utils/dateUtils';
+
 export default function SystemMessage({ message }) {
   const classes = useStyles();
-
-  const timeFormat = 'h:mm A';
 
   const changeColor = (event) => {
     const timeSpan = document.getElementById(message._id);
@@ -19,6 +18,10 @@ export default function SystemMessage({ message }) {
     }
   };
 
+  const processDate = (createdAt) => {
+    return moment(createdAt).format(timeFormat);
+  };
+
   return (
     <Box
       className={classes.systemMessage}
@@ -27,7 +30,7 @@ export default function SystemMessage({ message }) {
     >
       <Box className={classes.systemMessageContent}>{message.text}</Box>
       <Box className={classes.systemMessageTime} id={message._id}>
-        {moment(message.createdAt).format(timeFormat)}
+        {processDate(message.createdAt)}
       </Box>
     </Box>
   );
@@ -68,17 +71,3 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.textNormal,
   },
 }));
-
-// const useStyles = makeStyles((theme) => ({
-//   systemMessage: {
-//     backgroundColor: theme.palette.backgroundPrimary,
-//     padding: '5px 10px 5px 12px',
-//     fontFamily: 'Lucida Console',
-//     fontStyle: 'italic',
-//     fontSize: '11px',
-//     '&:hover': {
-//       background: theme.palette.itemOnHover,
-//     },
-//   },
-// }));
-// return <Box className={classes.systemMessage}>{message.text}</Box>;

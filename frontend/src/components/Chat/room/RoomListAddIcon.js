@@ -27,8 +27,6 @@ export default function RoomListAddIcon({ handleAddClick }) {
 
 const useStyles = makeStyles((theme) => ({
   roomAddBox: {
-    // padding: '8px',
-    // padding: '4px 8px 4px 8px',
     padding: '4px 12px 4px 12px',
   },
   roomAddIcon: {

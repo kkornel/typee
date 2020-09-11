@@ -3,7 +3,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
-import HorizontalLineDivider from '../../ui/HorizontalLineDivider';
+import HorizontalLineDivider from '../../../ui/HorizontalLineDivider';
 
 export default function HomeRoomListHeader({ title }) {
   const classes = useStyles();

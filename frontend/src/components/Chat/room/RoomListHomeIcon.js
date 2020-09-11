@@ -1,5 +1,4 @@
 import React from 'react';
-
 import classNames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -45,7 +44,6 @@ export default function RoomListHomeIcon({ handleHomeClick }) {
 
 const useStyles = makeStyles((theme) => ({
   roomHomeBox: {
-    // padding: '4px 8px 4px 8px',
     padding: '4px 12px 4px 12px',
   },
   roomHomeIcon: {

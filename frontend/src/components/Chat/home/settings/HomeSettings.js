@@ -1,17 +1,13 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-import { useRoomData } from '../../../context/RoomDataContext';
-import { useAuth } from '../../../context/AuthContext';
+import HomeTabList from '../HomeTabList';
 
-import HomeTabList from './HomeTabList';
-import HomeRoomListItem from './HomeRoomListItem';
-import HomeRoomListHeader from './HomeRoomListHeader';
+import { useAuth } from '../../../../context/AuthContext';
+import { useRoomData } from '../../../../context/RoomDataContext';
 
 export default function HomeSettings() {
   const classes = useStyles();

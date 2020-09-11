@@ -45,11 +45,18 @@ function useUserData() {
     return localStorage.getItem(LAST_OPENED_ROOM_KEY);
   }, []);
 
+  const handleRoomDeleted = (roomName) => {
+    if (getLastOpenedRoom() === roomName) {
+      setLastOpenedRoom(null);
+    }
+  };
+
   return {
     state,
     dispatch,
     setLastOpenedRoom,
     getLastOpenedRoom,
+    handleRoomDeleted,
   };
 }
 

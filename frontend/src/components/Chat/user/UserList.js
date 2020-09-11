@@ -6,13 +6,7 @@ import Box from '@material-ui/core/Box';
 import UserListItem from './UserListItem';
 import UserListHeader from './UserListHeader';
 
-// usersListHeader
-// usersListHeaderSpan
-// usersListItemContent
-// usersListItemContentNameInner
-// usersListItemContentNameInnerSpan
-// usersListItemContentSubtext
-// usersListItemContentNameInnerDiv
+import UserInfoDialog from '../../ui/dialogs/UserInfoDialog';
 
 export default function UserList({ users }) {
   const classes = useStyles();
@@ -20,28 +14,48 @@ export default function UserList({ users }) {
   const online = users.filter((user) => user.online === true);
   const offline = users.filter((user) => user.online === false);
 
+  const [dialogData, setDialogData] = React.useState({
+    open: false,
+    user: null,
+  });
+
+  const onUserClick = (user) => {
+    setDialogData({ open: true, user: user });
+  };
+
+  const handleDialogClose = () => {
+    setDialogData({ open: false, user: null });
+  };
+
   return (
     <Box className={classes.usersList}>
       <UserListHeader text={`Online-${online.length}`} />
       {online.map((user) => (
-        <UserListItem user={user} key={user._id} />
+        <UserListItem user={user} key={user._id} onUserClick={onUserClick} />
       ))}
       {online.map((user) => (
-        <UserListItem user={user} key={user._id} />
+        <UserListItem user={user} key={user._id} onUserClick={onUserClick} />
       ))}
       {online.map((user) => (
-        <UserListItem user={user} key={user._id} />
+        <UserListItem user={user} key={user._id} onUserClick={onUserClick} />
       ))}
       <UserListHeader text={`Offline-${offline.length}`} />
       {offline.map((user) => (
-        <UserListItem user={user} key={user._id} />
+        <UserListItem user={user} key={user._id} onUserClick={onUserClick} />
       ))}
       {offline.map((user) => (
-        <UserListItem user={user} key={user._id} />
+        <UserListItem user={user} key={user._id} onUserClick={onUserClick} />
       ))}
       {offline.map((user) => (
-        <UserListItem user={user} key={user._id} />
+        <UserListItem user={user} key={user._id} onUserClick={onUserClick} />
       ))}
+      {dialogData.open && (
+        <UserInfoDialog
+          user={dialogData.user}
+          handleDialogClose={handleDialogClose}
+          open={dialogData.open}
+        />
+      )}
     </Box>
   );
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useSnackbar } from 'notistack';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,21 +7,22 @@ import Box from '@material-ui/core/Box';
 import HomeRoomListItem from './HomeRoomListItem';
 import HomeRoomListHeader from './HomeRoomListHeader';
 
-import ConfirmationDialog from '../../ui/dialogs/ConfirmationDialog';
-import DeleteRoomDialog from '../../ui/dialogs/DeleteRoomDialog';
-import EditRoomDialog from '../../ui/dialogs/EditRoomDialog';
+import EditRoomDialog from '../../../ui/dialogs/EditRoomDialog';
+import DeleteRoomDialog from '../../../ui/dialogs/DeleteRoomDialog';
+import ConfirmationDialog from '../../../ui/dialogs/ConfirmationDialog';
 
 import {
   useRoomData,
   ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../../context/RoomDataContext';
-
-import { useAuth } from '../../../context/AuthContext';
+} from '../../../../context/RoomDataContext';
+import { useAuth } from '../../../../context/AuthContext';
+import { useUserData } from '../../../../context/UserDataContext';
 
 export default function HomeRoomList({ socket }) {
   const classes = useStyles();
 
   const { user } = useAuth();
+  const { handleRoomDeleted } = useUserData();
   const [roomDataState, roomDataDispatch] = useRoomData();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -79,6 +79,7 @@ export default function HomeRoomList({ socket }) {
     }
 
     roomDataDispatch({ type: ROOM_DATA_ACTIONS.LEAVE_ROOM, payload: room });
+    handleRoomDeleted(room.name);
 
     enqueueSnackbar(`You left ${room.name}`, {
       variant: 'info',
