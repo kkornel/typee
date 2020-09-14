@@ -2,30 +2,9 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-
-import HomeTabList from '../HomeTabList';
-
-import { useAuth } from '../../../../context/AuthContext';
-import { useRoomData } from '../../../../context/RoomDataContext';
 
 export default function HomeFriendsList() {
   const classes = useStyles();
-
-  const [selectedTab, setSelectedTab] = React.useState('rooms');
-
-  const [roomDataState, roomDataDispatch] = useRoomData();
-  const { user } = useAuth();
-
-  const managedRooms = Object.values(roomDataState.rooms).filter(
-    (room) => room.author === user._id
-  );
-
-  const participatedRooms = Object.values(roomDataState.rooms).filter(
-    (room) => room.author !== user._id
-  );
-
-  const renderContent = () => {};
 
   return (
     <Box className={classes.homeFriendsList}>

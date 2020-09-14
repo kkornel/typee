@@ -104,7 +104,7 @@ export default function EditRoomDialog({
 
   const onChangeHandler = (event) => {
     setFile(event.target.files[0]);
-    if (room.avatarURL) {
+    if (room.avatarUrl) {
       setDeleteCurrent(true);
     }
   };
@@ -196,12 +196,12 @@ export default function EditRoomDialog({
             ref={inputRef}
           />
         </Box>
-        {room.avatarURL && !file && (
+        {room.avatarUrl && !file && (
           <Box style={{ marginTop: '8px' }}>
             <Box style={{ marginBottom: '4px' }}>Current avatar:</Box>
             <Box>
               <img
-                src={room.avatarURL}
+                src={room.avatarUrl}
                 className={classes.img}
                 alt="Supposed to show very important data"
               />

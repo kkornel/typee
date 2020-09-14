@@ -4,8 +4,8 @@ import { useSnackbar } from 'notistack';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
+import HomeSectionHeader from '../HomeSectionHeader';
 import HomeRoomListItem from './HomeRoomListItem';
-import HomeRoomListHeader from './HomeRoomListHeader';
 
 import EditRoomDialog from '../../../ui/dialogs/EditRoomDialog';
 import DeleteRoomDialog from '../../../ui/dialogs/DeleteRoomDialog';
@@ -138,7 +138,7 @@ export default function HomeRoomList({ socket }) {
 
   return (
     <Box className={classes.homeRoomList}>
-      <HomeRoomListHeader title={'Rooms you manage'} />
+      <HomeSectionHeader title={'Rooms you manage'} />
       {managedRooms.map((room) => (
         <HomeRoomListItem
           room={room}
@@ -148,7 +148,7 @@ export default function HomeRoomList({ socket }) {
           onDeleteClick={onDeleteClick}
         />
       ))}
-      <HomeRoomListHeader title={'Rooms you participate'} />
+      <HomeSectionHeader title={'Rooms you participate'} />
       {participatedRooms.map((room) => (
         <HomeRoomListItem
           room={room}

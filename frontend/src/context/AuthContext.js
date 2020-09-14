@@ -72,7 +72,26 @@ function AuthProvider(props) {
     []
   );
 
-  console.log('AUTHCONTEXT', data);
+  const verifyPassword = React.useCallback(async (userId, password) => {
+    const response = await authClient.verifyPassword(userId, password);
+    return response;
+  });
+
+  const updateProfile = React.useCallback(async (userId, data) => {
+    const response = await authClient.updateProfile(userId, data);
+    setData({ user: response.data.user });
+    return response;
+  }, []);
+
+  const deleteAccount = React.useCallback(
+    async (userId) => {
+      const user = await authClient.deleteAccount(userId);
+      setData(user);
+    },
+    [setData]
+  );
+
+  console.log('AuthContext', data);
   const user = data?.user;
 
   const value = React.useMemo(
@@ -85,6 +104,9 @@ function AuthProvider(props) {
       resendVerificationEmail,
       resetPassword,
       changePassword,
+      verifyPassword,
+      updateProfile,
+      deleteAccount,
     }),
     [
       user,
@@ -95,6 +117,9 @@ function AuthProvider(props) {
       resendVerificationEmail,
       resetPassword,
       changePassword,
+      verifyPassword,
+      updateProfile,
+      deleteAccount,
     ]
   );
 

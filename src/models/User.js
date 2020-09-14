@@ -138,6 +138,7 @@ userSchema.virtual('createdRooms', {
 
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
+    console.log('Password was modified');
     this.password = await bcrypt.hash(this.password, config.hashRounds);
   }
 
@@ -158,6 +159,10 @@ userSchema.statics.findByCredentials = async (email, password) => {
   }
 
   return user;
+};
+
+userSchema.methods.verifyPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
 };
 
 userSchema.methods.getRooms = async function () {

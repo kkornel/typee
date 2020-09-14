@@ -35,7 +35,7 @@ const roomSchema = new Schema({
   avatar: {
     type: Buffer,
   },
-  avatarURL: {
+  avatarUrl: {
     type: String,
   },
 });
@@ -53,7 +53,7 @@ roomSchema.pre('remove', async function (next) {
 roomSchema.methods.getUsersInRoom = async function () {
   await this.populate(
     'users.user',
-    '_id username online avatarURL subtext'
+    '_id username online avatarUrl subtext'
   ).execPopulate();
   const users = this.users.map((user) => user.user);
   return users;

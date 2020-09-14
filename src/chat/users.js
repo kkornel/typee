@@ -196,7 +196,7 @@ const joinRoom = async (roomName, userId, socketId) => {
   await room.save();
   await room.populate('messages').execPopulate();
   await room
-    .populate('messages.author', '_id username subtext avatarURL')
+    .populate('messages.author', '_id username subtext avatarUrl')
     .execPopulate();
 
   // I'm doing this, because I want to have only user list under property 'users',
@@ -245,7 +245,7 @@ const removeUser = async (roomId, userId) => {
 
   await room.populate('messages').execPopulate();
   await room
-    .populate('messages.author', '_id username subtext avatarURL')
+    .populate('messages.author', '_id username subtext avatarUrl')
     .execPopulate();
 
   // I'm doing this, because I want to have only user list under property 'users',

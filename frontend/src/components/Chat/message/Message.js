@@ -20,10 +20,10 @@ export default function Message({ message, onUserClick }) {
         className={classes.messagesListUserIconButton}
         onClick={() => onUserClick(message.author)}
       >
-        {message.author.avatarURL ? (
+        {message.author.avatarUrl ? (
           <Avatar
             className={classes.messagesListItemAvatar}
-            src={message.author.avatarURL}
+            src={message.author.avatarUrl}
             alt={`It is supposed to show user avatar, but it doesn't!`}
           />
         ) : (

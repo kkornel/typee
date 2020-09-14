@@ -1,5 +1,7 @@
 import { client, localStorageKey } from './api-client';
 
+import axios from 'axios';
+
 function handleLoginResponse({ user, token }) {
   if (token) {
     localStorage.setItem(localStorageKey, token);
@@ -21,12 +23,6 @@ function isLoggedIn() {
 }
 
 async function getUser() {
-  // const token = getToken();
-
-  // if (!token) {
-  //   return Promise.resolve(null);
-  // }
-
   const response = await client('users');
   console.log('auth-client getUser response', response);
   return response.user;
@@ -80,6 +76,35 @@ async function changePassword(password) {
   return response;
 }
 
+async function verifyPassword(userId, password) {
+  const response = await client(`users/${userId}/verify`, {
+    body: { password },
+  });
+  console.log('auth-client verifyPassword response', response);
+  return response;
+}
+
+async function deleteAccount(userId) {
+  const response = await client(`users/${userId}/delete`, { body: {} });
+  console.log('auth-client deleteAccount response', response);
+  removeToken();
+  return response;
+}
+
+async function updateProfile(userId, data) {
+  // Can't send files with fetch, so using axios...
+  // const response = await client(`users/${userId}`, {
+  //   body: { data },
+  // });
+  const token = localStorage.getItem(localStorageKey);
+  const response = await axios.post(`/api/v1/users/${userId}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+}
+
 export {
   getToken,
   isLoggedIn,
@@ -91,4 +116,7 @@ export {
   resendVerificationEmail,
   resetPassword,
   changePassword,
+  updateProfile,
+  verifyPassword,
+  deleteAccount,
 };

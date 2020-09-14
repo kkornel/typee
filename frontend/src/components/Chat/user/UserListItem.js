@@ -23,10 +23,10 @@ export default function UserListItem({ user, onUserClick }) {
         <Box className={classes.usersListItemInnerAvatar}>
           <Box className={classes.usersListItemInnerAvatarWrapper}>
             <ArrowTooltip title={user.username}>
-              {user.avatarURL ? (
+              {user.avatarUrl ? (
                 <Avatar
                   className={classes.usersListItemInnerAvatarImg}
-                  src={user.avatarURL}
+                  src={user.avatarUrl}
                 />
               ) : (
                 <Avatar className={classes.usersListItemInnerAvatarWrapper}>

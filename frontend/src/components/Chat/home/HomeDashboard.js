@@ -8,7 +8,7 @@ import HomeFriendsList from './friends/HomeFriendsList';
 import HomeSettings from './settings/HomeSettings';
 
 export default function HomeDashboard({ socket }) {
-  const [selectedTab, setSelectedTab] = React.useState('rooms');
+  const [selectedTab, setSelectedTab] = React.useState('settings');
 
   const renderContent = () => {
     switch (selectedTab) {

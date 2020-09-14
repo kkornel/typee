@@ -36,10 +36,10 @@ export default function RoomListItem({ room, handleRoomClick }) {
           className={classes.roomIcon}
           onClick={onRoomIconClick}
         >
-          {room.avatarURL ? (
+          {room.avatarUrl ? (
             <Avatar
               className={classes.roomIconAvatar}
-              src={room.avatarURL}
+              src={room.avatarUrl}
             ></Avatar>
           ) : (
             <Avatar

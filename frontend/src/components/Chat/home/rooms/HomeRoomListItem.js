@@ -20,8 +20,8 @@ export default function HomeRoomListItem({
     <Box className={classes.homeRoomItem}>
       <Box className={classes.homeRoomItemContent}>
         <Box className={classes.homeRoomItemAvatar}>
-          {room.avatarURL ? (
-            <Avatar className={classes.roomIconAvatar} src={room.avatarURL} />
+          {room.avatarUrl ? (
+            <Avatar className={classes.roomIconAvatar} src={room.avatarUrl} />
           ) : (
             <Avatar className={classes.roomIconAvatar}>
               {room.name[0]}

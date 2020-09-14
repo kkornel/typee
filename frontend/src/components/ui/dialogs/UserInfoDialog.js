@@ -26,9 +26,9 @@ export default function UserInfoDialog({ user, handleDialogClose, open }) {
       <Box className={classes.header}>
         <Box className={classes.headerContent}>
           <Box className={classes.headerImageBox}>
-            {user.avatarURL ? (
+            {user.avatarUrl ? (
               <img
-                src={user.avatarURL}
+                src={user.avatarUrl}
                 className={classes.headerImage}
                 alt="Supposed to show very important data"
               />
