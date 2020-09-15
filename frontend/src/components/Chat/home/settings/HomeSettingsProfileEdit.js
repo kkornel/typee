@@ -14,7 +14,7 @@ import InteractiveNormalButton from '../../../ui/buttons/InteractiveNormalButton
 import OutlinedDangerButton from '../../../ui/buttons/OutlinedDangerButton';
 import PasswordConfirmationDialog from '../../../ui/dialogs/PasswordConfirmationDialog';
 
-import profileUpdateSchema from '../../../../utils/profileUpdateSchema';
+import profileUpdateSchema from '../../../../utils/schemas/profileUpdateSchema';
 
 export default function HomeSettingsProfileEdit({
   user,

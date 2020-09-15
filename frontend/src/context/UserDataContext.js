@@ -14,7 +14,7 @@ const initialState = {
 const UserDataContext = React.createContext();
 
 const userDataReducer = (state, action) => {
-  console.log('userDataReducer', state, action);
+  // console.log('userDataReducer', state, action);
   switch (action.type) {
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);

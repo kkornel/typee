@@ -141,7 +141,6 @@ export default function EditRoomDialog({
       onExit={onExit}
       maxWidth={'xs'}
       fullWidth={true}
-      aria-labelledby="form-dialog-name"
       PaperProps={{ classes: { root: classes.paper } }}
     >
       {loading && <FullPageSpinner />}
@@ -166,9 +165,7 @@ export default function EditRoomDialog({
           variant="outlined"
           className={classes.root}
           InputProps={{ classes: { root: classes.paper } }}
-          InputLabelProps={{
-            shrink: true,
-          }}
+          InputLabelProps={{ shrink: true }}
         />
         <HorizontalTextDivider
           text={'Avatar'}
@@ -183,7 +180,7 @@ export default function EditRoomDialog({
               <img
                 src={URL.createObjectURL(file)}
                 className={classes.img}
-                alt="Supposed to show very important data"
+                alt="It is supposed to show very important data, but it doesn't :("
               />
             </Box>
           )}
@@ -203,7 +200,7 @@ export default function EditRoomDialog({
               <img
                 src={room.avatarUrl}
                 className={classes.img}
-                alt="Supposed to show very important data"
+                alt="It is supposed to show very important data, but it doesn't :("
               />
             </Box>
             <FormControlLabel

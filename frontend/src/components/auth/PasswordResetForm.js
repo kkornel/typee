@@ -13,38 +13,14 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import PasswordResetSchema from '../../utils/PasswordResetSchema';
+import passwordResetSchema from '../../utils/schemas/passwordResetSchema';
 
-const useStyles = makeStyles((theme) => ({
-  mainBox: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(3, 2, 3, 2),
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  title: {
-    fontWeight: 700,
-  },
-  form: {
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    marginTop: theme.spacing(2),
-    textTransform: 'none',
-  },
-  spinner: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  recaptchaError: {
-    color: theme.palette.recaptchaError,
-    textAlign: 'center',
-    fontSize: '12px',
-  },
-}));
-
-function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
+export default function PasswordResetForm({
+  onPasswordReset,
+  isLoading,
+  isError,
+  error,
+}) {
   const classes = useStyles();
   const recaptchaRef = React.useRef();
   const recaptchaErrorRef = React.useRef();
@@ -53,7 +29,7 @@ function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
-    validationSchema: PasswordResetSchema,
+    validationSchema: passwordResetSchema,
   });
 
   const onSubmit = ({ email, username, password }) => {
@@ -143,4 +119,31 @@ function PasswordResetForm({ onPasswordReset, isLoading, isError, error }) {
   );
 }
 
-export default PasswordResetForm;
+const useStyles = makeStyles((theme) => ({
+  mainBox: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(3, 2, 3, 2),
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  title: {
+    fontWeight: 700,
+  },
+  form: {
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    textTransform: 'none',
+  },
+  spinner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  recaptchaError: {
+    color: theme.palette.recaptchaError,
+    textAlign: 'center',
+    fontSize: '12px',
+  },
+}));

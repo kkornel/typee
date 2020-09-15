@@ -15,33 +15,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    // position: 'fixed',
-    backgroundColor: theme.palette.appBarBackground,
-  },
-  toolbar: {
-    flexWrap: 'wrap',
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-  aTag: {
-    color: 'white',
-    textDecoration: 'none',
-  },
-  root: {
-    display: 'flex',
-  },
-}));
-
-function Header() {
+export default function Header() {
   const classes = useStyles();
   const { execute } = useAsync();
   const { user, logout, logoutAll } = useAuth();
@@ -138,4 +112,28 @@ function Header() {
   );
 }
 
-export default Header;
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    // position: 'fixed',
+    backgroundColor: theme.palette.appBarBackground,
+  },
+  toolbar: {
+    flexWrap: 'wrap',
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  margin: {
+    margin: theme.spacing(1),
+  },
+  aTag: {
+    color: 'white',
+    textDecoration: 'none',
+  },
+  root: {
+    display: 'flex',
+  },
+}));

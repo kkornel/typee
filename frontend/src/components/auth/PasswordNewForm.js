@@ -11,45 +11,21 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import PasswordNewSchema from '../../utils/PasswordNewSchema';
+import passwordNewSchema from '../../utils/schemas/passwordNewSchema';
 
-const useStyles = makeStyles((theme) => ({
-  mainBox: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(3, 2, 3, 2),
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  title: {
-    fontWeight: 700,
-  },
-  form: {
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    marginTop: theme.spacing(2),
-    textTransform: 'none',
-  },
-  spinner: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  recaptchaError: {
-    color: theme.palette.recaptchaError,
-    textAlign: 'center',
-    fontSize: '12px',
-  },
-}));
-
-function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
+export default function PasswordResetForm({
+  onNewPassword,
+  isLoading,
+  isError,
+  error,
+}) {
   const classes = useStyles();
 
   const [wasErrorShowed, setWasErrorShowed] = React.useState(false);
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
-    validationSchema: PasswordNewSchema,
+    validationSchema: passwordNewSchema,
   });
 
   const onSubmit = ({ password }) => {
@@ -132,4 +108,31 @@ function PasswordResetForm({ onNewPassword, isLoading, isError, error }) {
   );
 }
 
-export default PasswordResetForm;
+const useStyles = makeStyles((theme) => ({
+  mainBox: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(3, 2, 3, 2),
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  title: {
+    fontWeight: 700,
+  },
+  form: {
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    textTransform: 'none',
+  },
+  spinner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  recaptchaError: {
+    color: theme.palette.recaptchaError,
+    textAlign: 'center',
+    fontSize: '12px',
+  },
+}));

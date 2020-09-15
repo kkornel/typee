@@ -30,7 +30,7 @@ function useSafeDispatch(dispatch) {
 }
 
 function reducer(state, action) {
-  console.log('REDUCER: new state', { ...state, ...action });
+  // console.log('REDUCER: new state', { ...state, ...action });
   return {
     ...state,
     ...action,
@@ -56,12 +56,12 @@ function useAsync() {
       return promise.then(
         (data) => {
           setState({ status: STATUS.RESOLVED, data });
-          console.log('useAsync() run promise .then data:', data);
+          // console.log('useAsync() run :', data);
           return data;
         },
         (error) => {
           setState({ status: STATUS.REJECTED, error });
-          console.log('useAsync() run promise .then error:', error);
+          // console.log('useAsync() run:', error);
           return error;
         }
       );

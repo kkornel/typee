@@ -56,7 +56,6 @@ export default function PasswordConfirmationDialog({
   };
 
   const deleteRoom = (roomName) => {
-    console.log('deleteRoom', roomName, socket);
     socket.deleteRoom(roomName, deleteRoomCallback);
   };
 

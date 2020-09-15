@@ -20,14 +20,10 @@ export default function HomeRoomListItem({
     <Box className={classes.homeRoomItem}>
       <Box className={classes.homeRoomItemContent}>
         <Box className={classes.homeRoomItemAvatar}>
-          {room.avatarUrl ? (
-            <Avatar className={classes.roomIconAvatar} src={room.avatarUrl} />
-          ) : (
-            <Avatar className={classes.roomIconAvatar}>
-              {room.name[0]}
-              {room.name[room.name.length - 1]}
-            </Avatar>
-          )}
+          <Avatar className={classes.roomIconAvatar} src={room.avatarUrl}>
+            {room.name[0]}
+            {room.name[room.name.length - 1]}
+          </Avatar>
         </Box>
         <Box className={classes.homeRoomItemName}>{room.name}</Box>
       </Box>

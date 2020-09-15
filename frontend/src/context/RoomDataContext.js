@@ -20,9 +20,14 @@ const initialState = {
 
 const RoomDataContext = React.createContext();
 
+/**
+ * TODO: Clean switch instruction to be more readable.
+ * Now it has logs for development purpose.
+ */
+
 function roomDataReducer(state, action) {
-  console.log(`roomDataReducer old state`, state);
-  console.log(`roomDataReducer ${action.type}`, action.payload);
+  // console.log(`roomDataReducer old state`, state);
+  // console.log(`roomDataReducer ${action.type}`, action.payload);
   switch (action.type) {
     case ACTIONS.LEAVE_ROOM: {
       // Omit the room that was left

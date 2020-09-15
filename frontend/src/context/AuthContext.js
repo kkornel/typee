@@ -31,13 +31,11 @@ function AuthProvider(props) {
     loadData();
   }, [execute]);
 
-  // Register the user
   const signUp = React.useCallback(
     async (formValues) => await authClient.signUp(formValues),
     []
   );
 
-  // Make a login request
   const signIn = React.useCallback(
     async (formValues) => {
       const user = await authClient.signIn(formValues);
@@ -46,7 +44,6 @@ function AuthProvider(props) {
     [setData]
   );
 
-  // Clear the token in the localStorage and the user data
   const logout = React.useCallback(async () => {
     await authClient.logout();
     setData(null);
@@ -93,7 +90,7 @@ function AuthProvider(props) {
     [setData]
   );
 
-  console.log('AuthContext', data);
+  // console.log('AuthContext', data);
   const user = data?.user;
 
   const value = React.useMemo(

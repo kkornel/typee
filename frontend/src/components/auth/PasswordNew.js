@@ -6,7 +6,7 @@ import PasswordNewForm from './PasswordNewForm';
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
-function PasswordNew() {
+export default function PasswordNew() {
   const history = useHistory();
   const { changePassword } = useAuth();
   const { isLoading, isError, error, execute } = useAsync();
@@ -31,5 +31,3 @@ function PasswordNew() {
     </div>
   );
 }
-
-export default PasswordNew;

@@ -1,8 +1,7 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-
-import classNames from 'classnames';
 
 import {
   Button,
@@ -15,59 +14,9 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import SignUpSchema from '../../utils/SignUpSchema';
+import signUpSchema from '../../utils/schemas/signUpSchema';
 
-const useStyles = makeStyles((theme) => ({
-  mainBox: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(3, 2, 3, 2),
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  title: {
-    fontWeight: 700,
-  },
-  form: {
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    marginTop: theme.spacing(2),
-    textTransform: 'none',
-  },
-  spinner: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  link: {
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
-  signIn: {
-    color: theme.palette.signUpText,
-    fontSize: '14px',
-    marginTop: '4px',
-  },
-  signInLink: {
-    // color: '#9c27b0',
-    color: theme.palette.signUpLink,
-    fontWeight: 700,
-    marginLeft: '4px',
-  },
-  divider: {
-    backgroundColor: theme.palette.signInDivider,
-  },
-  forgotLink: {
-    color: theme.palette.signInResendLink,
-    fontStyle: 'italic',
-    fontSize: '12px',
-    fontWeight: 600,
-  },
-}));
-
-function SignUpForm({ onSignUp, isLoading, isError, error }) {
+export default function SignUpForm({ onSignUp, isLoading, isError, error }) {
   const classes = useStyles();
   const forgotLinkRef = React.useRef();
 
@@ -75,7 +24,7 @@ function SignUpForm({ onSignUp, isLoading, isError, error }) {
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
-    validationSchema: SignUpSchema,
+    validationSchema: signUpSchema,
   });
 
   const onSubmit = ({ email, username, password }) => {
@@ -216,4 +165,52 @@ function SignUpForm({ onSignUp, isLoading, isError, error }) {
   );
 }
 
-export default SignUpForm;
+const useStyles = makeStyles((theme) => ({
+  mainBox: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(3, 2, 3, 2),
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  title: {
+    fontWeight: 700,
+  },
+  form: {
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    textTransform: 'none',
+  },
+  spinner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  link: {
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+  signIn: {
+    color: theme.palette.signUpText,
+    fontSize: '14px',
+    marginTop: '4px',
+  },
+  signInLink: {
+    // color: '#9c27b0',
+    color: theme.palette.signUpLink,
+    fontWeight: 700,
+    marginLeft: '4px',
+  },
+  divider: {
+    backgroundColor: theme.palette.signInDivider,
+  },
+  forgotLink: {
+    color: theme.palette.signInResendLink,
+    fontStyle: 'italic',
+    fontSize: '12px',
+    fontWeight: 600,
+  },
+}));

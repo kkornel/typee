@@ -191,7 +191,7 @@ export default function ManageRoomDialog({
               <img
                 src={URL.createObjectURL(file)}
                 className={classes.img}
-                alt="Supposed to show very important data"
+                alt="It is supposed to show very important data, but it doesn't :("
               />
             </Box>
           )}
@@ -211,7 +211,7 @@ export default function ManageRoomDialog({
               <img
                 src={room.avatarUrl}
                 className={classes.img}
-                alt="Supposed to show very important data"
+                alt="It is supposed to show very important data, but it doesn't :("
               />
             </Box>
             <FormControlLabel
@@ -286,9 +286,7 @@ export default function ManageRoomDialog({
             variant="outlined"
             className={classes.deleteInput}
             InputProps={{ classes: { root: classes.paper } }}
-            InputLabelProps={{
-              shrink: true,
-            }}
+            InputLabelProps={{ shrink: true }}
           />
           <InteractiveDangerButton
             onClick={handleDeleteClick}

@@ -94,9 +94,7 @@ export default function DeleteRoomDialog({
             variant="outlined"
             className={classes.deleteInput}
             InputProps={{ classes: { root: classes.paper } }}
-            InputLabelProps={{
-              shrink: true,
-            }}
+            InputLabelProps={{ shrink: true }}
           />
         </Box>
       </DialogContent>

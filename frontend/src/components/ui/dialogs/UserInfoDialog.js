@@ -3,9 +3,10 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
+
+import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 
 export default function UserInfoDialog({ user, handleDialogClose, open }) {
   const classes = useStyles();
@@ -20,24 +21,19 @@ export default function UserInfoDialog({ user, handleDialogClose, open }) {
       onClose={handleDialogClose}
       maxWidth={'xs'}
       fullWidth={true}
-      aria-labelledby="form-dialog-name"
       PaperProps={{ classes: { root: classes.paper } }}
     >
       <Box className={classes.header}>
         <Box className={classes.headerContent}>
           <Box className={classes.headerImageBox}>
-            {user.avatarUrl ? (
-              <img
-                src={user.avatarUrl}
-                className={classes.headerImage}
-                alt="Supposed to show very important data"
-              />
-            ) : (
-              <Avatar className={classes.headerImage}>
-                {user.username[0]}
-                {user.username[1]}
-              </Avatar>
-            )}
+            <Avatar
+              className={classes.headerImage}
+              src={user.avatarUrl}
+              alt="It is supposed to show very important data, but it doesn't :("
+            >
+              {user.username[0]}
+              {user.username[1]}
+            </Avatar>
           </Box>
           {user.username}
         </Box>
@@ -47,18 +43,12 @@ export default function UserInfoDialog({ user, handleDialogClose, open }) {
         <Box className={classes.sectionContent}>{user.subtext}</Box>
       </Box>
       <DialogActions>
-        <Button
-          onClick={handleAddFriend}
-          className={classes.interactiveMutedButton}
-        >
+        <InteractiveNormalButton disabled onClick={handleAddFriend}>
           Add Friend
-        </Button>
-        <Button
-          onClick={handleDialogClose}
-          className={classes.interactiveNormalButton}
-        >
+        </InteractiveNormalButton>
+        <InteractiveNormalButton onClick={handleDialogClose}>
           Cancel
-        </Button>
+        </InteractiveNormalButton>
       </DialogActions>
     </Dialog>
   );
@@ -104,19 +94,5 @@ const useStyles = makeStyles((theme) => ({
   sectionContent: {
     fontSize: '12px',
     color: theme.palette.textNormal,
-  },
-  interactiveNormalButton: {
-    color: theme.palette.interactiveNormal,
-    '&:hover': {
-      color: theme.palette.interactiveHover,
-      backgroundColor: theme.palette.interactiveMuted,
-    },
-  },
-  interactiveMutedButton: {
-    color: theme.palette.interactiveMuted,
-    '&:hover': {
-      cursor: 'unset',
-      backgroundColor: theme.palette.backgroundPrimary,
-    },
   },
 }));

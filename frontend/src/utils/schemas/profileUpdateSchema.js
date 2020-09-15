@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import passwordValidator from './passwordValidator';
+import passwordValidator from '../passwordValidator';
 
 const profileUpdateSchema = yup.object().shape({
   email: yup.string().required('Required.').email('Invalid email.'),

@@ -1,13 +1,14 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+
+import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 
 export default function AddRoomDialog({
   dialogData,
@@ -49,7 +50,6 @@ export default function AddRoomDialog({
       open={open}
       onClose={handleDialogClose}
       onExit={onExit}
-      aria-labelledby="form-dialog-title"
       PaperProps={{ classes: { root: classes.paper } }}
     >
       <DialogTitle>Create a new room or join existing one</DialogTitle>
@@ -73,24 +73,15 @@ export default function AddRoomDialog({
         />
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={onDialogClose}
-          className={classes.interactiveNormalButton}
-        >
+        <InteractiveNormalButton onClick={onDialogClose}>
           Cancel
-        </Button>
-        <Button
-          onClick={onJoinRoomClick}
-          className={classes.interactiveNormalButton}
-        >
+        </InteractiveNormalButton>
+        <InteractiveNormalButton onClick={onJoinRoomClick}>
           Join
-        </Button>
-        <Button
-          onClick={onCreateRoomClick}
-          className={classes.interactiveNormalButton}
-        >
+        </InteractiveNormalButton>
+        <InteractiveNormalButton onClick={onCreateRoomClick}>
           Create
-        </Button>
+        </InteractiveNormalButton>
       </DialogActions>
     </Dialog>
   );

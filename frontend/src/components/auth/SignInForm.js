@@ -1,8 +1,7 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-
-import classNames from 'classnames';
 
 import {
   Button,
@@ -13,88 +12,16 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import SignInSchema from '../../utils/SignInSchema';
+import signInSchema from '../../utils/schemas/signInSchema';
 
-const useStyles = makeStyles((theme) => ({
-  mainBox: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(3, 2, 3, 2),
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  title: {
-    fontWeight: 700,
-  },
-  form: {
-    marginTop: theme.spacing(1),
-  },
-  passwordInput: {
-    marginBottom: '2px',
-  },
-  submit: {
-    marginTop: theme.spacing(2),
-    textTransform: 'none',
-  },
-  spinner: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  or: {
-    margin: theme.spacing(2, 0, 2),
-    color: theme.palette.signInOr,
-  },
-  link: {
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-      cursor: 'pointer',
-    },
-  },
-  signUp: {
-    color: theme.palette.signUpText,
-    fontSize: '14px',
-    marginTop: '4px',
-  },
-  signUpLink: {
-    // color: '#9c27b0',
-    color: theme.palette.signUpLink,
-    fontWeight: 700,
-    marginLeft: '4px',
-  },
-  forgotLink: {
-    color: theme.palette.signInForgotLink,
-    fontStyle: 'italic',
-    fontSize: '12px',
-  },
-  resendLink: {
-    color: theme.palette.signInResendLink,
-    fontStyle: 'italic',
-    fontSize: '12px',
-    fontWeight: 600,
-  },
-  divider: {
-    backgroundColor: theme.palette.signInDivider,
-  },
-}));
+import GoogleButton from '../ui/buttons/GoogleButton';
 
-const GoogleButton = withStyles((theme) => ({
-  root: {
-    color: theme.palette.getContrastText(theme.palette.signInGoogleButton),
-    textTransform: 'none',
-    backgroundColor: theme.palette.signInGoogleButton,
-    '&:hover': {
-      backgroundColor: theme.palette.signInGoogleButtonOnHover,
-    },
-  },
-}))(Button);
-
-function SignInForm({
+export default function SignInForm({
   onSignIn,
   isLoading,
   isError,
@@ -119,7 +46,7 @@ function SignInForm({
     getValues,
   } = useForm({
     mode: 'onBlur',
-    validationSchema: SignInSchema,
+    validationSchema: signInSchema,
   });
 
   const onSubmit = (formValues) => {
@@ -258,4 +185,65 @@ function SignInForm({
   );
 }
 
-export default SignInForm;
+const useStyles = makeStyles((theme) => ({
+  mainBox: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(3, 2, 3, 2),
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  title: {
+    fontWeight: 700,
+  },
+  form: {
+    marginTop: theme.spacing(1),
+  },
+  passwordInput: {
+    marginBottom: '2px',
+  },
+  submit: {
+    marginTop: theme.spacing(2),
+    textTransform: 'none',
+  },
+  spinner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  or: {
+    margin: theme.spacing(2, 0, 2),
+    color: theme.palette.signInOr,
+  },
+  link: {
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+      cursor: 'pointer',
+    },
+  },
+  signUp: {
+    color: theme.palette.signUpText,
+    fontSize: '14px',
+    marginTop: '4px',
+  },
+  signUpLink: {
+    // color: '#9c27b0',
+    color: theme.palette.signUpLink,
+    fontWeight: 700,
+    marginLeft: '4px',
+  },
+  forgotLink: {
+    color: theme.palette.signInForgotLink,
+    fontStyle: 'italic',
+    fontSize: '12px',
+  },
+  resendLink: {
+    color: theme.palette.signInResendLink,
+    fontStyle: 'italic',
+    fontSize: '12px',
+    fontWeight: 600,
+  },
+  divider: {
+    backgroundColor: theme.palette.signInDivider,
+  },
+}));

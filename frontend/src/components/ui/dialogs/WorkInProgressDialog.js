@@ -2,12 +2,12 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 
 export default function WorkInProgressDialog({
   open,
@@ -22,7 +22,6 @@ export default function WorkInProgressDialog({
       onClose={handleDialogClose}
       maxWidth={'sm'}
       fullWidth={true}
-      aria-labelledby="form-dialog-name"
       PaperProps={{ classes: { root: classes.paper } }}
     >
       <DialogTitle
@@ -58,12 +57,9 @@ export default function WorkInProgressDialog({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleDialogClose}
-          className={classes.interactiveNormalButton}
-        >
+        <InteractiveNormalButton onClick={handleDialogClose}>
           OKAY :(
-        </Button>
+        </InteractiveNormalButton>
       </DialogActions>
     </Dialog>
   );
@@ -76,22 +72,5 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     color: theme.palette.textNormal,
-  },
-  img: {
-    // width: '532px',
-    // height: '323px',
-  },
-  image: {
-    // marginLeft: '110px',
-    // marginBottom: '15px',
-    // margin: 'auto',
-    // width: '50%',
-  },
-  interactiveNormalButton: {
-    color: theme.palette.interactiveNormal,
-    '&:hover': {
-      color: theme.palette.interactiveHover,
-      backgroundColor: theme.palette.interactiveMuted,
-    },
   },
 }));

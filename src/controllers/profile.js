@@ -7,6 +7,11 @@ const { errorFormatter } = require('../validators/profile');
 const { getResizedBuffer, getDataUri } = require('../utils/imageUtils');
 const { cloudinaryUpload, cloudinaryDelete } = require('../utils/cloudinary');
 
+const users = async (req, res) => {
+  console.log('/users');
+  res.send({ user: req.user });
+};
+
 const updateProfile = async (req, res, next) => {
   console.log(`/users/${req.params.id}`);
 
@@ -197,6 +202,7 @@ const deleteAccount = async (req, res, next) => {
 };
 
 module.exports = {
+  users,
   updateProfile,
   verifyPassword,
   deleteAccount,

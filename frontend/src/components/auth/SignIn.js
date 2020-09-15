@@ -8,7 +8,7 @@ import SignInForm from './SignInForm';
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
-function SignIn(props) {
+export default function SignIn(props) {
   let isMounted = false;
   const { state } = props.location;
 
@@ -62,5 +62,3 @@ function SignIn(props) {
     </Container>
   );
 }
-
-export default SignIn;

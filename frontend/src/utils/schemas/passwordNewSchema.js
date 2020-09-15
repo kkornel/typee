@@ -1,14 +1,8 @@
 import * as yup from 'yup';
 
-import passwordValidator from './passwordValidator';
+import passwordValidator from '../passwordValidator';
 
-const SignUpSchema = yup.object().shape({
-  email: yup.string().required('Required.').email('Invalid email.'),
-  username: yup
-    .string()
-    .required('Required.')
-    .min(4, 'Min length is 4.')
-    .max(18, 'Max length is 18.'),
+const passwordNewSchema = yup.object().shape({
   password: yup
     .string()
     .required('Required.')
@@ -27,4 +21,4 @@ const SignUpSchema = yup.object().shape({
     }),
 });
 
-export default SignUpSchema;
+export default passwordNewSchema;
