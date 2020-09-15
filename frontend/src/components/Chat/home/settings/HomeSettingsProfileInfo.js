@@ -5,11 +5,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
 import PurpleButton from '../../../ui/buttons/PurpleButton';
+import RedDarkButton from '../../../ui/buttons/RedDarkButton';
 import HomeSectionHeader from '../HomeSectionHeader';
 
 export default function HomeSettingsProfileInfo({
   user,
   onEditClick,
+  onLogoutClick,
   showProfileEdit,
 }) {
   const classes = useStyles();
@@ -38,10 +40,17 @@ export default function HomeSettingsProfileInfo({
             <Box className={classes.profileInfoContent}>{user.email}</Box>
           </Box>
         </Box>
-        <Box>
-          {!showProfileEdit && (
-            <PurpleButton onClick={onEditClick}>Edit</PurpleButton>
-          )}
+        <Box className={classes.profileButtonsBox}>
+          <Box className={classes.profileButtonsEdit}>
+            {!showProfileEdit && (
+              <PurpleButton onClick={onEditClick} style={{ width: '100%' }}>
+                Edit
+              </PurpleButton>
+            )}
+          </Box>
+          <Box className={classes.profileButtonsLogout}>
+            <RedDarkButton onClick={onLogoutClick}>Logout</RedDarkButton>
+          </Box>
         </Box>
       </Box>
     </Box>
@@ -83,5 +92,18 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '14px',
     fontFamily: 'Roboto',
     color: theme.palette.headerSecondary,
+  },
+  profileButtonsBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
+  },
+  profileButtonsEdit: {
+    display: 'flex',
+  },
+  profileButtonsLogout: {
+    display: 'flex',
+    alignSelf: 'flex-end',
   },
 }));

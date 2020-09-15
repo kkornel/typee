@@ -30,6 +30,7 @@ const theme = createMuiTheme({
     greenAlt: '#3ca374',
     red: '#f04747',
     redAlt: '#C7312F',
+    redDark: '#423337',
     purple: '#7289da',
     purpleAlt: '#677bc4',
 

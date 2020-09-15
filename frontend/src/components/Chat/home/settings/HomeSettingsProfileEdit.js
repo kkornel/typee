@@ -218,7 +218,7 @@ export default function HomeSettingsProfileEdit({
               </OutlinedDangerButton>
               <Box>
                 <InteractiveNormalButton
-                  onClick={() => setOpen(false)}
+                  onClick={onCancelClick}
                   style={{ marginRight: '20px' }}
                 >
                   Cancel

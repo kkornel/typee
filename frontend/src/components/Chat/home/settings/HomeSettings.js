@@ -7,14 +7,16 @@ import Box from '@material-ui/core/Box';
 import HomeSettingsProfileInfo from './HomeSettingsProfileInfo';
 import HomeSettingsProfileEdit from './HomeSettingsProfileEdit';
 
+import { useAsync } from '../../../../utils/useAsync';
 import { useAuth } from '../../../../context/AuthContext';
 
 export default function HomeSettings({ socket }) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { user, updateProfile } = useAuth();
+  const { execute } = useAsync();
+  const { user, updateProfile, logout } = useAuth();
 
-  const [showProfileEdit, setShowProfileEdit] = React.useState(true);
+  const [showProfileEdit, setShowProfileEdit] = React.useState(false);
 
   const onSuccessfulUpdate = () => {
     setShowProfileEdit(false);
@@ -31,6 +33,7 @@ export default function HomeSettings({ socket }) {
         user={user}
         showProfileEdit={showProfileEdit}
         onEditClick={() => setShowProfileEdit(true)}
+        onLogoutClick={async () => await execute(logout())}
       />
       {showProfileEdit && (
         <HomeSettingsProfileEdit
