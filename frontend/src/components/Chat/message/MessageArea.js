@@ -40,6 +40,14 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
   };
 
   const getMessage = (message, idx) => {
+    // TODO how to display deleted user?
+    if (!message.author) {
+      message.author = {
+        _id: 'TODO123',
+        username: 'Account Deleted',
+      };
+    }
+
     if (
       idx !== 0 &&
       messages[idx - 1].author &&

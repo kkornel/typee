@@ -208,6 +208,7 @@ const joinRoom = async (roomName, userId, socketId) => {
 };
 
 const leaveRoom = async (roomName, userId) => {
+  console.log('leaveRoom', roomName, userId);
   const { error, room } = await getRoomByName(roomName);
 
   if (error) {

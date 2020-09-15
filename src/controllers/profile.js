@@ -173,7 +173,7 @@ const verifyPassword = async (req, res, next) => {
 const deleteAccount = async (req, res, next) => {
   const { id } = req.params;
   const { user } = req;
-  console.log(`/${id}/delete`, user);
+  console.log(`/${id}/delete`);
 
   const isAuthorized = id === user._id.toString();
 
@@ -182,8 +182,15 @@ const deleteAccount = async (req, res, next) => {
   }
 
   try {
-    console.log(`/${id}/delete`, req.body);
-    res.send({ user: null });
+    await user.populate('rooms').execPopulate();
+    await user.populate('createdRooms').execPopulate();
+
+    const createdRooms = user.createdRooms.map((room) => room.name);
+
+    await user.remove();
+
+    // Sending names of created rooms in order to emit deleteRoom event to others
+    res.send({ user, createdRooms });
   } catch (error) {
     next(error);
   }

@@ -72,10 +72,11 @@ function AuthProvider(props) {
     []
   );
 
-  const verifyPassword = React.useCallback(async (userId, password) => {
-    const response = await authClient.verifyPassword(userId, password);
-    return response;
-  });
+  const verifyPassword = React.useCallback(
+    async (userId, password) =>
+      await authClient.verifyPassword(userId, password),
+    []
+  );
 
   const updateProfile = React.useCallback(async (userId, data) => {
     const response = await authClient.updateProfile(userId, data);
@@ -84,8 +85,9 @@ function AuthProvider(props) {
   }, []);
 
   const deleteAccount = React.useCallback(
-    async (userId) => {
-      const user = await authClient.deleteAccount(userId);
+    async (userId, callback) => {
+      const { user, createdRooms } = await authClient.deleteAccount(userId);
+      callback(createdRooms);
       setData(user);
     },
     [setData]

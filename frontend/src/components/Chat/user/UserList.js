@@ -11,8 +11,8 @@ import UserInfoDialog from '../../ui/dialogs/UserInfoDialog';
 export default function UserList({ users }) {
   const classes = useStyles();
 
-  const online = users.filter((user) => user.online === true);
-  const offline = users.filter((user) => user.online === false);
+  const online = users.filter((user) => user?.online === true);
+  const offline = users.filter((user) => user?.online === false);
 
   const [dialogData, setDialogData] = React.useState({
     open: false,

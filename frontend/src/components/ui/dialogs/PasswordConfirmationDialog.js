@@ -14,11 +14,17 @@ import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 
 import { useAsync } from '../../../utils/useAsync';
 import { useAuth } from '../../../context/AuthContext';
+import { useUserData } from '../../../context/UserDataContext';
 
-export default function PasswordConfirmationDialog({ open, onDialogCancel }) {
+export default function PasswordConfirmationDialog({
+  open,
+  socket,
+  onDialogCancel,
+}) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
+  const { setLastOpenedRoom } = useUserData();
   const { isLoading, isError, error, execute } = useAsync();
   const { verifyPassword, user, deleteAccount } = useAuth();
 
@@ -33,13 +39,33 @@ export default function PasswordConfirmationDialog({ open, onDialogCancel }) {
     console.log('onDeleteClick response ', response);
 
     if (response.success) {
-      await execute(deleteAccount(user._id));
+      await execute(deleteAccount(user._id, deleteAccountCallback));
 
       enqueueSnackbar(`Account has been deleted`, {
         variant: 'success',
         autoHideDuration: 2000,
       });
     }
+  };
+
+  const deleteAccountCallback = (createdRooms) => {
+    console.log('deleteAccountCallback', createdRooms);
+    createdRooms.forEach((room) => {
+      deleteRoom(room);
+    });
+  };
+
+  const deleteRoom = (roomName) => {
+    console.log('deleteRoom', roomName, socket);
+    socket.deleteRoom(roomName, deleteRoomCallback);
+  };
+
+  const deleteRoomCallback = ({ error, room }) => {
+    if (error) {
+      console.log('handleDeleteRoomCallback', error);
+    }
+    setLastOpenedRoom(null);
+    console.log(`The room ${room.name} has been deleted.`);
   };
 
   return (

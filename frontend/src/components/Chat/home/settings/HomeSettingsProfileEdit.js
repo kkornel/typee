@@ -18,6 +18,7 @@ import profileUpdateSchema from '../../../../utils/profileUpdateSchema';
 
 export default function HomeSettingsProfileEdit({
   user,
+  socket,
   updateProfile,
   onCancelClick,
   onSuccessfulUpdate,
@@ -230,6 +231,7 @@ export default function HomeSettingsProfileEdit({
       </Box>
       <PasswordConfirmationDialog
         open={open}
+        socket={socket}
         onDialogCancel={() => setOpen(false)}
       />
     </Box>

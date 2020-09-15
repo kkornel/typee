@@ -9,7 +9,7 @@ import HomeSettingsProfileEdit from './HomeSettingsProfileEdit';
 
 import { useAuth } from '../../../../context/AuthContext';
 
-export default function HomeSettings() {
+export default function HomeSettings({ socket }) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { user, updateProfile } = useAuth();
@@ -35,6 +35,7 @@ export default function HomeSettings() {
       {showProfileEdit && (
         <HomeSettingsProfileEdit
           user={user}
+          socket={socket}
           updateProfile={updateProfile}
           onCancelClick={() => setShowProfileEdit(false)}
           onSuccessfulUpdate={onSuccessfulUpdate}

@@ -17,6 +17,8 @@ const { sendEmailAsync } = require('../services/email');
 const verificationTemplate = require('../services/emailTemplates/verificationTemplate');
 const passwordResetTemplate = require('../services/emailTemplates/passwordResetTemplate');
 const Token = require('./Token');
+const Room = require('./Room');
+const { deleteCloudinary } = require('../utils/cloudinary');
 
 // Delete user tasks when user is removed
 // userSchema.pre('remove', async function (next) {
@@ -90,7 +92,8 @@ const userSchema = new Schema(
     ],
     active: {
       type: Boolean,
-      default: false,
+      // TODO uncomment
+      default: true,
     },
     socketId: {
       type: String,
@@ -141,6 +144,53 @@ userSchema.pre('save', async function (next) {
     console.log('Password was modified');
     this.password = await bcrypt.hash(this.password, config.hashRounds);
   }
+
+  next();
+});
+
+const leaveRoom = async (roomName, userId) => {
+  const room = await Room.findOne({ name: roomName })
+    .populate([{ path: 'author' }, { path: 'users.user' }])
+    .exec();
+
+  const users = room.users.filter((user) => !!user.user);
+  room.users = users;
+  await room.save();
+
+  return room;
+};
+
+userSchema.pre('remove', async function (next) {
+  console.log('pre remove user');
+
+  // 1. Delete avatar
+  if (this.avatarUrl) {
+    const res = await deleteCloudinary('users', this._id);
+    console.log('preremove res', res);
+  }
+
+  // 2. Delete all tokens
+  await Token.deleteMany({ user: this._id });
+
+  // 3. Delete all rooms*
+  // Now I'm only leaving the rooms that user participated in, but not created.
+  // Removing created rooms takes place in client side by emitting deleteRoom event via socket.
+  await this.populate('rooms').execPopulate();
+  await this.populate('createdRooms').execPopulate();
+
+  const allParticipatedRooms = this.rooms.map((room) => room.name);
+  const createdRooms = this.createdRooms.map((room) => room.name);
+
+  const participatedRooms = allParticipatedRooms.filter(
+    (room) => !createdRooms.includes(room)
+  );
+
+  participatedRooms.forEach((room) => leaveRoom(room, this._id));
+
+  // await Room.deleteMany({ author: this._id });
+
+  // 4. What about messages and author?
+  // On the client side if there is not message.author created is 'Account deleted' placeholder.
 
   next();
 });

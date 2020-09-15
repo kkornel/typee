@@ -20,18 +20,14 @@ export default function Message({ message, onUserClick }) {
         className={classes.messagesListUserIconButton}
         onClick={() => onUserClick(message.author)}
       >
-        {message.author.avatarUrl ? (
-          <Avatar
-            className={classes.messagesListItemAvatar}
-            src={message.author.avatarUrl}
-            alt={`It is supposed to show user avatar, but it doesn't!`}
-          />
-        ) : (
-          <Avatar className={classes.messagesListItemAvatar}>
-            {message.author.username[0]}
-            {message.author.username[1]}
-          </Avatar>
-        )}
+        <Avatar
+          className={classes.messagesListItemAvatar}
+          src={message.author.avatarUrl}
+          alt={`It is supposed to show user avatar, but it doesn't!`}
+        >
+          {message.author.username[0]}
+          {message.author.username[1]}
+        </Avatar>
       </IconButton>
       <Box>
         <Box className={classes.messagesListItemInfo}>

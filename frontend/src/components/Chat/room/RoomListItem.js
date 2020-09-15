@@ -36,22 +36,16 @@ export default function RoomListItem({ room, handleRoomClick }) {
           className={classes.roomIcon}
           onClick={onRoomIconClick}
         >
-          {room.avatarUrl ? (
-            <Avatar
-              className={classes.roomIconAvatar}
-              src={room.avatarUrl}
-            ></Avatar>
-          ) : (
-            <Avatar
-              className={classNames(
-                classes.roomIconAvatar,
-                isCurrentRoom ? classes.roomIconAvatarCurrent : ''
-              )}
-            >
-              {room.name[0]}
-              {room.name[room.name.length - 1]}
-            </Avatar>
-          )}
+          <Avatar
+            src={room.avatarUrl}
+            className={classNames(
+              classes.roomIconAvatar,
+              isCurrentRoom ? classes.roomIconAvatarCurrent : ''
+            )}
+          >
+            {room.name[0]}
+            {room.name[room.name.length - 1]}
+          </Avatar>
         </IconButton>
       </ArrowTooltip>
     </Box>

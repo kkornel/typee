@@ -120,7 +120,7 @@ function SignUpForm({ onSignUp, isLoading, isError, error }) {
             id="email"
             name="email"
             label="Email"
-            defaultValue="kornelcodes@gmail.com"
+            defaultValue="pawel@gmail.com"
             onFocus={resetErrorsOnFocus}
             error={!!errors.email}
             helperText={!!errors.email ? errors.email.message : null}

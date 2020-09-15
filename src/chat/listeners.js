@@ -126,7 +126,8 @@ const connectionEvent = (io) => {
 
       socket.join(room.name);
 
-      alreadyIsInRoom ? callback({ room }) : callback({ room, rooms });
+      // alreadyIsInRoom ? callback({ room }) : callback({ room, rooms });
+      callback({ room, rooms });
 
       if (!alreadyIsInRoom) {
         const { message, error } = await createSystemMessage(
@@ -211,7 +212,7 @@ const connectionEvent = (io) => {
       const { error, room } = await leaveRoom(roomName, userId);
 
       if (error) {
-        console.log('roomUpdated ERROR', error);
+        console.log('leave ERROR', error);
         return callback({ error });
       }
 

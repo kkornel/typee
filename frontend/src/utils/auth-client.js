@@ -93,9 +93,6 @@ async function deleteAccount(userId) {
 
 async function updateProfile(userId, data) {
   // Can't send files with fetch, so using axios...
-  // const response = await client(`users/${userId}`, {
-  //   body: { data },
-  // });
   const token = localStorage.getItem(localStorageKey);
   const response = await axios.post(`/api/v1/users/${userId}`, data, {
     headers: {

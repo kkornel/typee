@@ -17,7 +17,7 @@ export default function HomeDashboard({ socket }) {
       case 'friends':
         return <HomeFriendsList />;
       case 'settings':
-        return <HomeSettings />;
+        return <HomeSettings socket={socket} />;
     }
   };
 

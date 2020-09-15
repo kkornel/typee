@@ -176,9 +176,7 @@ export default function ManageRoomDialog({
           variant="outlined"
           className={classes.root}
           InputProps={{ classes: { root: classes.paper } }}
-          InputLabelProps={{
-            shrink: true,
-          }}
+          InputLabelProps={{ shrink: true }}
         />
         <HorizontalTextDivider
           text={'Avatar'}
