@@ -43,7 +43,6 @@ export default function SignInForm({
   });
 
   React.useEffect(() => {
-    console.log('useEffect', isError);
     showError();
   }, [isError]);
 
@@ -172,12 +171,12 @@ export default function SignInForm({
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
+    display: 'flex',
+    flexDirection: 'column',
     marginTop: '16px',
     padding: '24px 16px 24px 16px',
     borderRadius: '5px',
     boxShadow: '0 2px 5px 0 #000',
-    display: 'flex',
-    flexDirection: 'column',
     color: theme.palette.textMuted,
     background: theme.palette.backgroundPrimary,
   },

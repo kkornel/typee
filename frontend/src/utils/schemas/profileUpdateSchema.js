@@ -3,13 +3,16 @@ import * as yup from 'yup';
 import passwordValidator from '../passwordValidator';
 
 const profileUpdateSchema = yup.object().shape({
-  email: yup.string().required('Required.').email('Invalid email.'),
+  email: yup
+    .string()
+    .required('This field is required')
+    .email('Invalid email.'),
   username: yup
     .string()
-    .required('Required.')
+    .required('This field is required')
     .min(4, 'Min length is 4.')
     .max(18, 'Max length is 18.'),
-  password: yup.string().required('Required.'),
+  password: yup.string().required('This field is required'),
   newPassword: yup
     .string()
     .test(

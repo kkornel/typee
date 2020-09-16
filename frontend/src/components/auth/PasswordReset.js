@@ -1,6 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
+import Container from '@material-ui/core/Container';
+
 import ROUTES from '../../utils/consts/routes';
 import PasswordResetForm from './PasswordResetForm';
 import { useAuth } from '../../context/AuthContext';
@@ -11,9 +13,8 @@ export default function PasswordReset() {
   const { resetPassword } = useAuth();
   const { isLoading, isError, error, execute } = useAsync();
 
-  const onPasswordReset = async (email, setWasErrorShowed) => {
+  const onPasswordReset = async (email) => {
     const response = await execute(resetPassword(email));
-    setWasErrorShowed(false);
 
     if (response.success) {
       history.push(ROUTES.SIGN_IN, { message: response.message });
@@ -21,13 +22,11 @@ export default function PasswordReset() {
   };
 
   return (
-    <div>
-      <PasswordResetForm
-        onPasswordReset={onPasswordReset}
-        isLoading={isLoading}
-        isError={isError}
-        error={error}
-      />
-    </div>
+    <PasswordResetForm
+      onPasswordReset={onPasswordReset}
+      isLoading={isLoading}
+      isError={isError}
+      error={error}
+    />
   );
 }

@@ -16,6 +16,7 @@ export default function DarkTextFieldStyled(props) {
       variant="filled"
       InputProps={{ className: classes.input }}
       InputLabelProps={{ shrink: true }}
+      FormHelperTextProps={{ className: classes.helperText }}
       {...props}
     />
   );
@@ -24,5 +25,8 @@ export default function DarkTextFieldStyled(props) {
 const useStyles = makeStyles((theme) => ({
   input: {
     color: theme.palette.textNormal,
+  },
+  helperText: {
+    marginLeft: '4px',
   },
 }));
