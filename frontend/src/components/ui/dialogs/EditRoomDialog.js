@@ -167,10 +167,9 @@ export default function EditRoomDialog({
           InputProps={{ classes: { root: classes.paper } }}
           InputLabelProps={{ shrink: true }}
         />
-        <HorizontalTextDivider
-          text={'Avatar'}
-          style={{ margin: '10px 4px', color: 'white' }}
-        />
+        <HorizontalTextDivider style={{ margin: '10px 4px', color: 'white' }}>
+          Avatar
+        </HorizontalTextDivider>
         <Box>
           <DialogContentText className={classes.content}>
             Change room avatar:

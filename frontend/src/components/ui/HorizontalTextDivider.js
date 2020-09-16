@@ -6,11 +6,7 @@ import Box from '@material-ui/core/Box';
 export default function HorizontalTextDivider(props) {
   const classes = useStyles(props);
 
-  return (
-    <Box className={classes.container} {...props}>
-      {props.text}
-    </Box>
-  );
+  return <Box className={classes.container} {...props} />;
 }
 
 const useStyles = makeStyles((theme) => ({

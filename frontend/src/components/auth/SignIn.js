@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Collapse, Container } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import CheckIcon from '@material-ui/icons/Check';
+import Collapse from '@material-ui/core/Collapse';
+import Container from '@material-ui/core/Container';
 
 import SignInForm from './SignInForm';
 import { useAuth } from '../../context/AuthContext';
@@ -13,12 +14,12 @@ export default function SignIn(props) {
   const { state } = props.location;
 
   const { signIn, resendVerificationEmail } = useAuth();
+  const { isLoading, isError, error, execute } = useAsync();
+
   const [open, setOpen] = React.useState(state && !!state.message);
   const [alertMessage, setAlertMessage] = React.useState(
     state && state.message ? state.message : ''
   );
-
-  const { isLoading, isError, error, execute } = useAsync();
 
   React.useEffect(() => {
     isMounted = true;
@@ -26,12 +27,8 @@ export default function SignIn(props) {
     return () => (isMounted = false);
   }, [open]);
 
-  const onSignIn = async (formValues, setWasErrorShowed) => {
+  const onSignIn = async (formValues) => {
     await execute(signIn(formValues));
-
-    if (isMounted) {
-      setWasErrorShowed(false);
-    }
   };
 
   const onResendEmailClicked = async (email) => {

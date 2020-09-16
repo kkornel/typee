@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import TextField from '@material-ui/core/TextField';
 
 import FullPageSpinner from '../../../ui/FullPageSpinner';
+import DarkTextField from '../../../ui/forms/DarkTextField';
 import GreenButton from '../../../ui/buttons/GreenButton';
 import HomeSectionHeader from '../HomeSectionHeader';
 import HorizontalTextDivider from '../../../ui/HorizontalTextDivider';
@@ -123,7 +123,7 @@ export default function HomeSettingsProfileEdit({
         </Box>
         <Box className={classes.profileEditForm}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <EditProfileTextField
+            <DarkTextField
               required
               fullWidth
               size="small"
@@ -139,7 +139,7 @@ export default function HomeSettingsProfileEdit({
               InputProps={{ className: classes.input }}
               InputLabelProps={{ shrink: true }}
             />
-            <EditProfileTextField
+            <DarkTextField
               required
               fullWidth
               size="small"
@@ -155,7 +155,7 @@ export default function HomeSettingsProfileEdit({
               InputProps={{ className: classes.input }}
               InputLabelProps={{ shrink: true }}
             />
-            <EditProfileTextField
+            <DarkTextField
               required
               fullWidth
               size="small"
@@ -172,11 +172,10 @@ export default function HomeSettingsProfileEdit({
               InputProps={{ className: classes.input }}
               InputLabelProps={{ shrink: true }}
             />
-            <HorizontalTextDivider
-              text="Set new password?"
-              style={{ margin: 0, marginTop: '10px' }}
-            />
-            <EditProfileTextField
+            <HorizontalTextDivider style={{ margin: 0, marginTop: '10px' }}>
+              Set new password?
+            </HorizontalTextDivider>
+            <DarkTextField
               fullWidth
               size="small"
               margin="normal"
@@ -193,7 +192,7 @@ export default function HomeSettingsProfileEdit({
               InputProps={{ className: classes.input }}
               InputLabelProps={{ shrink: true }}
             />
-            <EditProfileTextField
+            <DarkTextField
               fullWidth
               size="small"
               margin="normal"
@@ -237,32 +236,6 @@ export default function HomeSettingsProfileEdit({
     </Box>
   );
 }
-
-const EditProfileTextField = withStyles((theme) => ({
-  root: {
-    '& .MuiFormLabel-root': {
-      color: theme.palette.interactiveNormal,
-    },
-    '& label.Mui-focused': {
-      color: theme.palette.purple,
-    },
-    '& .MuiInput-underline': {
-      // borderBottomColor: theme.palette.purple,
-    },
-    '& .MuiFilledInput-underline:before': {
-      // borderBottomColor: theme.palette.purple,
-    },
-    '& .MuiFilledInput-underline:after': {
-      borderBottomColor: theme.palette.purple,
-    },
-    '& .MuiFilledInput-root': {
-      background: theme.palette.textInputBackground,
-      borderTop: `1px solid ${theme.palette.textInputBorder}`,
-      borderLeft: `1px solid ${theme.palette.textInputBorder}`,
-      borderRight: `1px solid ${theme.palette.textInputBorder}`,
-    },
-  },
-}))(TextField);
 
 const useStyles = makeStyles((theme) => ({
   profileEdit: {

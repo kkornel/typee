@@ -76,10 +76,9 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
       if (renderNewDateDivider) {
         return (
           <React.Fragment key={currentIdx + message._id}>
-            <HorizontalTextDivider
-              key={message._id + currentIdx}
-              text={getDate(message.createdAt)}
-            />
+            <HorizontalTextDivider key={message._id + currentIdx}>
+              {getDate(message.createdAt)}
+            </HorizontalTextDivider>
             <SystemMessage key={message._id} message={message} />
           </React.Fragment>
         );

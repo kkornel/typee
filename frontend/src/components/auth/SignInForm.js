@@ -3,23 +3,22 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import {
-  Button,
-  Box,
-  Container,
-  CircularProgress,
-  Divider,
-  TextField,
-  Typography,
-} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import signInSchema from '../../utils/schemas/signInSchema';
-
+import DarkTextFieldStyled from '../ui/forms/DarkTextFieldStyled';
+import FullPageSpinner from '../ui/FullPageSpinner';
 import GoogleButton from '../ui/buttons/GoogleButton';
+import HorizontalTextDivider from '../ui/HorizontalTextDivider';
+import HorizontalLineDivider from '../ui/HorizontalLineDivider';
+import PurpleButton from '../ui/buttons/PurpleButton';
+
+import signInSchema from '../../utils/schemas/signInSchema';
 
 export default function SignInForm({
   onSignIn,
@@ -30,12 +29,6 @@ export default function SignInForm({
 }) {
   const classes = useStyles();
   const resendRef = React.useRef();
-
-  // It was necessary to control, somehow, if the SERVER error was showed,
-  // because the 'error' object and 'isError' are present until re-submission.
-  // So even if, user changed input the error was displayed, because it last
-  // since previous request. The state is set to show error, after making another request.
-  const [wasErrorShowed, setWasErrorShowed] = React.useState(false);
 
   const {
     register,
@@ -49,76 +42,81 @@ export default function SignInForm({
     validationSchema: signInSchema,
   });
 
+  React.useEffect(() => {
+    console.log('useEffect', isError);
+    showError();
+  }, [isError]);
+
   const onSubmit = (formValues) => {
-    onSignIn(formValues, setWasErrorShowed);
+    onSignIn(formValues);
   };
 
   const onResendClicked = async () => {
     const { email } = getValues();
     onResendEmailClicked(email);
     resendRef.current.hidden = true;
-    setWasErrorShowed(true);
   };
 
   const resetErrorsOnFocus = () => {
-    if (!wasErrorShowed) {
-      setWasErrorShowed(true);
-    }
     if (isError) {
       clearError(['email', 'password']);
       resendRef.current.hidden = true;
     }
   };
 
-  if (isError && !wasErrorShowed) {
-    setError('email', error.status, error.message);
-    if (error.status === 'NOT_VERIFIED') {
-      resendRef.current.hidden = false;
-    } else {
-      setError('password', error.status, null);
+  const showError = () => {
+    if (isError) {
+      setError('email', error.status, error.message);
+      if (error.status === 'NOT_VERIFIED') {
+        resendRef.current.hidden = false;
+      } else {
+        setError('password', error.status, null);
+      }
     }
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
-      <Box
-        border={1}
-        borderRadius={12}
-        borderColor="grey.500"
-        className={classes.mainBox}
-      >
+      {isLoading && <FullPageSpinner />}
+      <Box className={classes.mainBox}>
         <Typography component="h1" variant="h5" className={classes.title}>
-          Sign In
+          Welcome back!
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-          <TextField
+        <Typography
+          variant="subtitle2"
+          gutterBottom
+          className={classes.subTitle}
+        >
+          Good to see you again!
+        </Typography>
+        <form
+          autoComplete="off"
+          className={classes.form}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <DarkTextFieldStyled
             autoFocus
-            fullWidth
-            margin="normal"
-            variant="outlined"
             id="email"
             name="email"
             label="Email"
-            defaultValue="kornelcodes@gmail.com"
+            // defaultValue="pawel1@gmail.com"
+            defaultValue="kornelcodess@gmail.com"
             onFocus={resetErrorsOnFocus}
             error={!!errors.email}
             helperText={!!errors.email ? errors.email.message : null}
             inputRef={register}
           />
-          <Box textAlign="right" ref={resendRef} hidden>
+          <Box className={classes.textAlignRight} ref={resendRef} hidden>
             <Box
               component="span"
               onClick={onResendClicked}
-              className={classNames(classes.link, classes.resendLink)}
+              className={classNames(classes.link, classes.forgotResendLink)}
             >
               Resend verification email?
             </Box>
           </Box>
-          <TextField
-            fullWidth
+          <DarkTextFieldStyled
             type="password"
-            margin="normal"
-            variant="outlined"
             id="password"
             name="password"
             label="Password"
@@ -127,56 +125,43 @@ export default function SignInForm({
             error={!!errors.password}
             helperText={!!errors.password ? errors.password.message : null}
             inputRef={register}
-            className={classes.passwordInput}
           />
-          <Box textAlign="right">
+          <Box className={classes.textAlignRight}>
             <Link
               to="/password-reset"
-              className={classNames(classes.link, classes.forgotLink)}
+              className={classNames(classes.link, classes.forgotResendLink)}
             >
-              Forgot Password?
+              Forgot your password?
             </Link>
           </Box>
-          {isLoading && (
-            <Box className={classes.spinner}>
-              <CircularProgress />
-            </Box>
-          )}
-          <Button
-            fullWidth
-            type="submit"
-            color="primary"
-            variant="contained"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
+          <Box className={classes.formButtons}>
+            <PurpleButton type="submit" fullWidth>
+              Sign In
+            </PurpleButton>
+            <HorizontalTextDivider style={{ marginLeft: 0, marginRight: 0 }}>
+              OR
+            </HorizontalTextDivider>
+            <a href="/api/v1/auth/google">
+              <GoogleButton
+                fullWidth
+                variant="contained"
+                startIcon={<FontAwesomeIcon icon={faGoogle} />}
+                style={{ marginTop: '16px' }}
+              >
+                Continue with Google
+              </GoogleButton>
+            </a>
+          </Box>
         </form>
-        <Typography align="center" className={classes.or}>
-          OR
-        </Typography>
-        <a href="/api/v1/auth/google">
-          <GoogleButton
-            fullWidth
-            variant="contained"
-            startIcon={<FontAwesomeIcon icon={faGoogle} />}
-          >
-            Continue with Google
-          </GoogleButton>
-        </a>
-        <Box mt={2}>
-          <Divider className={classes.divider} />
-          <Box
-            display="flex"
-            justifyContent="center"
-            className={classes.signUp}
-          >
-            Don't have an account?
+        <Box className={classes.footerBox}>
+          <HorizontalLineDivider />
+          <Box className={classes.signUp}>
+            Need an account?
             <Link
               to="/sign-up"
               className={classNames(classes.link, classes.signUpLink)}
             >
-              Create One
+              Create one
             </Link>
           </Box>
         </Box>
@@ -187,63 +172,58 @@ export default function SignInForm({
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(3, 2, 3, 2),
+    marginTop: '16px',
+    padding: '24px 16px 24px 16px',
+    borderRadius: '5px',
+    boxShadow: '0 2px 5px 0 #000',
     display: 'flex',
     flexDirection: 'column',
+    color: theme.palette.textMuted,
+    background: theme.palette.backgroundPrimary,
   },
   title: {
-    fontWeight: 700,
+    textAlign: 'center',
+    fontWeight: 600,
+    color: theme.palette.headerPrimary,
+  },
+  subTitle: {
+    marginTop: '8px',
+    textAlign: 'center',
+    color: theme.palette.headerSecondary,
   },
   form: {
-    marginTop: theme.spacing(1),
+    marginTop: '8px',
   },
-  passwordInput: {
-    marginBottom: '2px',
-  },
-  submit: {
-    marginTop: theme.spacing(2),
-    textTransform: 'none',
-  },
-  spinner: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  or: {
-    margin: theme.spacing(2, 0, 2),
-    color: theme.palette.signInOr,
+  textAlignRight: {
+    textAlign: 'right',
   },
   link: {
+    color: theme.palette.purple,
     textDecoration: 'none',
     '&:hover': {
       textDecoration: 'underline',
       cursor: 'pointer',
     },
   },
+  forgotResendLink: {
+    fontSize: '12px',
+    fontWeight: 600,
+    fontStyle: 'italic',
+  },
+  formButtons: {
+    marginTop: '16px',
+  },
+  footerBox: {
+    marginTop: '16px',
+  },
   signUp: {
-    color: theme.palette.signUpText,
+    display: 'flex',
+    justifyContent: 'center',
     fontSize: '14px',
     marginTop: '4px',
   },
   signUpLink: {
-    // color: '#9c27b0',
-    color: theme.palette.signUpLink,
     fontWeight: 700,
     marginLeft: '4px',
-  },
-  forgotLink: {
-    color: theme.palette.signInForgotLink,
-    fontStyle: 'italic',
-    fontSize: '12px',
-  },
-  resendLink: {
-    color: theme.palette.signInResendLink,
-    fontStyle: 'italic',
-    fontSize: '12px',
-    fontWeight: 600,
-  },
-  divider: {
-    backgroundColor: theme.palette.signInDivider,
   },
 }));
