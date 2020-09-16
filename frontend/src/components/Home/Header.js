@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMeteor, faUserAstronaut } from '@fortawesome/free-solid-svg-icons';
+
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
@@ -19,8 +19,6 @@ export default function Header() {
   const classes = useStyles();
   const { execute } = useAsync();
   const { user, logout, logoutAll } = useAuth();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
 
   const onLogout = async () => {
     await execute(logout());
@@ -30,83 +28,44 @@ export default function Header() {
     await execute(logoutAll());
   };
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
-    <AppBar position="static" className={classes.appBar}>
-      <Toolbar className={classes.toolbar}>
-        <IconButton
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="menu"
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          News
-        </Typography>
-        {/* <Link to="/sign-in">
-          <Button color="primary">Login</Button>
-        </Link> */}
-        {user ? (
-          <React.Fragment>
-            <Button onClick={onLogout}>Logout</Button>
-            <Button color="inherit" onClick={onLogoutAll}>
-              Logout all
-            </Button>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <Button component={Link} to="/sign-in" color="inherit">
+    <AppBar className={classes.appBar}>
+      <Toolbar variant="dense" className={classes.toolbar}>
+        <Container maxWidth="md" className={classes.container}>
+          {/* <Container maxWidth="sm" className={classes.root}> */}
+          <Link to="/home" className={classes.homeLink}>
+            <Box className={classes.leftSection}>
+              <FontAwesomeIcon icon={faMeteor} className={classes.icon} />
+              <Typography variant="h6" className={classes.title}>
+                typee
+              </Typography>
+            </Box>
+          </Link>
+
+          <Box className={classes.rightSection}>
+            <Link to="/sign-in" className={classes.link}>
               Sign In
-            </Button>
-            <Button component={Link} to="/sign-up" color="inherit">
+            </Link>
+            <Link to="/sign-up" className={classes.link}>
               Sign Up
-            </Button>
-            <Button component={Link} to="/password-reset" color="inherit">
-              Reset
-            </Button>
-            <Button component={Link} to="/password-reset-new" color="inherit">
-              New
-            </Button>
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          </React.Fragment>
-        )}
+            </Link>
+            <Link to="/about" className={classes.link}>
+              About
+            </Link>
+            {/* <Button component={Link} to="/sign-in" color="inherit">
+            Sign In
+          </Button>
+          <Button component={Link} to="/sign-up" color="inherit">
+            Sign Up
+          </Button>
+          <Button component={Link} to="/password-reset" color="inherit">
+            Reset
+          </Button>
+          <Button component={Link} to="/password-reset-new" color="inherit">
+            New
+          </Button> */}
+          </Box>
+        </Container>
       </Toolbar>
     </AppBar>
   );
@@ -114,26 +73,45 @@ export default function Header() {
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    // position: 'fixed',
+    position: 'static',
     backgroundColor: theme.palette.appBarBackground,
+    // backgroundColor: theme.palette.purpleAlt,
+    // backgroundColor: theme.palette.purpleAlt2,
   },
   toolbar: {
     flexWrap: 'wrap',
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-  aTag: {
-    color: 'white',
-    textDecoration: 'none',
-  },
-  root: {
+  container: {
     display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  homeLink: {
+    textDecoration: 'none',
+    color: 'inherit',
+  },
+  leftSection: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  rightSection: {
+    display: 'flex',
+  },
+  title: {},
+  icon: {
+    marginRight: '10px',
+  },
+  link: {
+    color: theme.palette.headerPrimary,
+    padding: '10px 20px',
+    cursor: 'pointer',
+    textDecoration: 'none',
+    textAlign: 'center',
+    fontSize: '16px',
+    lineHeight: '140%',
+    fontWeight: 600,
+    '&:hover': {
+      textDecoration: 'underline',
+    },
   },
 }));

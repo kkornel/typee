@@ -5,7 +5,7 @@ const theme = createMuiTheme({
     // primary: { 500: '#00ff00' },
     headerPrimary: '#fff',
     headerSecondary: '#b9bbbe',
-    appBarBackground: '#4527a0',
+    appBarBackground: '#23272a',
     // appBarBackground: '#7289da',
     activityCardBackground: '#202225',
     backgroundPrimary: '#36393f',
@@ -34,7 +34,7 @@ const theme = createMuiTheme({
     purple: '#7289da',
     purpleAlt: '#677bc4',
 
-    test: '#8095dd',
+    purpleAlt2: '#8095dd',
 
     logoPrimary: '#fff',
     focusPrimary: '#00b0f4',

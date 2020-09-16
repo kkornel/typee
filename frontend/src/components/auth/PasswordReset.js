@@ -1,10 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import Container from '@material-ui/core/Container';
+import BodyContainer from '../home/BodyContainer';
+import FullPageSpinner from '../ui/FullPageSpinner';
+import PasswordResetForm from './PasswordResetForm';
 
 import ROUTES from '../../utils/consts/routes';
-import PasswordResetForm from './PasswordResetForm';
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
@@ -22,11 +23,13 @@ export default function PasswordReset() {
   };
 
   return (
-    <PasswordResetForm
-      onPasswordReset={onPasswordReset}
-      isLoading={isLoading}
-      isError={isError}
-      error={error}
-    />
+    <BodyContainer>
+      {isLoading && <FullPageSpinner />}
+      <PasswordResetForm
+        onPasswordReset={onPasswordReset}
+        isError={isError}
+        error={error}
+      />
+    </BodyContainer>
   );
 }

@@ -5,7 +5,10 @@ import CheckIcon from '@material-ui/icons/Check';
 import Collapse from '@material-ui/core/Collapse';
 import Container from '@material-ui/core/Container';
 
+import BodyContainer from '../home/BodyContainer';
+import FullPageSpinner from '../ui/FullPageSpinner';
 import SignInForm from './SignInForm';
+
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
@@ -39,23 +42,27 @@ export default function SignIn(props) {
 
   return (
     <Container component="main" maxWidth="sm">
-      <Collapse in={open}>
-        <Alert
-          icon={<CheckIcon fontSize="inherit" />}
-          variant="filled"
-          severity="success"
-          style={{ marginTop: '12px' }}
-        >
-          {alertMessage}
-        </Alert>
-      </Collapse>
-      <SignInForm
-        onSignIn={onSignIn}
-        isLoading={isLoading}
-        isError={isError}
-        error={error}
-        onResendEmailClicked={onResendEmailClicked}
-      />
+      {open && (
+        <Collapse in={open}>
+          <Alert
+            icon={<CheckIcon fontSize="inherit" />}
+            variant="filled"
+            severity="success"
+            style={{ marginTop: '12px' }}
+          >
+            {alertMessage}
+          </Alert>
+        </Collapse>
+      )}
+      <BodyContainer>
+        {isLoading && <FullPageSpinner />}
+        <SignInForm
+          onSignIn={onSignIn}
+          isError={isError}
+          error={error}
+          onResendEmailClicked={onResendEmailClicked}
+        />
+      </BodyContainer>
     </Container>
   );
 }

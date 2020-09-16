@@ -5,17 +5,15 @@ import { useForm } from 'react-hook-form';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
 import DarkTextFieldStyled from '../ui/forms/DarkTextFieldStyled';
-import FullPageSpinner from '../ui/FullPageSpinner';
 import HorizontalLineDivider from '../ui/HorizontalLineDivider';
 import PurpleButton from '../ui/buttons/PurpleButton';
 
 import signUpSchema from '../../utils/schemas/signUpSchema';
 
-export default function SignUpForm({ onSignUp, isLoading, isError, error }) {
+export default function SignUpForm({ onSignUp, isError, error }) {
   const classes = useStyles();
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
@@ -50,107 +48,91 @@ export default function SignUpForm({ onSignUp, isLoading, isError, error }) {
   };
 
   return (
-    <Container component="main" maxWidth="xs" className={classes.container}>
-      {isLoading && <FullPageSpinner />}
-      <Box className={classes.mainBox}>
-        <Typography component="h1" variant="h5" className={classes.title}>
-          Create an account
-        </Typography>
-        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-          <DarkTextFieldStyled
-            autoFocus
-            required
-            id="email"
-            name="email"
-            label="Email"
-            defaultValue="pawel@gmail.com"
-            onFocus={hideError}
-            error={!!errors.email}
-            helperText={!!errors.email ? errors.email.message : null}
-            inputRef={register}
-          />
-          <Box className={classes.textAlignRight} ref={forgotLinkRef} hidden>
+    <React.Fragment>
+      <Typography component="h1" variant="h5" className={classes.title}>
+        Create an account
+      </Typography>
+      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+        <DarkTextFieldStyled
+          autoFocus
+          required
+          id="email"
+          name="email"
+          label="Email"
+          defaultValue="pawel@gmail.com"
+          onFocus={hideError}
+          error={!!errors.email}
+          helperText={!!errors.email ? errors.email.message : null}
+          inputRef={register}
+        />
+        <Box className={classes.textAlignRight} ref={forgotLinkRef} hidden>
+          <Link
+            to="/password-reset"
+            className={classNames(classes.link, classes.forgotLink)}
+          >
+            Forgot your password?
+          </Link>
+        </Box>
+        <DarkTextFieldStyled
+          required
+          id="username"
+          name="username"
+          label="Username"
+          defaultValue="kornel"
+          onFocus={hideError}
+          error={!!errors.username}
+          helperText={!!errors.username ? errors.username.message : null}
+          inputRef={register}
+        />
+        <DarkTextFieldStyled
+          required
+          type="password"
+          id="password"
+          name="password"
+          label="Password"
+          defaultValue="Polska12"
+          error={!!errors.password}
+          helperText={!!errors.password ? errors.password.message : null}
+          inputRef={register}
+        />
+        <DarkTextFieldStyled
+          required
+          type="password"
+          id="passwordConfirmation"
+          name="passwordConfirmation"
+          label="Confirm Password"
+          defaultValue="Polska12"
+          error={!!errors.passwordConfirmation}
+          helperText={
+            !!errors.passwordConfirmation
+              ? errors.passwordConfirmation.message
+              : null
+          }
+          inputRef={register}
+        />
+        <Box className={classes.formButtons}>
+          <PurpleButton type="submit" fullWidth>
+            Sign Up
+          </PurpleButton>
+        </Box>
+        <Box className={classes.footerBox}>
+          <HorizontalLineDivider />
+          <Box className={classes.signIn}>
+            Already have an account?
             <Link
-              to="/password-reset"
-              className={classNames(classes.link, classes.forgotLink)}
+              to="/sign-in"
+              className={classNames(classes.link, classes.signInLink)}
             >
-              Forgot your password?
+              Sign In
             </Link>
           </Box>
-          <DarkTextFieldStyled
-            required
-            id="username"
-            name="username"
-            label="Username"
-            defaultValue="kornel"
-            onFocus={hideError}
-            error={!!errors.username}
-            helperText={!!errors.username ? errors.username.message : null}
-            inputRef={register}
-          />
-          <DarkTextFieldStyled
-            required
-            type="password"
-            id="password"
-            name="password"
-            label="Password"
-            defaultValue="Polska12"
-            error={!!errors.password}
-            helperText={!!errors.password ? errors.password.message : null}
-            inputRef={register}
-          />
-          <DarkTextFieldStyled
-            required
-            type="password"
-            id="passwordConfirmation"
-            name="passwordConfirmation"
-            label="Confirm Password"
-            defaultValue="Polska12"
-            error={!!errors.passwordConfirmation}
-            helperText={
-              !!errors.passwordConfirmation
-                ? errors.passwordConfirmation.message
-                : null
-            }
-            inputRef={register}
-          />
-          <Box className={classes.formButtons}>
-            <PurpleButton type="submit" fullWidth>
-              Sign Up
-            </PurpleButton>
-          </Box>
-          <Box className={classes.footerBox}>
-            <HorizontalLineDivider />
-            <Box className={classes.signIn}>
-              Already have an account?
-              <Link
-                to="/sign-in"
-                className={classNames(classes.link, classes.signInLink)}
-              >
-                Sign In
-              </Link>
-            </Box>
-          </Box>
-        </form>
-      </Box>
-    </Container>
+        </Box>
+      </form>
+    </React.Fragment>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: '16px',
-  },
-  mainBox: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: '16px',
-    padding: '24px 16px 24px 16px',
-    borderRadius: '5px',
-    boxShadow: '0 2px 5px 0 #000',
-    color: theme.palette.textMuted,
-    background: theme.palette.backgroundPrimary,
-  },
   title: {
     textAlign: 'center',
     fontWeight: 600,

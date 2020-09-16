@@ -1,8 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import ROUTES from '../../utils/consts/routes';
+import BodyContainer from '../home/BodyContainer';
+import FullPageSpinner from '../ui/FullPageSpinner';
 import PasswordNewForm from './PasswordNewForm';
+
+import ROUTES from '../../utils/consts/routes';
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
@@ -20,11 +23,13 @@ export default function PasswordNew() {
   };
 
   return (
-    <PasswordNewForm
-      onNewPassword={onNewPassword}
-      isLoading={isLoading}
-      isError={isError}
-      error={error}
-    />
+    <BodyContainer>
+      {isLoading && <FullPageSpinner />}
+      <PasswordNewForm
+        onNewPassword={onNewPassword}
+        isError={isError}
+        error={error}
+      />
+    </BodyContainer>
   );
 }

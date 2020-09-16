@@ -1,12 +1,15 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import ROUTES from '../../utils/consts/routes';
+import BodyContainer from '../home/BodyContainer';
+import FullPageSpinner from '../ui/FullPageSpinner';
 import SignUpForm from './SignUpForm';
+
+import ROUTES from '../../utils/consts/routes';
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
-function SignUp() {
+export default function SignUp() {
   const history = useHistory();
   const { signUp } = useAuth();
   const { isLoading, isError, error, execute } = useAsync();
@@ -25,13 +28,9 @@ function SignUp() {
   };
 
   return (
-    <SignUpForm
-      onSignUp={onSignUp}
-      isLoading={isLoading}
-      isError={isError}
-      error={error}
-    />
+    <BodyContainer>
+      {isLoading && <FullPageSpinner />}
+      <SignUpForm onSignUp={onSignUp} isError={isError} error={error} />
+    </BodyContainer>
   );
 }
-
-export default SignUp;
