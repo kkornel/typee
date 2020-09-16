@@ -3,106 +3,94 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import {
-  Button,
-  Box,
-  Container,
-  CircularProgress,
-  Divider,
-  TextField,
-  Typography,
-} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+
+import DarkTextFieldStyled from '../ui/forms/DarkTextFieldStyled';
+import FullPageSpinner from '../ui/FullPageSpinner';
+import HorizontalLineDivider from '../ui/HorizontalLineDivider';
+import PurpleButton from '../ui/buttons/PurpleButton';
 
 import signUpSchema from '../../utils/schemas/signUpSchema';
 
 export default function SignUpForm({ onSignUp, isLoading, isError, error }) {
   const classes = useStyles();
-  const forgotLinkRef = React.useRef();
-
-  const [wasErrorShowed, setWasErrorShowed] = React.useState(false);
 
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
     validationSchema: signUpSchema,
   });
 
+  const forgotLinkRef = React.useRef();
+
+  React.useEffect(() => {
+    showError();
+  }, [isError]);
+
   const onSubmit = ({ email, username, password }) => {
-    onSignUp({ email, username, password }, setWasErrorShowed);
+    onSignUp({ email, username, password });
   };
 
-  const resetErrorsOnFocus = () => {
-    if (!wasErrorShowed) {
-      setWasErrorShowed(true);
-    }
+  const hideError = () => {
     if (isError) {
       clearError(error.details.field);
       forgotLinkRef.current.hidden = true;
     }
   };
 
-  if (isError && !wasErrorShowed) {
-    setError(error.details.field, error.status, error.message);
-    if (error.details.field === 'email') {
-      forgotLinkRef.current.hidden = false;
+  const showError = () => {
+    if (isError) {
+      setError(error.details.field, error.status, error.message);
+      if (error.details.field === 'email') {
+        forgotLinkRef.current.hidden = false;
+      }
     }
-  }
+  };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        border={1}
-        borderRadius={12}
-        borderColor="grey.500"
-        className={classes.mainBox}
-      >
+    <Container component="main" maxWidth="xs" className={classes.container}>
+      {isLoading && <FullPageSpinner />}
+      <Box className={classes.mainBox}>
         <Typography component="h1" variant="h5" className={classes.title}>
-          Sign Up
+          Create an account
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-          <TextField
+          <DarkTextFieldStyled
             autoFocus
             required
-            fullWidth
-            margin="normal"
-            variant="outlined"
             id="email"
             name="email"
             label="Email"
             defaultValue="pawel@gmail.com"
-            onFocus={resetErrorsOnFocus}
+            onFocus={hideError}
             error={!!errors.email}
             helperText={!!errors.email ? errors.email.message : null}
             inputRef={register}
           />
-          <Box textAlign="right" ref={forgotLinkRef} hidden>
+          <Box className={classes.textAlignRight} ref={forgotLinkRef} hidden>
             <Link
               to="/password-reset"
               className={classNames(classes.link, classes.forgotLink)}
             >
-              Forgot Password?
+              Forgot your password?
             </Link>
           </Box>
-          <TextField
+          <DarkTextFieldStyled
             required
-            fullWidth
-            margin="normal"
-            variant="outlined"
             id="username"
             name="username"
             label="Username"
             defaultValue="kornel"
-            onFocus={resetErrorsOnFocus}
+            onFocus={hideError}
             error={!!errors.username}
             helperText={!!errors.username ? errors.username.message : null}
             inputRef={register}
           />
-          <TextField
+          <DarkTextFieldStyled
             required
-            fullWidth
             type="password"
-            margin="normal"
-            variant="outlined"
             id="password"
             name="password"
             label="Password"
@@ -111,12 +99,9 @@ export default function SignUpForm({ onSignUp, isLoading, isError, error }) {
             helperText={!!errors.password ? errors.password.message : null}
             inputRef={register}
           />
-          <TextField
+          <DarkTextFieldStyled
             required
-            fullWidth
             type="password"
-            margin="normal"
-            variant="outlined"
             id="passwordConfirmation"
             name="passwordConfirmation"
             label="Confirm Password"
@@ -129,27 +114,14 @@ export default function SignUpForm({ onSignUp, isLoading, isError, error }) {
             }
             inputRef={register}
           />
-          {isLoading && (
-            <Box className={classes.spinner}>
-              <CircularProgress />
-            </Box>
-          )}
-          <Button
-            fullWidth
-            type="submit"
-            color="primary"
-            variant="contained"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
-          <Box mt={2}>
-            <Divider className={classes.divider} />
-            <Box
-              display="flex"
-              justifyContent="center"
-              className={classes.signIn}
-            >
+          <Box className={classes.formButtons}>
+            <PurpleButton type="submit" fullWidth>
+              Sign Up
+            </PurpleButton>
+          </Box>
+          <Box className={classes.footerBox}>
+            <HorizontalLineDivider />
+            <Box className={classes.signIn}>
               Already have an account?
               <Link
                 to="/sign-in"
@@ -166,51 +138,56 @@ export default function SignUpForm({ onSignUp, isLoading, isError, error }) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    paddingTop: '16px',
+  },
   mainBox: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(3, 2, 3, 2),
     display: 'flex',
     flexDirection: 'column',
+    marginTop: '16px',
+    padding: '24px 16px 24px 16px',
+    borderRadius: '5px',
+    boxShadow: '0 2px 5px 0 #000',
+    color: theme.palette.textMuted,
+    background: theme.palette.backgroundPrimary,
   },
   title: {
-    fontWeight: 700,
+    textAlign: 'center',
+    fontWeight: 600,
+    color: theme.palette.headerPrimary,
   },
   form: {
-    marginTop: theme.spacing(1),
+    marginTop: '8px',
   },
-  submit: {
-    marginTop: theme.spacing(2),
-    textTransform: 'none',
-  },
-  spinner: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+  textAlignRight: {
+    textAlign: 'right',
   },
   link: {
+    color: theme.palette.purple,
     textDecoration: 'none',
     '&:hover': {
       textDecoration: 'underline',
     },
   },
-  signIn: {
-    color: theme.palette.signUpText,
-    fontSize: '14px',
-    marginTop: '4px',
-  },
-  signInLink: {
-    // color: '#9c27b0',
-    color: theme.palette.signUpLink,
-    fontWeight: 700,
-    marginLeft: '4px',
-  },
-  divider: {
-    backgroundColor: theme.palette.signInDivider,
-  },
   forgotLink: {
-    color: theme.palette.signInResendLink,
     fontStyle: 'italic',
     fontSize: '12px',
     fontWeight: 600,
+  },
+  formButtons: {
+    marginTop: '8px',
+  },
+  footerBox: {
+    marginTop: '8px',
+  },
+  signIn: {
+    fontSize: '14px',
+    marginTop: '4px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  signInLink: {
+    fontWeight: 700,
+    marginLeft: '4px',
   },
 }));

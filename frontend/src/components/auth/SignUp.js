@@ -11,9 +11,8 @@ function SignUp() {
   const { signUp } = useAuth();
   const { isLoading, isError, error, execute } = useAsync();
 
-  const onSignUp = async (formValues, setWasErrorShowed) => {
+  const onSignUp = async (formValues) => {
     const response = await execute(signUp(formValues));
-    setWasErrorShowed(false);
 
     // Can't do this in 'if (isSuccess) {}', because it would be executed
     // before setWasErrorShowed(false) which would cause error:
@@ -26,14 +25,12 @@ function SignUp() {
   };
 
   return (
-    <div>
-      <SignUpForm
-        onSignUp={onSignUp}
-        isLoading={isLoading}
-        isError={isError}
-        error={error}
-      />
-    </div>
+    <SignUpForm
+      onSignUp={onSignUp}
+      isLoading={isLoading}
+      isError={isError}
+      error={error}
+    />
   );
 }
 

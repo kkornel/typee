@@ -48,7 +48,7 @@ export default function PasswordResetForm({
     recaptchaErrorRef.current.hidden = true;
   };
 
-  const resetErrorsOnFocus = () => {
+  const hideError = () => {
     if (isError) {
       clearError(error.details.field);
     }
@@ -82,7 +82,7 @@ export default function PasswordResetForm({
             name="email"
             label="Email"
             defaultValue="kornelcodes@gmail.com"
-            onFocus={resetErrorsOnFocus}
+            onFocus={hideError}
             error={!!errors.email}
             helperText={!!errors.email ? errors.email.message : null}
             inputRef={register}

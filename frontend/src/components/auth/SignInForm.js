@@ -28,7 +28,6 @@ export default function SignInForm({
   onResendEmailClicked,
 }) {
   const classes = useStyles();
-  const resendRef = React.useRef();
 
   const {
     register,
@@ -41,6 +40,8 @@ export default function SignInForm({
     mode: 'onBlur',
     validationSchema: signInSchema,
   });
+
+  const resendRef = React.useRef();
 
   React.useEffect(() => {
     showError();
@@ -56,7 +57,7 @@ export default function SignInForm({
     resendRef.current.hidden = true;
   };
 
-  const resetErrorsOnFocus = () => {
+  const hideError = () => {
     if (isError) {
       clearError(['email', 'password']);
       resendRef.current.hidden = true;
@@ -100,7 +101,7 @@ export default function SignInForm({
             label="Email"
             // defaultValue="pawel1@gmail.com"
             defaultValue="kornelcodess@gmail.com"
-            onFocus={resetErrorsOnFocus}
+            onFocus={hideError}
             error={!!errors.email}
             helperText={!!errors.email ? errors.email.message : null}
             inputRef={register}
@@ -120,7 +121,7 @@ export default function SignInForm({
             name="password"
             label="Password"
             defaultValue="Polska12"
-            onFocus={resetErrorsOnFocus}
+            onFocus={hideError}
             error={!!errors.password}
             helperText={!!errors.password ? errors.password.message : null}
             inputRef={register}
