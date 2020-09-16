@@ -34,6 +34,8 @@ const theme = createMuiTheme({
     purple: '#7289da',
     purpleAlt: '#677bc4',
 
+    test: '#8095dd',
+
     logoPrimary: '#fff',
     focusPrimary: '#00b0f4',
     channelsDefault: '#8e9297',

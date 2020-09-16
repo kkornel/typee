@@ -13,6 +13,7 @@ export default function PurpleButton(props) {
 
 const useStyles = makeStyles((theme) => ({
   purpleButton: {
+    textTransform: 'none',
     color: theme.palette.headerPrimary,
     background: theme.palette.purple,
     '&:hover': {

@@ -1,15 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  Button,
-  Box,
-  Container,
-  CircularProgress,
-  TextField,
-  Typography,
-} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+
+import DarkTextFieldStyled from '../ui/forms/DarkTextFieldStyled';
+import FullPageSpinner from '../ui/FullPageSpinner';
+import PurpleButton from '../ui/buttons/PurpleButton';
 
 import passwordNewSchema from '../../utils/schemas/passwordNewSchema';
 
@@ -21,65 +20,58 @@ export default function PasswordResetForm({
 }) {
   const classes = useStyles();
 
-  const [wasErrorShowed, setWasErrorShowed] = React.useState(false);
-
   const { register, errors, handleSubmit, clearError, setError } = useForm({
     mode: 'onBlur',
     validationSchema: passwordNewSchema,
   });
 
+  React.useEffect(() => {
+    showError();
+  }, [isError]);
+
   const onSubmit = ({ password }) => {
-    onNewPassword(password, setWasErrorShowed);
+    onNewPassword(password);
   };
 
-  const resetErrorsOnFocus = () => {
-    setWasErrorShowed(true);
+  const hideError = () => {
     if (isError) {
       clearError('password');
     }
   };
 
-  if (isError && !wasErrorShowed) {
-    setError('password', error.status, error.message);
-  }
+  const showError = () => {
+    if (isError) {
+      setError('password', error.status, error.message);
+    }
+  };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        border={1}
-        borderRadius={12}
-        borderColor="grey.500"
-        className={classes.mainBox}
-      >
+    <Container component="main" maxWidth="xs" className={classes.container}>
+      {isLoading && <FullPageSpinner />}
+      <Box className={classes.mainBox}>
         <Typography component="h1" variant="h5" className={classes.title}>
-          Set New Password
+          Change Your Password
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-          <TextField
+          <DarkTextFieldStyled
             required
-            fullWidth
             type="password"
-            margin="normal"
-            variant="outlined"
             id="password"
             name="password"
-            label="Password"
-            defaultValue="Polska12"
-            onFocus={resetErrorsOnFocus}
+            label="New password"
+            // defaultValue="Polska12"
+            onFocus={hideError}
             error={!!errors.password}
             helperText={!!errors.password ? errors.password.message : null}
             inputRef={register}
           />
-          <TextField
+          <DarkTextFieldStyled
             required
-            fullWidth
             type="password"
-            margin="normal"
-            variant="outlined"
             id="passwordConfirmation"
             name="passwordConfirmation"
-            label="Confirm Password"
-            defaultValue="Polska12"
+            label="Confirm password"
+            // defaultValue="Polska12"
             error={!!errors.passwordConfirmation}
             helperText={
               !!errors.passwordConfirmation
@@ -88,20 +80,11 @@ export default function PasswordResetForm({
             }
             inputRef={register}
           />
-          {isLoading && (
-            <Box className={classes.spinner}>
-              <CircularProgress />
-            </Box>
-          )}
-          <Button
-            fullWidth
-            type="submit"
-            color="primary"
-            variant="contained"
-            className={classes.submit}
-          >
-            Set New Password
-          </Button>
+          <Box className={classes.formButtons}>
+            <PurpleButton type="submit" fullWidth>
+              Change password
+            </PurpleButton>
+          </Box>
         </form>
       </Box>
     </Container>
@@ -109,30 +92,28 @@ export default function PasswordResetForm({
 }
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    paddingTop: '16px',
+  },
   mainBox: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(3, 2, 3, 2),
     display: 'flex',
     flexDirection: 'column',
+    marginTop: '16px',
+    padding: '24px 16px 24px 16px',
+    borderRadius: '5px',
+    boxShadow: '0 2px 5px 0 #000',
+    color: theme.palette.textMuted,
+    background: theme.palette.backgroundPrimary,
   },
   title: {
-    fontWeight: 700,
+    textAlign: 'center',
+    fontWeight: 600,
+    color: theme.palette.headerPrimary,
   },
   form: {
-    marginTop: theme.spacing(1),
+    marginTop: '8px',
   },
-  submit: {
-    marginTop: theme.spacing(2),
-    textTransform: 'none',
-  },
-  spinner: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  recaptchaError: {
-    color: theme.palette.recaptchaError,
-    textAlign: 'center',
-    fontSize: '12px',
+  formButtons: {
+    marginTop: '8px',
   },
 }));

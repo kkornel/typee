@@ -11,9 +11,8 @@ export default function PasswordNew() {
   const { changePassword } = useAuth();
   const { isLoading, isError, error, execute } = useAsync();
 
-  const onNewPassword = async (password, setWasErrorShowed) => {
+  const onNewPassword = async (password) => {
     const response = await execute(changePassword(password));
-    setWasErrorShowed(false);
 
     if (response.success) {
       history.push(ROUTES.SIGN_IN, { message: response.message });
@@ -21,13 +20,11 @@ export default function PasswordNew() {
   };
 
   return (
-    <div>
-      <PasswordNewForm
-        onNewPassword={onNewPassword}
-        isLoading={isLoading}
-        isError={isError}
-        error={error}
-      />
-    </div>
+    <PasswordNewForm
+      onNewPassword={onNewPassword}
+      isLoading={isLoading}
+      isError={isError}
+      error={error}
+    />
   );
 }
