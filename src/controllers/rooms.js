@@ -6,23 +6,25 @@ const { errorFormatter } = require('../validators/room');
 const { getResizedBuffer, getDataUri } = require('../utils/imageUtils');
 const { cloudinaryUpload, cloudinaryDelete } = require('../utils/cloudinary');
 
-const update = async (req, res, next) => {
-  const { name } = req.params;
+const { getRoomWithoutUserSockets } = require('../chat/users');
 
+const update = async (req, res, next) => {
+  console.log(`/rooms/${req.params.name}`, req.body);
+
+  const errors = validationResult(req).formatWith(errorFormatter);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.mapped() });
+  }
+
+  const { name } = req.params;
   // const { newName, deleteCurrent } = req.body;
   // deleteCurrent was of type String, because of how FormData works
   // so now it is stringified on client side and parsed on server,
   // so deleteCurrent is boolean instead of String
+  const { file } = req;
   const newName = req.body.newName;
-  const deleteCurrent = JSON.parse(req.body.deleteCurrent);
-  const file = req.file;
-
-  const errors = validationResult(req).formatWith(errorFormatter);
-  console.log(errors.errors);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() });
-  }
+  const deleteAvatar = JSON.parse(req.body.deleteAvatar);
 
   try {
     const nameTaken = await Room.findOne({
@@ -42,14 +44,16 @@ const update = async (req, res, next) => {
       .populate('messages.author', '_id username subtext avatarUrl')
       .execPopulate();
 
+    console.log(newName);
+
     if (newName) {
       room.name = newName;
     }
 
-    // deleteCurrent is of type String because of how FormData works
-    // if (deleteCurrent === 'true') {
-    if (deleteCurrent) {
-      const response = await cloudinaryDelete('users', user._id.toString());
+    // deleteAvatar is of type String because of how FormData works
+    // if (deleteAvatar === 'true') {
+    if (deleteAvatar && room.avatarUrl) {
+      const response = await cloudinaryDelete('rooms', room._id.toString());
       console.log('cloudinary response', response);
 
       room.avatar = undefined;
@@ -65,26 +69,34 @@ const update = async (req, res, next) => {
       // 2. To send image instead of binary as a response use:
       // res.set('Content-Type', 'image/png');
       // res.send(room.avatar);
-      room.avatar = buffer;
+      // room.avatar = buffer;
 
       const dataUri = getDataUri(buffer);
 
       try {
         const response = await cloudinaryUpload(
-          'users',
-          user._id.toString(),
+          'room',
+          room._id.toString(),
           dataUri
         );
         console.log('cloudinary response', response);
 
         room.avatarUrl = response.secure_url;
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        console.log('cloudinary error', error);
+        throw new ErrorResponse(
+          500,
+          'Unable to upload image.',
+          'INTERNAL_SERVER_ERROR'
+        );
       }
     }
 
     await room.save();
-    res.send(room);
+
+    const newRoom = await getRoomWithoutUserSockets(room);
+
+    res.send(newRoom);
   } catch (error) {
     next(error);
   }

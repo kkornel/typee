@@ -46,7 +46,7 @@ export default function EditRoomDialog({
 
   const [file, setFile] = React.useState(null);
   const [name, setName] = React.useState('');
-  const [deleteCurrent, setDeleteCurrent] = React.useState(false);
+  const [deleteAvatar, setDeleteAvatar] = React.useState(false);
 
   const participants = Object.values(room.users).filter(
     (user) => user._id !== currentUser._id
@@ -62,7 +62,7 @@ export default function EditRoomDialog({
 
     data.append('newName', name);
     data.append('file', file);
-    data.append('deleteCurrent', JSON.stringify(deleteCurrent));
+    data.append('deleteAvatar', JSON.stringify(deleteAvatar));
 
     try {
       setLoading(true);
@@ -105,7 +105,7 @@ export default function EditRoomDialog({
   const onChangeHandler = (event) => {
     setFile(event.target.files[0]);
     if (room.avatarUrl) {
-      setDeleteCurrent(true);
+      setDeleteAvatar(true);
     }
   };
 
@@ -115,13 +115,13 @@ export default function EditRoomDialog({
   };
 
   const onDeleteCurrentChange = () => {
-    setDeleteCurrent(!deleteCurrent);
+    setDeleteAvatar(!deleteAvatar);
   };
 
   const onExit = () => {
     setFile(null);
     setName('');
-    setDeleteCurrent(false);
+    setDeleteAvatar(false);
     inputRef.current.value = null;
   };
 
@@ -206,7 +206,7 @@ export default function EditRoomDialog({
               className={classes.formControl}
               control={
                 <Checkbox
-                  checked={deleteCurrent}
+                  checked={deleteAvatar}
                   onChange={onDeleteCurrentChange}
                   classes={{
                     root: classes.deleteCurrentRoot,

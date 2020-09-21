@@ -1,0 +1,8 @@
+1) User status changed on connecting
+2) Uncommmet remove user: await room.save()
+
+
+# TODO:
+
+1) Room validate schema both sides
+2) Navbar

@@ -49,7 +49,7 @@ export default function ManageRoomDialog({
 
   const [file, setFile] = React.useState(null);
   const [name, setName] = React.useState('');
-  const [deleteCurrent, setDeleteCurrent] = React.useState(false);
+  const [deleteAvatar, setDeleteAvatar] = React.useState(false);
 
   const [confirmName, setConfirmName] = React.useState('');
   const [confirmNameError, setConfirmNameError] = React.useState(false);
@@ -66,13 +66,13 @@ export default function ManageRoomDialog({
 
     const data = new FormData();
 
-    if (!file && !name && !deleteCurrent) {
+    if (!file && !name && !deleteAvatar) {
       return onDialogClose();
     }
 
     data.append('newName', name);
     data.append('file', file);
-    data.append('deleteCurrent', JSON.stringify(deleteCurrent));
+    data.append('deleteAvatar', JSON.stringify(deleteAvatar));
 
     try {
       setLoading(true);
@@ -104,7 +104,7 @@ export default function ManageRoomDialog({
   const onChangeHandler = (event) => {
     setFile(event.target.files[0]);
     if (room.avatarUrl) {
-      setDeleteCurrent(true);
+      setDeleteAvatar(true);
     }
   };
 
@@ -114,13 +114,13 @@ export default function ManageRoomDialog({
   };
 
   const onDeleteCurrentChange = () => {
-    setDeleteCurrent(!deleteCurrent);
+    setDeleteAvatar(!deleteAvatar);
   };
 
   const onExit = () => {
     setFile(null);
     setName('');
-    setDeleteCurrent(false);
+    setDeleteAvatar(false);
     inputRef.current.value = null;
   };
 
@@ -217,7 +217,7 @@ export default function ManageRoomDialog({
               className={classes.formControl}
               control={
                 <Checkbox
-                  checked={deleteCurrent}
+                  checked={deleteAvatar}
                   onChange={onDeleteCurrentChange}
                   classes={{
                     root: classes.deleteCurrentRoot,
