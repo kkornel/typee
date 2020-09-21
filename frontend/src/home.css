@@ -1,0 +1,92 @@
+/* @import url('https://fonts.googleapis.com/css?family=Montserrat'); */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.typed-title {
+  font-weight: 700;
+  /* color: #677bc4; */
+  color: #ffffff;
+}
+
+.typed-placeholder {
+  font-weight: normal;
+  /* letter-spacing: normal; */
+  /* color: #dcddde; */
+  /* color: #72767d; */
+  color: #b9bbbe;
+  /* color: #4f545c; */
+  letter-spacing: 0rem;
+}
+
+
+
+
+.c {
+    position: fixed;
+    top: 372px;
+    /* bottom: 0; */
+    left: 0px;
+    width: 100%;
+    height: 76px;
+    background-color: #a4bcda;
+    z-index: 1;
+}
+
+
+.typed-text {
+  font-weight: 500;
+  /* font-weight: normal; */
+  /* color: #dd7732; */
+  color: #7289da;
+  letter-spacing: 0rem;
+      /* purple: '#7289da', */
+    /* purpleAlt: '#677bc4', */
+    /* green: '#43b581',
+    greenAlt: '#3ca374', */
+}
+
+.container {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #000;
+  color: #eee;
+  height: calc(100vh - 48px);
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  /* padding-top: 50px; */
+  flex-direction: column;
+}
+.container p {
+  font-size: 3rem;
+  padding: 0.5rem;
+  /* font-weight: bold; */
+  letter-spacing: 0.1rem;
+  text-align: center;
+  overflow: hidden;
+}
+/* .container p span.typed-text { */
+  /* font-weight: normal; */
+  /* color: #dd7732; */
+  /* color: #7289da; */
+      /* purple: '#7289da', */
+    /* purpleAlt: '#677bc4', */
+    /* green: '#43b581', */
+    /* greenAlt: '#3ca374', */
+/* } */
+.container p span.cursor {
+  display: inline-block;
+  background-color: #ccc;
+  margin-left: 0.1rem;
+  width: 3px;
+  animation: blink 1s infinite;
+}
+.container p span.cursor.typing {
+  animation: none;
+}
+@keyframes blink {
+  0%  { background-color: #ccc; }
+  49% { background-color: #ccc; }
+  50% { background-color: transparent; }
+  99% { background-color: transparent; }
+  100%  { background-color: #ccc; }
+}

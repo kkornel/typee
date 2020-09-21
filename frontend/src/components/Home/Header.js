@@ -33,7 +33,7 @@ export default function Header() {
       <Toolbar variant="dense" className={classes.toolbar}>
         <Container maxWidth="md" className={classes.container}>
           {/* <Container maxWidth="sm" className={classes.root}> */}
-          <Link to="/home" className={classes.homeLink}>
+          <Link to="/" className={classes.homeLink}>
             <Box className={classes.leftSection}>
               <FontAwesomeIcon icon={faMeteor} className={classes.icon} />
               <Typography variant="h6" className={classes.title}>
