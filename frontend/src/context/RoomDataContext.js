@@ -107,8 +107,6 @@ function roomDataReducer(state, action) {
       return newState;
     }
     case ACTIONS.UPDATE_ROOM: {
-      // TODO: Here it's loading whole room, with users, messages etc.
-      // Is it necessary?
       const currentRoom = state.currentRoom
         ? {
             ...state.currentRoom,

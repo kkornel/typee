@@ -49,7 +49,7 @@ export default function ChatDashboard({ user, socket }) {
     // TODO: is it necessary?
     const lastOpenedRoom = getLastOpenedRoom();
     if (lastOpenedRoom) {
-      // socket.joinRoom(user._id, lastOpenedRoom, joinRoomCallback);
+      socket.joinRoom(user._id, lastOpenedRoom, joinRoomCallback);
     }
   }, []);
 
@@ -92,7 +92,7 @@ export default function ChatDashboard({ user, socket }) {
       console.log('requestUserDataCallback ERROR', error);
     }
 
-    // TODO: Here eventually set new data with dispatch
+    // Here eventually set new data with dispatch
     console.log('User data received.');
   };
 

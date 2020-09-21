@@ -59,7 +59,6 @@ export default function ManageRoomDialog({
   );
 
   const handleSave = async () => {
-    // TODO: validate
     if (name.length >= 25) {
       return setError('Maximum length is 25');
     }

@@ -182,8 +182,6 @@ describe('POST /api/v1/auth/login', () => {
 });
 
 describe('POST /api/v1/auth/logout', () => {
-  // TODO: Test Google?
-
   it('should respond with 401 for unauthenticated request', async () => {
     const response = await request(app)
       .post('/api/v1/auth/logout')

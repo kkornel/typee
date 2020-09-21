@@ -31,16 +31,6 @@ async function client(endpoint, { body } = {}) {
     config
   );
 
-  // TODO: what to do with this?
-  // if (response.status === 401) {
-  //   logout();
-
-  //   // Refresh the page
-  //   window.location.assign(window.location);
-
-  //   return Promise.reject({ message: 'Please re-authenticate.' });
-  // }
-
   const data = await response.json();
 
   if (!response.ok) {

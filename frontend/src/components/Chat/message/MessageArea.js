@@ -40,10 +40,10 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
   };
 
   const getMessage = (message, idx) => {
-    // TODO how to display deleted user?
+    // TODO How to display deleted user?
     if (!message.author) {
       message.author = {
-        _id: 'TODO123',
+        _id: new Date().getTime().toString(),
         username: 'Account Deleted',
       };
     }
@@ -65,12 +65,19 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
   };
 
   const renderMessage = (message, currentIdx) => {
+    console.log('renderMessage');
     let renderNewDateDivider =
       currentIdx === 0 ||
       !moment(message.createdAt).isSame(
         messages[currentIdx - 1].createdAt,
         'day'
       );
+
+    console.log('renderMessage renderNewDateDivider', renderNewDateDivider);
+    console.log(
+      'renderMessage getDate(message.createdAt)',
+      getDate(message.createdAt)
+    );
 
     if (message.systemMessage) {
       if (renderNewDateDivider) {
@@ -89,10 +96,9 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
     if (renderNewDateDivider) {
       return (
         <React.Fragment key={currentIdx + message._id}>
-          <HorizontalTextDivider
-            key={message._id + currentIdx}
-            text={getDate(message.createdAt)}
-          />
+          <HorizontalTextDivider key={message._id + currentIdx}>
+            {getDate(message.createdAt)}
+          </HorizontalTextDivider>
           <Message
             key={message._id}
             message={message}

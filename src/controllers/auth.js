@@ -55,8 +55,6 @@ const register = async (req, res, next) => {
 
     user.sendVerificationEmail(token.token);
 
-    // TODO: what to return?
-    // res.status(201).send({ user, token });
     res.status(201).send({
       success: true,
       message: `A verification email has been sent to ${user.email}`,
@@ -87,7 +85,7 @@ const login = async (req, res, next) => {
 
     const token = await user.generateAuthToken();
 
-    // TODO: If I don't want to have 'rooms' field in the DB,
+    // If I don't want to have 'rooms' field in the DB,
     // this is the way to get rooms from virtual to new, copied object.
     // const userWithRooms = JSON.parse(JSON.stringify(user));
     // userWithRooms.rooms = await user.getRoomsNames();
