@@ -25,6 +25,7 @@ export default function SignIn(props) {
   );
 
   React.useEffect(() => {
+    document.title = 'Sign in | typee';
     isMounted = true;
     setTimeout(() => (isMounted ? setOpen(false) : null), 7000);
     return () => (isMounted = false);

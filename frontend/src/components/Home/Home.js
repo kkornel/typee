@@ -13,7 +13,7 @@ export default function BodyContainer(props) {
   const cursorSpan = React.useRef(null);
   console.log('ss', cursorSpan);
 
-  const textArray = ['talk...', 'chat...', 'TYPE!'];
+  const textArray = ['chat...', 'talk...', 'TYPE!'];
   const typingDelay = 200;
   const erasingDelay = 100;
   const newTextDelay = 2000; // Delay between current and next text
@@ -24,6 +24,8 @@ export default function BodyContainer(props) {
   let lel2;
 
   React.useEffect(() => {
+    document.title = 'typee';
+
     const id = setTimeout(type, newTextDelay + 250);
     return () => {
       clearTimeout(id);
@@ -73,7 +75,7 @@ export default function BodyContainer(props) {
     <Box>
       <div className="container">
         <Box className={classes.mainBox4}>
-          <div className="c">sadas</div>
+          <div className="c"></div>
 
           <Box className={classes.mainBox2}>
             <img
@@ -93,12 +95,61 @@ export default function BodyContainer(props) {
             &nbsp;
           </span>
         </p>
+        <Box className={classes.buttons}>
+          <a className={classes.buttonDark}>Log in</a>
+          <a className={classes.buttonWhite}>Join us!</a>
+        </Box>
       </div>
     </Box>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
+  buttons: {
+    marginTop: '148px',
+  },
+  buttonWhite: {
+    borderRadius: '28px',
+    fontSize: '20px',
+    padding: '16px 32px',
+    background: 'white',
+    color: '#23272a',
+    lineHeight: '24px',
+    cursor: 'pointer',
+    fontWeight: 500,
+    display: 'inline-flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    '&:hover': {
+      color: theme.palette.purple,
+      boxShadow: `0 2px 15px ${theme.palette.purple}`,
+      // boxShadow: '0 8px 15px white',
+    },
+    transitionTimingFunction: 'ease-in-out',
+    transitionDuration: '.2s',
+    transitionProperty: 'background-color,color,box-shadow,-webkit-box-shadow',
+  },
+  buttonDark: {
+    marginRight: '64px',
+    borderRadius: '28px',
+    fontSize: '20px',
+    padding: '16px 32px',
+    background: '#23272a',
+    color: 'white',
+    lineHeight: '24px',
+    cursor: 'pointer',
+    fontWeight: 500,
+    display: 'inline-flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    '&:hover': {
+      background: '#36393f',
+      boxShadow: '0 2px 15px white',
+    },
+    transitionTimingFunction: 'ease-in-out',
+    transitionDuration: '.2s',
+    transitionProperty: 'background-color,color,box-shadow,-webkit-box-shadow',
+  },
   mainBox4: {
     background: '#d9e8ff',
     width: '100%',

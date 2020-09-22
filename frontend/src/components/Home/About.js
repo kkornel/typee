@@ -7,6 +7,10 @@ import Container from '@material-ui/core/Container';
 export default function BodyContainer(props) {
   const classes = useStyles();
 
+  React.useEffect(() => {
+    document.title = 'About | typee';
+  }, []);
+
   return <Box className={classes.mainBox2}>{'111111111111111111111'}</Box>;
 }
 

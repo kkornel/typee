@@ -14,6 +14,10 @@ export default function SignUp() {
   const { signUp } = useAuth();
   const { isLoading, isError, error, execute } = useAsync();
 
+  React.useEffect(() => {
+    document.title = 'Sign up | typee';
+  }, []);
+
   const onSignUp = async (formValues) => {
     const response = await execute(signUp(formValues));
 

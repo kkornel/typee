@@ -4,6 +4,9 @@
 
 # TODO:
 
+IDEAS
+1) private room for invitations only
+
 1) Room validate schema both sides
 2) Navbar
 

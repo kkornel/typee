@@ -36,6 +36,10 @@ export default function ChatDashboard({ user, socket }) {
   });
 
   React.useEffect(() => {
+    document.title = currentRoom ? `#${currentRoom.name}` : 'typee';
+  }, [currentRoom]);
+
+  React.useEffect(() => {
     console.log('useEffect');
 
     socket.connect(user._id, connectCallback);
