@@ -35,6 +35,10 @@ const theme = createMuiTheme({
     purpleAlt: '#677bc4',
 
     purpleAlt2: '#8095dd',
+    purpleAlt3: '#d8d8f7',
+
+    blueLight: '#d9e8ff',
+    blueDark: '#a4bcda',
 
     logoPrimary: '#fff',
     focusPrimary: '#00b0f4',

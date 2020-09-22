@@ -1,4 +1,4 @@
-/* Separate .css file, because animations was hard to do in MaterialUI */
+/* Separate .css file, because animations was hard to do in MaterialUI... */
 
 .blue-stripe {
     position: fixed;
@@ -37,6 +37,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .container p {

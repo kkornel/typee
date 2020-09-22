@@ -85,7 +85,8 @@ export default function Home() {
             className={classes.image}
             width="650"
             height="400"
-            src="https://cdn.dribbble.com/users/1579322/screenshots/6587273/blue_boy_typing_nothought.gif"
+            src="https://i.imgur.com/g7HnVSh.gif"
+            alt="It is supposed to show very important image, but it doesn't :("
           />
         </Box>
       </Box> */}
@@ -101,7 +102,8 @@ export default function Home() {
             className={classes.image}
             width="650"
             height="400"
-            src="https://cdn.dribbble.com/users/1579322/screenshots/6587273/blue_boy_typing_nothought.gif"
+            src="https://i.imgur.com/g7HnVSh.gif"
+            alt="It is supposed to show very important image, but it doesn't :("
           />
         </Box>
         <Box className={classes.boxColumn}>
@@ -147,21 +149,21 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   boxLighterBlue: {
-    background: '#d9e8ff',
+    background: theme.palette.blueLight,
     height: '324px',
   },
   boxDarkerBlue: {
-    background: '#a4bcda',
+    background: theme.palette.blueDark,
     height: '76px',
   },
   buttons: {
     marginTop: '148px',
     display: 'flex',
-    // flexDirection: 'row',
+    marginBottom: '100px',
   },
   buttonWhite: {
     background: 'white',
-    color: '#23272a',
+    color: theme.palette.appBarBackground,
     '&:hover': {
       color: theme.palette.purple,
       boxShadow: `0 2px 15px ${theme.palette.purple}`,
@@ -169,15 +171,15 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonDark: {
     marginRight: '64px',
-    background: '#23272a',
+    background: theme.palette.appBarBackground,
     color: 'white',
     '&:hover': {
-      background: '#36393f',
+      background: theme.palette.backgroundPrimary,
       boxShadow: '0 2px 15px white',
     },
   },
   banner: {
-    background: '#d9e8ff',
+    background: theme.palette.blueLight,
     width: '100%',
   },
   image: {
