@@ -28,11 +28,16 @@ export default function About(props) {
             />
           </Box>
           <Box className={classes.textBox}>
-            <Box className={classes.textHeader}>Where hanging out is easy</Box>
+            <Box className={classes.textHeader}>
+              Chat, study, collaborate or goof around
+            </Box>
             <Box className={classes.textContent}>
-              Grab a seat in a voice channel when you’re free. Friends in your
-              server can see you’re around and instantly pop in to talk without
-              having to call.
+              <p>
+                Type with others about your day, talk with your work colleagues,
+                do homework with schoolmates or just invite friends to play
+                together.
+              </p>
+              <p>No matter what, typee is there for you.</p>
             </Box>
           </Box>
         </Container>
@@ -44,11 +49,13 @@ export default function About(props) {
       <Box className={classes.boxRow}>
         <Container maxWidth="lg" className={classes.container}>
           <Box className={classNames(classes.textBox, classes.textBoxRow2)}>
-            <Box className={classes.textHeader}>From a few to a fandom</Box>
+            <Box className={classes.textHeader}>
+              A better way to communicate
+            </Box>
             <Box className={classes.textContent}>
-              Get a community of any size running with moderation tools and
-              custom member access. Give members special powers, set up private
-              channels, and more.
+              Conversations in typee are easy to follow. And they’re more than
+              conversations — you can create your own rooms, make friends, send
+              gifs and more!
             </Box>
           </Box>
 
@@ -60,6 +67,33 @@ export default function About(props) {
             />
           </Box>
         </Container>
+      </Box>
+
+      <Box id="C"></Box>
+      <Box id="D" class="wavy"></Box>
+
+      <Box className={classes.boxRow}>
+        <Container maxWidth="lg" className={classes.container}>
+          <Box className={classes.imageBox}>
+            <img
+              className={classes.image}
+              src="https://i.imgur.com/IICTl62.gif"
+              alt="It is supposed to show very important image, but it doesn't :("
+            />
+          </Box>
+          <Box className={classes.textBox}>
+            <Box className={classes.textHeader}>
+              Start your journey right now
+            </Box>
+            <Box className={classes.textContent}>And join us!</Box>
+          </Box>
+        </Container>
+      </Box>
+
+      <Box className={classes.signUp}>
+        <RoundedLinkButton to={'/sign-up'} classes={classes.buttonDark}>
+          SIGN UP
+        </RoundedLinkButton>
       </Box>
 
       <Box id="C"></Box>
@@ -124,5 +158,19 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.purple,
       boxShadow: `0 2px 15px ${theme.palette.purple}`,
     },
+  },
+  buttonDark: {
+    color: 'white',
+    background: theme.palette.appBarBackground,
+    // background: theme.palette.purpleAlt3,
+    // color: theme.palette.appBarBackground,
+    '&:hover': {
+      background: theme.palette.backgroundPrimary,
+      boxShadow: '0 2px 15px white',
+    },
+  },
+  signUp: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
