@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMeteor, faUserAstronaut } from '@fortawesome/free-solid-svg-icons';
 
-import '../../home.css';
+// import '../../home.css';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -156,9 +156,16 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     textDecoration: 'none',
     textAlign: 'center',
-    fontSize: '16px',
-    lineHeight: '140%',
+
+    // 1 or 2
+    // fontSize: '16px',
+    // fontWeight: 600,
+    // OR
+    fontFamily: 'Montserrat',
+    fontSize: '14px',
     fontWeight: 600,
+
+    lineHeight: '140%',
     '&:hover': {
       textDecoration: 'underline',
     },
