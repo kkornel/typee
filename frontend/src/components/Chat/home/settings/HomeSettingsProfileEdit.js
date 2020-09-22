@@ -123,22 +123,24 @@ export default function HomeSettingsProfileEdit({
         </Box>
         <Box className={classes.profileEditForm}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <DarkTextField
-              required
-              fullWidth
-              size="small"
-              margin="normal"
-              variant="filled"
-              id="email"
-              name="email"
-              label="Email"
-              defaultValue={user.email}
-              error={!!errors.email}
-              helperText={!!errors.email ? errors.email.message : null}
-              inputRef={register}
-              InputProps={{ className: classes.input }}
-              InputLabelProps={{ shrink: true }}
-            />
+            {!user.googleId && (
+              <DarkTextField
+                required
+                fullWidth
+                size="small"
+                margin="normal"
+                variant="filled"
+                id="email"
+                name="email"
+                label="Email"
+                defaultValue={user.email}
+                error={!!errors.email}
+                helperText={!!errors.email ? errors.email.message : null}
+                inputRef={register}
+                InputProps={{ className: classes.input }}
+                InputLabelProps={{ shrink: true }}
+              />
+            )}
             <DarkTextField
               required
               fullWidth
@@ -155,62 +157,68 @@ export default function HomeSettingsProfileEdit({
               InputProps={{ className: classes.input }}
               InputLabelProps={{ shrink: true }}
             />
-            <DarkTextField
-              required
-              fullWidth
-              size="small"
-              margin="normal"
-              variant="filled"
-              type="password"
-              id="password"
-              name="password"
-              label="Current password"
-              defaultValue="Polska12"
-              error={!!errors.password}
-              helperText={!!errors.password ? errors.password.message : null}
-              inputRef={register}
-              InputProps={{ className: classes.input }}
-              InputLabelProps={{ shrink: true }}
-            />
-            <HorizontalTextDivider style={{ margin: 0, marginTop: '10px' }}>
-              Set new password?
-            </HorizontalTextDivider>
-            <DarkTextField
-              fullWidth
-              size="small"
-              margin="normal"
-              variant="filled"
-              type="password"
-              id="newPassword"
-              name="newPassword"
-              label="Set new password"
-              error={!!errors.newPassword}
-              helperText={
-                !!errors.newPassword ? errors.newPassword.message : null
-              }
-              inputRef={register}
-              InputProps={{ className: classes.input }}
-              InputLabelProps={{ shrink: true }}
-            />
-            <DarkTextField
-              fullWidth
-              size="small"
-              margin="normal"
-              variant="filled"
-              type="password"
-              id="newPasswordConfirmation"
-              name="newPasswordConfirmation"
-              label="Confirm new password"
-              error={!!errors.newPasswordConfirmation}
-              helperText={
-                !!errors.newPasswordConfirmation
-                  ? errors.newPasswordConfirmation.message
-                  : null
-              }
-              inputRef={register}
-              InputProps={{ className: classes.input }}
-              InputLabelProps={{ shrink: true }}
-            />
+            {!user.googleId && (
+              <>
+                <DarkTextField
+                  required
+                  fullWidth
+                  size="small"
+                  margin="normal"
+                  variant="filled"
+                  type="password"
+                  id="password"
+                  name="password"
+                  label="Current password"
+                  defaultValue="Polska12"
+                  error={!!errors.password}
+                  helperText={
+                    !!errors.password ? errors.password.message : null
+                  }
+                  inputRef={register}
+                  InputProps={{ className: classes.input }}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <HorizontalTextDivider style={{ margin: 0, marginTop: '10px' }}>
+                  Set new password?
+                </HorizontalTextDivider>
+                <DarkTextField
+                  fullWidth
+                  size="small"
+                  margin="normal"
+                  variant="filled"
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  label="Set new password"
+                  error={!!errors.newPassword}
+                  helperText={
+                    !!errors.newPassword ? errors.newPassword.message : null
+                  }
+                  inputRef={register}
+                  InputProps={{ className: classes.input }}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <DarkTextField
+                  fullWidth
+                  size="small"
+                  margin="normal"
+                  variant="filled"
+                  type="password"
+                  id="newPasswordConfirmation"
+                  name="newPasswordConfirmation"
+                  label="Confirm new password"
+                  error={!!errors.newPasswordConfirmation}
+                  helperText={
+                    !!errors.newPasswordConfirmation
+                      ? errors.newPasswordConfirmation.message
+                      : null
+                  }
+                  inputRef={register}
+                  InputProps={{ className: classes.input }}
+                  InputLabelProps={{ shrink: true }}
+                />
+              </>
+            )}
             <Box className={classes.profileEditButtons}>
               <OutlinedDangerButton onClick={() => setOpen(true)}>
                 Delete account

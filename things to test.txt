@@ -14,4 +14,3 @@ IDEAS
 3) Hello in the console
 4) Test google oath
 5) Google auth user should't be able to update email, only username, also no passwod for him.
-6) Dav icon and titles!! 
