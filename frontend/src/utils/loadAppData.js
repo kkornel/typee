@@ -1,7 +1,6 @@
 import { getUser } from './auth-client';
 
 async function loadAppData() {
-  console.log('loadAppData');
   let appData = { user: null };
 
   // When using only JWT this was the way to check if the token is saved
@@ -22,7 +21,6 @@ async function loadAppData() {
 
   const user = await getUser();
   appData = { user };
-  console.log('loadAppData appData', appData);
 
   return appData;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -7,7 +8,11 @@ export default function GreenButton(props) {
   const classes = useStyles();
 
   return (
-    <Button variant="contained" className={classes.greenButton} {...props} />
+    <Button
+      variant="contained"
+      className={classNames(classes.greenButton, props.classes)}
+      {...props}
+    />
   );
 }
 

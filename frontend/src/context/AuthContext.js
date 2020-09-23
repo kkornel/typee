@@ -22,8 +22,7 @@ function AuthProvider(props) {
     setData,
   } = useAsync();
 
-  // Code for pre-loading the user's information
-  // if his token is the localStorage.
+  // Pre-load user's information if his token is the localStorage
   React.useLayoutEffect(() => {
     function loadData() {
       execute(appDataPromise);
@@ -131,7 +130,7 @@ function AuthProvider(props) {
   }
 
   if (isError) {
-    console.log('Error', error);
+    console.log('AuthContext Error', error);
     return <div>{error.message}</div>;
   }
 
@@ -144,11 +143,9 @@ function AuthProvider(props) {
 
 function useAuth() {
   const context = React.useContext(AuthContext);
-
   if (context === undefined) {
     throw new Error('useAuth must be used within a AuthProvider');
   }
-
   return context;
 }
 

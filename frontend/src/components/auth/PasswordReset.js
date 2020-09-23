@@ -5,7 +5,7 @@ import BodyContainer from '../home/BodyContainer';
 import FullPageSpinner from '../ui/FullPageSpinner';
 import PasswordResetForm from './PasswordResetForm';
 
-import ROUTES from '../../utils/consts/routes';
+import { SIGN_IN } from '../../utils/consts/routes';
 import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
@@ -18,7 +18,7 @@ export default function PasswordReset() {
     const response = await execute(resetPassword(email));
 
     if (response.success) {
-      history.push(ROUTES.SIGN_IN, { message: response.message });
+      history.push(SIGN_IN, { message: response.message });
     }
   };
 

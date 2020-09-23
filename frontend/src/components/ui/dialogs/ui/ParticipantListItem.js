@@ -17,17 +17,17 @@ export default function ParticipantListItem({ user, onRemoveClick }) {
         <Box className={classes.usersListItemInnerAvatar}>
           <Box className={classes.usersListItemInnerAvatarWrapper}>
             <ArrowTooltip title={user.username}>
-              {user.avatarUrl ? (
-                <Avatar
-                  className={classes.usersListItemInnerAvatarImg}
-                  src={user.avatarUrl}
-                />
-              ) : (
-                <Avatar className={classes.usersListItemInnerAvatarWrapper}>
-                  {user.username[0]}
-                  {user.username[1]}
-                </Avatar>
-              )}
+              <Avatar
+                className={
+                  user.avatarUrl
+                    ? classes.usersListItemInnerAvatarImg
+                    : classes.usersListItemInnerAvatarWrapper
+                }
+                src={user.avatarUrl}
+              >
+                {user.username[0]}
+                {user.username[1]}
+              </Avatar>
             </ArrowTooltip>
           </Box>
         </Box>
@@ -44,20 +44,21 @@ export default function ParticipantListItem({ user, onRemoveClick }) {
                 classes.contentOverflow
               )}
             >
-              <span
+              <Box
+                component="span"
                 className={classNames(
                   classes.usersListItemContentNameInnerSpan,
                   classes.contentOverflow
                 )}
               >
                 {user.username}
-              </span>
+              </Box>
             </Box>
           </Box>
         </Box>
         <InteractiveDangerButton
           onClick={() => onRemoveClick(user._id)}
-          style={{ height: '28px' }}
+          classes={classes.interactiveDangerButton}
         >
           Remove
         </InteractiveDangerButton>
@@ -147,5 +148,8 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       opacity: '1',
     },
+  },
+  interactiveDangerButton: {
+    height: '28px',
   },
 }));

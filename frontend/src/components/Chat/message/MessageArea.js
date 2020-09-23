@@ -65,19 +65,12 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
   };
 
   const renderMessage = (message, currentIdx) => {
-    console.log('renderMessage');
-    let renderNewDateDivider =
+    const renderNewDateDivider =
       currentIdx === 0 ||
       !moment(message.createdAt).isSame(
         messages[currentIdx - 1].createdAt,
         'day'
       );
-
-    console.log('renderMessage renderNewDateDivider', renderNewDateDivider);
-    console.log(
-      'renderMessage getDate(message.createdAt)',
-      getDate(message.createdAt)
-    );
 
     if (message.systemMessage) {
       if (renderNewDateDivider) {
@@ -107,6 +100,7 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
         </React.Fragment>
       );
     }
+
     return getMessage(message, currentIdx);
   };
 

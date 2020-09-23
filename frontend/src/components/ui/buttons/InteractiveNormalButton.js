@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -6,7 +7,12 @@ import Button from '@material-ui/core/Button';
 export default function InteractiveNormalButton(props) {
   const classes = useStyles();
 
-  return <Button className={classes.interactiveNormalButton} {...props} />;
+  return (
+    <Button
+      className={classNames(classes.interactiveNormalButton, props.classes)}
+      {...props}
+    />
+  );
 }
 
 const useStyles = makeStyles((theme) => ({

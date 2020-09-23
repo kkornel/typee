@@ -45,7 +45,7 @@ export default function WorkInProgressDialog({
           <p>
             Our team of qualified engineers is aware that you've chosen{' '}
             <b>
-              <i>{text || 'screenshot.png'}</i>
+              <i>{text}</i>
             </b>
             , but unfortunately they don't know how to handle those files{' '}
             <b>

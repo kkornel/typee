@@ -25,12 +25,9 @@ function useSafeDispatch(dispatch) {
     (...args) => (mounted.current ? dispatch(...args) : void 0),
     [dispatch]
   );
-
-  // return React.useCallback((...args) => dispatch(...args), [dispatch]);
 }
 
 function reducer(state, action) {
-  // console.log('REDUCER: new state', { ...state, ...action });
   return {
     ...state,
     ...action,
@@ -56,12 +53,10 @@ function useAsync() {
       return promise.then(
         (data) => {
           setState({ status: STATUS.RESOLVED, data });
-          // console.log('useAsync() run :', data);
           return data;
         },
         (error) => {
           setState({ status: STATUS.REJECTED, error });
-          // console.log('useAsync() run:', error);
           return error;
         }
       );

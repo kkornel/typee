@@ -116,14 +116,14 @@ export default function MessageInput({ handleMessageSubmit }) {
           component="form"
         >
           <IconButton className={classes.iconButton}>
-            <div className={classes.customFileInputBox}>
+            <Box className={classes.customFileInputBox}>
               <AddCircleIcon />
               <input
                 className={classes.customFileInput}
                 type="file"
                 onChange={onChangeHandler}
               />
-            </div>
+            </Box>
           </IconButton>
           <InputBase
             className={classes.input}
@@ -232,7 +232,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/* .custom-file-input {
+/* Custom file input pure CSS */
+/*
+.custom-file-input {
   overflow: hidden;
   position: relative;
   display: inline-block;
@@ -240,6 +242,7 @@ const useStyles = makeStyles((theme) => ({
   height: 24px;
   cursor: pointer;
 }
+
 .custom-file-input input[type="file"] {
   cursor: pointer;
   //height: 44px;
@@ -254,11 +257,12 @@ const useStyles = makeStyles((theme) => ({
   right: 0;
   bottom: 0;
   z-index: 999;
-} */
+} 
+*/
 
-{
-  /* <div className="custom-file-input">
-              <AddCircleIcon />
-              <input type="file" onChange={onChangeHandler} />
-            </div> */
-}
+/* 
+  <div className="custom-file-input">
+  <AddCircleIcon />
+  <input type="file" onChange={onChangeHandler} />
+  </div> 
+*/

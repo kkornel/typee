@@ -53,7 +53,7 @@ export default function ChatDashboard({ user, socket }) {
     // TODO: is it necessary?
     const lastOpenedRoom = getLastOpenedRoom();
     if (lastOpenedRoom) {
-      socket.joinRoom(user._id, lastOpenedRoom, joinRoomCallback);
+      // socket.joinRoom(user._id, lastOpenedRoom, joinRoomCallback);
     }
   }, []);
 

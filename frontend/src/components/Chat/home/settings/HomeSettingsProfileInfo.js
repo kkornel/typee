@@ -43,7 +43,10 @@ export default function HomeSettingsProfileInfo({
         <Box className={classes.profileButtonsBox}>
           <Box className={classes.profileButtonsEdit}>
             {!showProfileEdit && (
-              <PurpleButton onClick={onEditClick} style={{ width: '100%' }}>
+              <PurpleButton
+                onClick={onEditClick}
+                classes={classes.purpleButton}
+              >
                 Edit
               </PurpleButton>
             )}
@@ -105,5 +108,8 @@ const useStyles = makeStyles((theme) => ({
   profileButtonsLogout: {
     display: 'flex',
     alignSelf: 'flex-end',
+  },
+  purpleButton: {
+    width: '100%',
   },
 }));

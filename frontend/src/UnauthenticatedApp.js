@@ -12,6 +12,8 @@ import PasswordReset from './components/auth/PasswordReset';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 
+import FourOhFour from './components/404';
+
 export default function UnauthenticatedApp() {
   const location = useLocation();
   const classes = useStyles();
@@ -26,13 +28,16 @@ export default function UnauthenticatedApp() {
         <Route path="/dev-log" component={DevLog} />
         <Route path="/password-reset" component={PasswordReset} />
         <Route path="/password-reset-new" component={PasswordNew} />
-        <Redirect
+        {/* <Redirect
           to={{
             pathname: '/sign-in',
             state: { from: location.pathname },
           }}
           from="*"
-        />
+        /> */}
+        <Route path="*">
+          <FourOhFour />
+        </Route>
       </Switch>
     </Box>
   );

@@ -24,14 +24,7 @@ export default function HomeSettingsProfileEdit({
   onSuccessfulUpdate,
 }) {
   const classes = useStyles();
-  const {
-    getValues,
-    register,
-    errors,
-    handleSubmit,
-    clearError,
-    setError,
-  } = useForm({
+  const { register, errors, handleSubmit, setError } = useForm({
     mode: 'onBlur',
     validationSchema: profileUpdateSchema,
   });
@@ -79,7 +72,6 @@ export default function HomeSettingsProfileEdit({
       return URL.createObjectURL(file);
     }
     if (deleteAvatar) {
-      // return 'https://www.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png';
       return null;
     }
     return user.avatarUrl;
@@ -226,7 +218,7 @@ export default function HomeSettingsProfileEdit({
               <Box>
                 <InteractiveNormalButton
                   onClick={onCancelClick}
-                  style={{ marginRight: '20px' }}
+                  classes={classes.interactiveNormalButton}
                 >
                   Cancel
                 </InteractiveNormalButton>
@@ -306,7 +298,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     marginTop: '4px',
   },
-
+  interactiveNormalButton: {
+    marginRight: '20px',
+  },
   // submit: {
   //   color: theme.palette.textNormal,
   //   background: theme.palette.purple,

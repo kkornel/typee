@@ -4,6 +4,12 @@
 
 # TODO:
 
+1) Routes authenticated and not
+2) 404
+3) Dashborads
+4) room data context
+5) consts like STATUS and ACTIONS how to storem them
+
 1) Room validate schema both sides
 2) Navbar
 

@@ -9,7 +9,6 @@ async function updateRoom(name, data) {
       Authorization: `Bearer ${token}`,
     },
   });
-  // console.log('room-client updateRoom', response.data);
   return response.data;
 }
 

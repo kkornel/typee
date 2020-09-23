@@ -19,7 +19,6 @@ export default function MessageAreaBar({
   deleteRoom,
 }) {
   const classes = useStyles();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const [anchorEl, setAnchorEl] = React.useState(null);

@@ -32,21 +32,13 @@ export default function HomeRoomListItem({
           <React.Fragment>
             <InteractiveNormalContainedButton
               onClick={() => onEditClick(room._id)}
-              style={{
-                height: '28px',
-                padding: '0px',
-                marginRight: '8px',
-              }}
+              classes={classes.interactiveNormalButton}
             >
               Edit
             </InteractiveNormalContainedButton>
             <InteractiveDangerContainedButton
               onClick={() => onDeleteClick(room._id)}
-              style={{
-                height: '28px',
-                padding: '0px',
-                marginRight: '8px',
-              }}
+              classes={classes.interactiveDangerButton}
             >
               Delete
             </InteractiveDangerContainedButton>
@@ -54,11 +46,7 @@ export default function HomeRoomListItem({
         ) : (
           <InteractiveNormalContainedButton
             onClick={() => onLeaveClick(room._id)}
-            style={{
-              height: '28px',
-              padding: '0px',
-              marginRight: '8px',
-            }}
+            classes={classes.interactiveNormalButton}
           >
             Leave
           </InteractiveNormalContainedButton>
@@ -93,5 +81,15 @@ const useStyles = makeStyles((theme) => ({
   },
   homeRoomItemButtons: {
     marginLeft: '24px',
+  },
+  interactiveNormalButton: {
+    height: '28px',
+    padding: '0px',
+    marginRight: '8px',
+  },
+  interactiveDangerButton: {
+    height: '28px',
+    padding: '0px',
+    marginRight: '8px',
   },
 }));

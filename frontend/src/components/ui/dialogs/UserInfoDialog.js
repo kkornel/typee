@@ -11,9 +11,7 @@ import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 export default function UserInfoDialog({ user, handleDialogClose, open }) {
   const classes = useStyles();
 
-  const handleAddFriend = () => {
-    console.log('Add Friend');
-  };
+  const handleAddFriend = () => {};
 
   return (
     <Dialog
