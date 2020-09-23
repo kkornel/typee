@@ -84,6 +84,7 @@ export default function MessageInput({ handleMessageSubmit }) {
     if (showGiphyPicker) {
       setShowGiphyPicker(false);
     }
+
     setShowEmojisPicker(!showEmojiPicker);
   };
 

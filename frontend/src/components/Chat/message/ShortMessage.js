@@ -10,8 +10,10 @@ import { processMessage } from '../../../utils/messageUtils';
 export default function ShortMessage({ message }) {
   const classes = useStyles();
 
+  // TODO extract to be reusable
   const changeColor = (event) => {
     const timeSpan = document.getElementById(message._id);
+
     if (event.type === 'mouseenter') {
       timeSpan.style.color = '#72767d';
     } else if (event.type === 'mouseleave') {

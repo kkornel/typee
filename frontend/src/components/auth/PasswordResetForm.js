@@ -31,6 +31,7 @@ export default function PasswordResetForm({ onPasswordReset, isError, error }) {
 
     if (!recaptchaValue) {
       recaptchaErrorRef.current.hidden = false;
+      // TODO uncomment
       // return;
     }
 

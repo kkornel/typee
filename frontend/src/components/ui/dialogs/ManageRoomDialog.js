@@ -82,13 +82,13 @@ export default function ManageRoomDialog({
         payload: updatedRoom,
       });
       roomUpdated(room.name, updatedRoom.name);
-      setLoading(false);
       onSuccessfulUpdate();
     } catch (error) {
       console.log('Edit Room ERROR', error.response.data);
-      setLoading(false);
       setError(error.response.data.message);
     }
+
+    setLoading(false);
   };
 
   const resetError = () => {

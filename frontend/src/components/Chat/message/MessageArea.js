@@ -48,13 +48,10 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
       };
     }
 
-    if (
-      idx !== 0 &&
-      messages[idx - 1].author &&
-      message.author._id === messages[idx - 1].author._id
-    ) {
+    if (idx !== 0 && messages[idx - 1].author?._id === message.author._id) {
       return <ShortMessage key={message._id} message={message} />;
     }
+
     return (
       <Message key={message._id} message={message} onUserClick={onUserClick} />
     );
@@ -83,6 +80,7 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
           </React.Fragment>
         );
       }
+
       return <SystemMessage key={message._id} message={message} />;
     }
 

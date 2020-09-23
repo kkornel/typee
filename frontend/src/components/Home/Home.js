@@ -43,6 +43,7 @@ export default function Home() {
       if (!cursorSpan.current.classList.contains('typing')) {
         cursorSpan.current.classList.add('typing');
       }
+
       typedSpan.current.textContent += textArray[txtArrIdx].charAt(charIdx);
       charIdx++;
       timerId1 = setTimeout(type, typingDelay);
@@ -58,18 +59,22 @@ export default function Home() {
       if (!cursorSpan.current.classList.contains('typing')) {
         cursorSpan.current.classList.add('typing');
       }
+
       typedSpan.current.textContent = textArray[txtArrIdx].substring(
         0,
         charIdx - 1
       );
+
       charIdx--;
       timerId2 = setTimeout(erase, erasingDelay);
     } else {
       cursorSpan.current.classList.remove('typing');
       txtArrIdx++;
+
       if (txtArrIdx >= textArray.length) {
         txtArrIdx = 0;
       }
+
       timerId1 = setTimeout(type, typingDelay + 1100);
     }
   }

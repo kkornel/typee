@@ -1,21 +1,21 @@
 import React from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 
 import About from './components/home/About';
 import DevLog from './components/home/DevLog';
+import FourOhFour from './components/404';
 import Home from './components/home/Home';
 import PasswordNew from './components/auth/PasswordNew';
 import PasswordReset from './components/auth/PasswordReset';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 
-import FourOhFour from './components/404';
-
 export default function UnauthenticatedApp() {
-  const location = useLocation();
+  // const location = useLocation();
   const classes = useStyles();
 
   return (
@@ -35,6 +35,7 @@ export default function UnauthenticatedApp() {
           }}
           from="*"
         /> */}
+        <Redirect to="/sign-in" from="/dashboard" />
         <Route path="*">
           <FourOhFour />
         </Route>

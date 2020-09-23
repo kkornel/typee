@@ -7,11 +7,10 @@ import Dashboard from './components/chat/Dashboard';
 function AuthenticatedApp() {
   return (
     <Switch>
-      <Route exact path="/" component={Dashboard} />
-      <Route path="/channel/*" component={Dashboard} />
+      <Route path="/dashboard" component={Dashboard} />
       <Redirect to="/dashboard" from="/sign-in" />
       <Redirect to="/dashboard" from="/sign-up" />
-      <Route path="/" component={Dashboard} />
+      <Redirect to="/dashboard" from="/" />
       <Route path="*">
         <FourOhFour />
       </Route>

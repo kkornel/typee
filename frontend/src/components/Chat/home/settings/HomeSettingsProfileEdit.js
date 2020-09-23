@@ -71,9 +71,11 @@ export default function HomeSettingsProfileEdit({
     if (file) {
       return URL.createObjectURL(file);
     }
+
     if (deleteAvatar) {
       return null;
     }
+
     return user.avatarUrl;
   };
 

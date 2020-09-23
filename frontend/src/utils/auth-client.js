@@ -6,6 +6,7 @@ function handleLoginResponse({ user, token }) {
   if (token) {
     localStorage.setItem(localStorageKey, token);
   }
+
   return user;
 }
 

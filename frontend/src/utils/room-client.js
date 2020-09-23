@@ -9,6 +9,7 @@ async function updateRoom(name, data) {
       Authorization: `Bearer ${token}`,
     },
   });
+
   return response.data;
 }
 
