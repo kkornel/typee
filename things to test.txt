@@ -4,13 +4,11 @@
 
 # TODO:
 
-IDEAS
-1) private room for invitations only
-
 1) Room validate schema both sides
 2) Navbar
 
-
 3) Hello in the console
 4) Test google oath
-5) Google auth user should't be able to update email, only username, also no passwod for him.
+
+IDEAS
+1) private room for invitations only
