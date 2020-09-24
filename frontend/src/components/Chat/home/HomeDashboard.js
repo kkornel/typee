@@ -18,6 +18,8 @@ export default function HomeDashboard({ socket }) {
         return <HomeFriendsList />;
       case 'settings':
         return <HomeSettings socket={socket} />;
+      default:
+        throw new Error(`Unhandled tab type: ${selectedTab}`);
     }
   };
 

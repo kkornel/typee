@@ -11,10 +11,8 @@ import EditRoomDialog from '../../../ui/dialogs/EditRoomDialog';
 import DeleteRoomDialog from '../../../ui/dialogs/DeleteRoomDialog';
 import ConfirmationDialog from '../../../ui/dialogs/ConfirmationDialog';
 
-import {
-  useRoomData,
-  ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../../../context/RoomDataContext';
+import { useRoomData } from '../../../../context/RoomDataContext';
+import { LEAVE_ROOM } from '../../../../context/actions/roomData';
 import { useAuth } from '../../../../context/AuthContext';
 import { useUserData } from '../../../../context/UserDataContext';
 
@@ -52,11 +50,7 @@ export default function HomeRoomList({ socket }) {
   });
 
   const onDialogConfirm = () => {
-    socket.leaveRoom(
-      user._id,
-      confirmationDialogData.data.name,
-      leaveRoomCallback
-    );
+    socket.leaveRoom(user._id, confirmationDialogData.data, leaveRoomCallback);
 
     setConfirmationDialogData({
       ...confirmationDialogData,
@@ -78,7 +72,7 @@ export default function HomeRoomList({ socket }) {
       return console.log('leaveRoomCallback ERROR', error);
     }
 
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.LEAVE_ROOM, payload: room });
+    roomDataDispatch({ type: LEAVE_ROOM, payload: room });
     handleRoomDeleted(room.name);
 
     enqueueSnackbar(`You left ${room.name}`, {

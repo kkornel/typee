@@ -9,7 +9,7 @@ export default function InteractiveDangerButton(props) {
 
   return (
     <Button
-      className={classNames(classes.interactiveDangerButton, props.classes)}
+      className={classNames(classes.interactiveDangerButton, props.cls)}
       {...props}
     />
   );

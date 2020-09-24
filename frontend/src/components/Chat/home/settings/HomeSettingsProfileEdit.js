@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
@@ -220,7 +220,7 @@ export default function HomeSettingsProfileEdit({
               <Box>
                 <InteractiveNormalButton
                   onClick={onCancelClick}
-                  classes={classes.interactiveNormalButton}
+                  cls={classes.interactiveNormalButton}
                 >
                   Cancel
                 </InteractiveNormalButton>

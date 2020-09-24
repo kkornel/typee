@@ -18,10 +18,8 @@ import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 import InteractiveDangerButton from '../buttons/InteractiveDangerButton';
 import ParticipantListItem from './ui/ParticipantListItem';
 
-import {
-  useRoomData,
-  ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../../context/RoomDataContext';
+import { useRoomData } from '../../../context/RoomDataContext';
+import { UPDATE_ROOM } from '../../../context/actions/roomData';
 import { useAuth } from '../../../context/AuthContext';
 import { updateRoom } from '../../../utils/room-client';
 
@@ -38,7 +36,7 @@ export default function ManageRoomDialog({
 
   const inputRef = React.useRef(null);
 
-  const [roomDataState, roomDataDispatch] = useRoomData();
+  const [, roomDataDispatch] = useRoomData();
 
   const { open } = dialogData;
 
@@ -78,7 +76,7 @@ export default function ManageRoomDialog({
       console.log('dasda', data);
       const updatedRoom = await updateRoom(room.name, data);
       roomDataDispatch({
-        type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
+        type: UPDATE_ROOM,
         payload: updatedRoom,
       });
       roomUpdated(room.name, updatedRoom.name);
@@ -129,7 +127,7 @@ export default function ManageRoomDialog({
 
   const removeUserCallback = ({ room, user }) => {
     console.log('removeUserCallback', room, user);
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.UPDATE_ROOM, payload: room });
+    roomDataDispatch({ type: UPDATE_ROOM, payload: room });
   };
 
   const onConfirmNameChange = (event) => {

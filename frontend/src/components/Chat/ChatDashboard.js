@@ -12,10 +12,17 @@ import MessageAreaBar from './message/MessageAreaBar';
 import UserList from './user/UserList';
 import RoomList from './room/RoomList';
 
+import { useRoomData } from '../../context/RoomDataContext';
 import {
-  useRoomData,
-  ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../context/RoomDataContext';
+  LEAVE_ROOM,
+  NEW_MESSAGE,
+  ROOM_DELETED,
+  SET_CURRENT_ROOM,
+  SET_ROOMS,
+  UPDATE_ROOM,
+  USER_LIST_CHANGED,
+  USER_STATUS_CHANGED,
+} from '../../context/actions/roomData';
 import { useUserData } from '../../context/UserDataContext';
 
 export default function ChatDashboard({ user, socket }) {
@@ -86,19 +93,19 @@ export default function ChatDashboard({ user, socket }) {
       return console.log('connectCallback ERROR', error);
     }
 
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+    roomDataDispatch({ type: SET_ROOMS, payload: rooms });
 
     console.log('Successfully connected to the server.');
   };
 
-  const requestUserDataCallback = ({ error, user, rooms }) => {
-    if (error) {
-      console.log('requestUserDataCallback ERROR', error);
-    }
+  // const requestUserDataCallback = ({ error, user, rooms }) => {
+  //   if (error) {
+  //     console.log('requestUserDataCallback ERROR', error);
+  //   }
 
-    // Here eventually set new data with dispatch
-    console.log('User data received.');
-  };
+  //   // Here eventually set new data with dispatch
+  //   console.log('User data received.');
+  // };
 
   const submitCallback = ({ error }) => {
     if (error) {
@@ -117,10 +124,10 @@ export default function ChatDashboard({ user, socket }) {
     }
 
     roomDataDispatch({
-      type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
+      type: SET_CURRENT_ROOM,
       payload: room,
     });
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+    roomDataDispatch({ type: SET_ROOMS, payload: rooms });
     setLastOpenedRoom(room.name);
 
     enqueueSnackbar(`Room ${room.name} created`, {
@@ -141,7 +148,7 @@ export default function ChatDashboard({ user, socket }) {
     }
 
     roomDataDispatch({
-      type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
+      type: SET_CURRENT_ROOM,
       payload: room,
     });
 
@@ -150,7 +157,7 @@ export default function ChatDashboard({ user, socket }) {
     // If user joins room for the first time,
     // he needs new room list to be generated
     if (rooms) {
-      roomDataDispatch({ type: ROOM_DATA_ACTIONS.SET_ROOMS, payload: rooms });
+      roomDataDispatch({ type: SET_ROOMS, payload: rooms });
     }
 
     handleDialogClose();
@@ -170,7 +177,7 @@ export default function ChatDashboard({ user, socket }) {
       return console.log('leaveRoomCallback ERROR', error);
     }
 
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.LEAVE_ROOM, payload: room });
+    roomDataDispatch({ type: LEAVE_ROOM, payload: room });
     handleRoomDeleted(room.name);
 
     enqueueSnackbar(`You left ${room.name}`, {
@@ -186,7 +193,7 @@ export default function ChatDashboard({ user, socket }) {
       console.log('handleDeleteRoomCallback', error);
     }
 
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
+    roomDataDispatch({ type: ROOM_DELETED, payload: room });
     handleRoomDeleted(room.name);
 
     enqueueSnackbar(`Room ${room.name} deleted`, {
@@ -203,7 +210,7 @@ export default function ChatDashboard({ user, socket }) {
     (user) => {
       // console.log('onUserStatusChanged', user);
       roomDataDispatch({
-        type: ROOM_DATA_ACTIONS.USER_STATUS_CHANGED,
+        type: USER_STATUS_CHANGED,
         payload: user,
       });
     },
@@ -214,7 +221,7 @@ export default function ChatDashboard({ user, socket }) {
     ({ users }) => {
       // console.log('onNewRoomData', users);
       roomDataDispatch({
-        type: ROOM_DATA_ACTIONS.USER_LIST_CHANGED,
+        type: USER_LIST_CHANGED,
         payload: users,
       });
     },
@@ -224,7 +231,7 @@ export default function ChatDashboard({ user, socket }) {
   const onNewMessage = React.useCallback(
     (message) => {
       roomDataDispatch({
-        type: ROOM_DATA_ACTIONS.NEW_MESSAGE,
+        type: NEW_MESSAGE,
         payload: message,
       });
     },
@@ -234,7 +241,7 @@ export default function ChatDashboard({ user, socket }) {
   const onRoomUpdated = React.useCallback(
     (room) => {
       // console.log('onRoomUpdated', room);
-      roomDataDispatch({ type: ROOM_DATA_ACTIONS.UPDATE_ROOM, payload: room });
+      roomDataDispatch({ type: UPDATE_ROOM, payload: room });
     },
     [roomDataDispatch]
   );
@@ -242,10 +249,10 @@ export default function ChatDashboard({ user, socket }) {
   const onRoomDeleted = React.useCallback(
     (room) => {
       // console.log('onRoomDeleted', room);
-      roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
+      roomDataDispatch({ type: ROOM_DELETED, payload: room });
       handleRoomDeleted(room.name);
     },
-    [roomDataDispatch]
+    [roomDataDispatch, handleRoomDeleted]
   );
 
   //#endregion
@@ -254,7 +261,7 @@ export default function ChatDashboard({ user, socket }) {
 
   const handleHomeClick = () => {
     roomDataDispatch({
-      type: ROOM_DATA_ACTIONS.SET_CURRENT_ROOM,
+      type: SET_CURRENT_ROOM,
       payload: undefined,
     });
   };

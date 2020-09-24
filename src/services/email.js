@@ -32,6 +32,7 @@ const sendEmailSync = async (to, subject, html) => {
   try {
     const response = await sgMail.send(msg);
     console.log(response);
+
     return response;
   } catch (error) {
     console.error(error);

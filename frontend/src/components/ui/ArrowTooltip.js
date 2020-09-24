@@ -11,7 +11,7 @@ export default function ArrowTooltip(props) {
   return (
     <Tooltip
       arrow
-      classes={props.small ? classesSmall : classesNormal}
+      cls={props.small ? classesSmall : classesNormal}
       placement={props.placement ? props.placement : 'right'}
       TransitionComponent={Zoom}
       {...props}

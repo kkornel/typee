@@ -28,6 +28,10 @@ export default function UnauthenticatedApp() {
         <Route path="/dev-log" component={DevLog} />
         <Route path="/password-reset" component={PasswordReset} />
         <Route path="/password-reset-new" component={PasswordNew} />
+        <Redirect to="/sign-in" from="/dashboard" />
+        <Route path="*">
+          <FourOhFour />
+        </Route>
         {/* <Redirect
           to={{
             pathname: '/sign-in',
@@ -35,10 +39,6 @@ export default function UnauthenticatedApp() {
           }}
           from="*"
         /> */}
-        <Redirect to="/sign-in" from="/dashboard" />
-        <Route path="*">
-          <FourOhFour />
-        </Route>
       </Switch>
     </Box>
   );

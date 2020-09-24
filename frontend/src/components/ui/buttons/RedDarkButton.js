@@ -9,7 +9,7 @@ export default function RedDarkButton(props) {
 
   return (
     <Button
-      className={classNames(classes.redDarkButton, props.classes)}
+      className={classNames(classes.redDarkButton, props.cls)}
       {...props}
     />
   );

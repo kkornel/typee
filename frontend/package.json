@@ -26,6 +26,7 @@
     "password-validator": "^5.0.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-giphy-component": "^1.1.0",
     "react-giphy-picker": "^1.1.1",
     "react-google-recaptcha": "^2.0.1",
     "react-hook-form": "^5.7.2",

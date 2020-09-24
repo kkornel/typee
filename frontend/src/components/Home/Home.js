@@ -27,23 +27,12 @@ export default function Home() {
   let timerId1;
   let timerId2;
 
-  React.useEffect(() => {
-    document.title = title;
-    const id = setTimeout(type, newTextDelay + 250);
-    return () => {
-      clearTimeout(id);
-      clearTimeout(timerId1);
-      clearTimeout(timerId2);
-    };
-  }, []);
-
   // TODO: Extract to be reusable
   function type() {
     if (charIdx < textArray[txtArrIdx].length) {
       if (!cursorSpan.current.classList.contains('typing')) {
         cursorSpan.current.classList.add('typing');
       }
-
       typedSpan.current.textContent += textArray[txtArrIdx].charAt(charIdx);
       charIdx++;
       timerId1 = setTimeout(type, typingDelay);
@@ -59,25 +48,36 @@ export default function Home() {
       if (!cursorSpan.current.classList.contains('typing')) {
         cursorSpan.current.classList.add('typing');
       }
-
       typedSpan.current.textContent = textArray[txtArrIdx].substring(
         0,
         charIdx - 1
       );
-
       charIdx--;
       timerId2 = setTimeout(erase, erasingDelay);
     } else {
       cursorSpan.current.classList.remove('typing');
       txtArrIdx++;
-
       if (txtArrIdx >= textArray.length) {
         txtArrIdx = 0;
       }
-
       timerId1 = setTimeout(type, typingDelay + 1100);
     }
   }
+
+  React.useEffect(() => {
+    document.title = title;
+    const id = setTimeout(type, newTextDelay + 250);
+    return () => {
+      clearTimeout(id);
+    };
+  }, [type]);
+
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timerId1);
+      clearTimeout(timerId2);
+    };
+  }, [timerId1, timerId2]);
 
   return (
     <Box className="container">
@@ -108,7 +108,7 @@ export default function Home() {
             width="650"
             height="400"
             src="https://i.imgur.com/g7HnVSh.gif"
-            alt="It is supposed to show very important image, but it doesn't :("
+            alt="It is supposed to show very important gif, but it doesn't :("
           />
         </Box>
         <Box className={classes.boxColumn}>
@@ -131,10 +131,10 @@ export default function Home() {
       </Box>
 
       <Box className={classes.buttons}>
-        <RoundedLinkButton to="/sign-in" classes={classes.buttonDark}>
+        <RoundedLinkButton to="/sign-in" cls={classes.buttonDark}>
           Log in
         </RoundedLinkButton>
-        <RoundedLinkButton to="/sign-up" classes={classes.buttonWhite}>
+        <RoundedLinkButton to="/sign-up" cls={classes.buttonWhite}>
           Join us!
         </RoundedLinkButton>
       </Box>

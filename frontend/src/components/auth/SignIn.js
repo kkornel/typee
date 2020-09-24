@@ -13,7 +13,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useAsync } from '../../utils/useAsync';
 
 export default function SignIn(props) {
-  let isMounted = false;
   const { state } = props.location;
 
   const { signIn, resendVerificationEmail } = useAuth();
@@ -26,9 +25,7 @@ export default function SignIn(props) {
 
   React.useEffect(() => {
     document.title = 'Sign in | typee';
-    isMounted = true;
-    setTimeout(() => (isMounted ? setOpen(false) : null), 7000);
-    return () => (isMounted = false);
+    setTimeout(() => setOpen(false), 7000);
   }, [open]);
 
   const onSignIn = async (formValues) => {

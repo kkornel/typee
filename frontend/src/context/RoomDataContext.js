@@ -1,17 +1,17 @@
 import React from 'react';
 import _ from 'lodash';
 
-const ACTIONS = {
-  LEAVE_ROOM: 'LEAVE_ROOM',
-  LOAD_MESSAGES: 'LOAD_MESSAGES',
-  NEW_MESSAGE: 'NEW_MESSAGE',
-  ROOM_DELETED: 'ROOM_DELETED',
-  SET_CURRENT_ROOM: 'SET_CURRENT_ROOM',
-  SET_ROOMS: 'SET_ROOMS',
-  UPDATE_ROOM: 'UPDATE_ROOM',
-  USER_LIST_CHANGED: 'USER_LIST_CHANGED',
-  USER_STATUS_CHANGED: 'USER_STATUS_CHANGED',
-};
+import {
+  LEAVE_ROOM,
+  LOAD_MESSAGES,
+  NEW_MESSAGE,
+  ROOM_DELETED,
+  SET_CURRENT_ROOM,
+  SET_ROOMS,
+  UPDATE_ROOM,
+  USER_LIST_CHANGED,
+  USER_STATUS_CHANGED,
+} from './actions/roomData';
 
 const initialState = {
   rooms: {},
@@ -20,27 +20,24 @@ const initialState = {
 
 const RoomDataContext = React.createContext();
 
-/**
- * TODO: Clean switch instruction to be more readable.
- * Now it has logs for development purpose.
- */
-
 function roomDataReducer(state, action) {
   console.log(`roomDataReducer old state`, state);
-  console.log(`roomDataReducer ${action.type}`, action.payload);
+  // console.log(`roomDataReducer ${action.type}`, action.payload);
   switch (action.type) {
-    case ACTIONS.LEAVE_ROOM: {
+    case LEAVE_ROOM: {
       // Omit the room that was left
       const rooms = _.omit(state.rooms, [action.payload._id]);
+
       const newState = {
         ...state,
         rooms,
         currentRoom: undefined,
       };
-      console.log('roomDataReducer new state', newState);
+
+      console.log('newState LEAVE_ROOM', newState);
       return newState;
     }
-    case ACTIONS.LOAD_MESSAGES: {
+    case LOAD_MESSAGES: {
       const newState = {
         ...state,
         currentRoom: {
@@ -48,10 +45,11 @@ function roomDataReducer(state, action) {
           messages: [...action.payload],
         },
       };
-      console.log('roomDataReducer new state', newState);
+
+      console.log('newState LOAD_MESSAGES', newState);
       return newState;
     }
-    case ACTIONS.NEW_MESSAGE: {
+    case NEW_MESSAGE: {
       const message = action.payload;
 
       const currentRoom = state.currentRoom
@@ -72,10 +70,11 @@ function roomDataReducer(state, action) {
         },
         currentRoom,
       };
-      console.log('state', newState);
+
+      console.log('newState NEW_MESSAGE', newState);
       return newState;
     }
-    case ACTIONS.ROOM_DELETED: {
+    case ROOM_DELETED: {
       // Omit the room that was deleted
       const rooms = _.omit(state.rooms, [action.payload._id]);
 
@@ -92,21 +91,25 @@ function roomDataReducer(state, action) {
         rooms,
         currentRoom,
       };
-      console.log('roomDataReducer new state', newState);
+
+      console.log('newState ROOM_DELETED', newState);
       return newState;
     }
-    case ACTIONS.SET_CURRENT_ROOM: {
+    case SET_CURRENT_ROOM: {
       const newState = { ...state, currentRoom: action.payload };
-      console.log('roomDataReducer new state', newState);
+
+      console.log('newState SET_CURRENT_ROOM', newState);
       return newState;
     }
-    case ACTIONS.SET_ROOMS: {
+    case SET_ROOMS: {
       const rooms = _.keyBy(action.payload, '_id');
+
       const newState = { ...state, rooms };
-      console.log('roomDataReducer new state', newState);
+
+      console.log('newState SET_ROOMS', newState);
       return newState;
     }
-    case ACTIONS.UPDATE_ROOM: {
+    case UPDATE_ROOM: {
       const currentRoom = state.currentRoom
         ? {
             ...state.currentRoom,
@@ -119,10 +122,11 @@ function roomDataReducer(state, action) {
         rooms: { ...state.rooms, [action.payload._id]: { ...action.payload } },
         currentRoom,
       };
-      console.log('roomDataReducer new state', newState);
+
+      console.log('newState UPDATE_ROOM', newState);
       return newState;
     }
-    case ACTIONS.USER_LIST_CHANGED: {
+    case USER_LIST_CHANGED: {
       const currentRoom = state.currentRoom
         ? {
             ...state.currentRoom,
@@ -134,10 +138,11 @@ function roomDataReducer(state, action) {
         ...state,
         currentRoom,
       };
-      console.log('roomDataReducer new state', newState);
+
+      console.log('newState USER_LIST_CHANGED', newState);
       return newState;
     }
-    case ACTIONS.USER_STATUS_CHANGED: {
+    case USER_STATUS_CHANGED: {
       if (!state.currentRoom) {
         return { ...state };
       }
@@ -145,6 +150,7 @@ function roomDataReducer(state, action) {
       const users = [...state.currentRoom.users];
       const index = users.findIndex((user) => user._id === action.payload._id);
       users[index] = action.payload;
+
       const currentRoom = state.currentRoom
         ? {
             ...state.currentRoom,
@@ -156,7 +162,8 @@ function roomDataReducer(state, action) {
         ...state,
         currentRoom,
       };
-      console.log('roomDataReducer new state', newState);
+
+      console.log('newState USER_STATUS_CHANGED', newState);
       return newState;
     }
     default: {
@@ -179,4 +186,18 @@ function useRoomData() {
   return context;
 }
 
-export { ACTIONS, RoomDataProvider, useRoomData };
+export { RoomDataProvider, useRoomData };
+
+// const ACTIONS = {
+//   LEAVE_ROOM: 'LEAVE_ROOM',
+//   LOAD_MESSAGES: 'LOAD_MESSAGES',
+//   NEW_MESSAGE: 'NEW_MESSAGE',
+//   ROOM_DELETED: 'ROOM_DELETED',
+//   SET_CURRENT_ROOM: 'SET_CURRENT_ROOM',
+//   SET_ROOMS: 'SET_ROOMS',
+//   UPDATE_ROOM: 'UPDATE_ROOM',
+//   USER_LIST_CHANGED: 'USER_LIST_CHANGED',
+//   USER_STATUS_CHANGED: 'USER_STATUS_CHANGED',
+// };
+
+// export { ACTIONS, RoomDataProvider, useRoomData };

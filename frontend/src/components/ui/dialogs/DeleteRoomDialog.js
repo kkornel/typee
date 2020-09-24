@@ -12,10 +12,8 @@ import TextField from '@material-ui/core/TextField';
 import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 import InteractiveDangerButton from '../buttons/InteractiveDangerButton';
 
-import {
-  useRoomData,
-  ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../../context/RoomDataContext';
+import { useRoomData } from '../../../context/RoomDataContext';
+import { ROOM_DELETED } from '../../../context/actions/roomData';
 import { useUserData } from '../../../context/UserDataContext';
 
 export default function DeleteRoomDialog({
@@ -54,7 +52,7 @@ export default function DeleteRoomDialog({
     }
 
     onSuccessfulDelete(room);
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.ROOM_DELETED, payload: room });
+    roomDataDispatch({ type: ROOM_DELETED, payload: room });
     handleRoomDeleted(room.name);
     console.log(`The room ${room.name} has been deleted.`);
   };

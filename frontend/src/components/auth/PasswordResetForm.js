@@ -22,9 +22,19 @@ export default function PasswordResetForm({ onPasswordReset, isError, error }) {
   const recaptchaRef = React.useRef();
   const recaptchaErrorRef = React.useRef();
 
+  // React.useEffect(() => {
+  //   showError();
+  // }, [isError]);
+
+  const showError = React.useCallback(() => {
+    if (isError) {
+      setError(error.details.field, error.status, error.message);
+    }
+  }, [error, isError, setError]);
+
   React.useEffect(() => {
     showError();
-  }, [isError]);
+  }, [isError, showError]);
 
   const onSubmit = ({ email, username, password }) => {
     const recaptchaValue = recaptchaRef.current.getValue();
@@ -48,11 +58,11 @@ export default function PasswordResetForm({ onPasswordReset, isError, error }) {
     }
   };
 
-  const showError = () => {
-    if (isError) {
-      setError(error.details.field, error.status, error.message);
-    }
-  };
+  // const showError = () => {
+  //   if (isError) {
+  //     setError(error.details.field, error.status, error.message);
+  //   }
+  // };
 
   return (
     <React.Fragment>

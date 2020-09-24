@@ -32,9 +32,11 @@ const roomSchema = new Schema({
       ref: 'Message',
     },
   ],
-  avatar: {
-    type: Buffer,
-  },
+  // Was storing buffer in database, but switched to cloudinary hosting
+  // and storing now URLs only
+  // avatar: {
+  //   type: Buffer,
+  // },
   avatarUrl: {
     type: String,
   },
@@ -55,14 +57,15 @@ roomSchema.methods.getUsersInRoom = async function () {
     'users.user',
     '_id username online avatarUrl subtext'
   ).execPopulate();
-  const users = this.users.map((user) => user.user);
-  return users;
+
+  return this.users.map((user) => user.user);
 };
 
 roomSchema.methods.toJSON = function () {
   const roomObject = this.toObject();
+
   delete roomObject.__v;
-  delete avatar;
+
   return roomObject;
 };
 

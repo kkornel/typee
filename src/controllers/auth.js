@@ -4,7 +4,7 @@ const User = require('../models/User');
 const Token = require('../models/Token');
 const config = require('../config/config');
 const ErrorResponse = require('../utils/ErrorResponse');
-const { errorFormatter } = require('../validators/auth');
+const errorFormatter = require('../validators/errorFormatter');
 
 const register = async (req, res, next) => {
   console.log('/register', req.body);
@@ -18,6 +18,7 @@ const register = async (req, res, next) => {
     const { email, username, password } = req.body;
 
     // Will never reach this, because of setting up express-validator.
+    // But leaving it just to have reference.
     // if (!email || !username || !password) {
     //   throw new ErrorResponse(400, 'Missing required field(s).');
     // }
@@ -27,7 +28,7 @@ const register = async (req, res, next) => {
     if (emailTaken) {
       // Google uses 409 for ALREADY_EXISTS:
       // The resource that a client tried to create already exists.
-      throw new ErrorResponse(409, 'Email already in use.', 'ALREADY_EXISTS', {
+      throw new ErrorResponse(409, 'Email already in use', 'ALREADY_EXISTS', {
         field: 'email',
         value: email,
       });
@@ -38,7 +39,7 @@ const register = async (req, res, next) => {
     if (usernameTaken) {
       throw new ErrorResponse(
         409,
-        'Username already in use.',
+        'Username already in use',
         'ALREADY_EXISTS',
         {
           field: 'username',
@@ -70,7 +71,7 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      throw new ErrorResponse(400, 'Missing required field(s).');
+      throw new ErrorResponse(400, 'Missing required field(s)');
     }
 
     const user = await User.findByCredentials(email, password);
@@ -78,7 +79,7 @@ const login = async (req, res, next) => {
     if (!user.active) {
       throw new ErrorResponse(
         401,
-        'Account has not been verified.',
+        'Account has not been verified',
         'NOT_VERIFIED'
       );
     }
@@ -103,8 +104,9 @@ const logout = async (req, res, next) => {
     // No token on request means that user is authenticated by Google
     console.log('Logging out from Google');
 
-    // Takes the cookie and kills the id inside
+    // Take the cookie and kills the id inside
     req.logout();
+
     return res.status(200).send({});
   }
 
@@ -142,7 +144,7 @@ const handleResendVerificationRequest = async (req, res, next) => {
     const { email } = req.body;
 
     if (!email) {
-      throw new ErrorResponse(400, 'Missing required field(s).');
+      throw new ErrorResponse(400, 'Missing required field(s)');
     }
 
     const user = await User.findOne({ email });
@@ -150,7 +152,7 @@ const handleResendVerificationRequest = async (req, res, next) => {
     if (!user) {
       throw new ErrorResponse(
         400,
-        `The email address ${email} is not associated with any account.`
+        `The email address ${email} is not associated with any account`
       );
     }
 
@@ -183,14 +185,14 @@ const verifyConfirmationToken = async (req, res, next) => {
     const token = await Token.findOne({ token: req.params.token });
 
     if (!token) {
-      throw new ErrorResponse(400, 'Invalid token.');
+      throw new ErrorResponse(400, 'Invalid token');
     }
 
     const expired = Date.now() > token.expires;
 
     if (expired) {
       await token.remove();
-      throw new ErrorResponse(400, 'Token expired.');
+      throw new ErrorResponse(400, 'Token expired');
     }
 
     await User.findByIdAndUpdate(token.user, { active: true });
@@ -210,7 +212,7 @@ const handleResetPasswordRequest = async (req, res, next) => {
     const { email } = req.body;
 
     if (!email) {
-      throw new ErrorResponse(400, 'Missing required field(s).');
+      throw new ErrorResponse(400, 'Missing required field(s)');
     }
 
     const user = await User.findOne({ email });
@@ -218,7 +220,7 @@ const handleResetPasswordRequest = async (req, res, next) => {
     if (!user) {
       throw new ErrorResponse(
         400,
-        `This email address is not associated with any account.`,
+        `This email address is not associated with any account`,
         'BAD_REQUEST',
         {
           field: 'email',
@@ -256,14 +258,14 @@ const verifyPasswordResetToken = async (req, res, next) => {
     const token = await Token.findOne({ token: req.params.token });
 
     if (!token) {
-      throw new ErrorResponse(400, 'Invalid token.');
+      throw new ErrorResponse(400, 'Invalid token');
     }
 
     const expired = Date.now() > token.expires;
 
     if (expired) {
       await token.remove();
-      throw new ErrorResponse(400, 'Token expired.');
+      throw new ErrorResponse(400, 'Token expired');
     }
 
     res.cookie('token', token.token, { httpOnly: true });
@@ -280,20 +282,20 @@ const setNewPassword = async (req, res, next) => {
     const token = await Token.findOne({ token: req.cookies.token });
 
     if (!token) {
-      throw new ErrorResponse(400, 'Invalid token.');
+      throw new ErrorResponse(400, 'Invalid token');
     }
 
     const expired = Date.now() > token.expires;
 
     if (expired) {
       await token.remove();
-      throw new ErrorResponse(400, 'Token expired.');
+      throw new ErrorResponse(400, 'Token expired');
     }
 
     const { password } = req.body;
 
     if (!password) {
-      throw new ErrorResponse(400, 'Missing required field(s).');
+      throw new ErrorResponse(400, 'Missing required field(s)');
     }
 
     res.clearCookie('token', {
@@ -316,7 +318,7 @@ const setNewPassword = async (req, res, next) => {
 
     res
       .status(200)
-      .send({ success: true, message: 'Password has been updated.' });
+      .send({ success: true, message: 'Password has been updated' });
   } catch (error) {
     next(error);
   }

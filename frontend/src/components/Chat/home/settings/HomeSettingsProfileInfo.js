@@ -43,10 +43,7 @@ export default function HomeSettingsProfileInfo({
         <Box className={classes.profileButtonsBox}>
           <Box className={classes.profileButtonsEdit}>
             {!showProfileEdit && (
-              <PurpleButton
-                onClick={onEditClick}
-                classes={classes.purpleButton}
-              >
+              <PurpleButton onClick={onEditClick} cls={classes.purpleButton}>
                 Edit
               </PurpleButton>
             )}

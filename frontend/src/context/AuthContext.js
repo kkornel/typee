@@ -74,11 +74,14 @@ function AuthProvider(props) {
     []
   );
 
-  const updateProfile = React.useCallback(async (userId, data) => {
-    const response = await authClient.updateProfile(userId, data);
-    setData({ user: response.data.user });
-    return response;
-  }, []);
+  const updateProfile = React.useCallback(
+    async (userId, data) => {
+      const response = await authClient.updateProfile(userId, data);
+      setData({ user: response.data.user });
+      return response;
+    },
+    [setData]
+  );
 
   const deleteAccount = React.useCallback(
     async (userId, callback) => {

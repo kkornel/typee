@@ -3,30 +3,31 @@ const { validationResult } = require('express-validator');
 const User = require('../models/User');
 const config = require('../config/config');
 const ErrorResponse = require('../utils/ErrorResponse');
-const { errorFormatter } = require('../validators/profile');
+const errorFormatter = require('../validators/errorFormatter');
 const { getResizedBuffer, getDataUri } = require('../utils/imageUtils');
 const { cloudinaryUpload, cloudinaryDelete } = require('../utils/cloudinary');
 
 const users = async (req, res) => {
   console.log('/users');
+
   res.send({ user: req.user });
 };
 
 const updateProfile = async (req, res, next) => {
   console.log(`/users/${req.params.id}`);
-
   try {
     const { id } = req.params;
     const { user, file } = req;
     const { email, username, password, newPassword } = req.body;
     const deleteAvatar = JSON.parse(req.body.deleteAvatar);
+
     console.log(req.body);
     console.log(file);
 
     const isAuthorized = id === user._id.toString();
 
     if (!isAuthorized) {
-      return res.status(401).send({ error: 'Please authenticate.' });
+      return res.status(401).send({ error: 'Please authenticate' });
     }
 
     const errors = validationResult(req).formatWith(errorFormatter);
@@ -50,15 +51,10 @@ const updateProfile = async (req, res, next) => {
       const isSameEmail = user._id.toString() === emailTaken._id.toString();
 
       if (!isSameEmail) {
-        throw new ErrorResponse(
-          409,
-          'Email already in use.',
-          'ALREADY_EXISTS',
-          {
-            field: 'email',
-            value: email,
-          }
-        );
+        throw new ErrorResponse(409, 'Email already in use', 'ALREADY_EXISTS', {
+          field: 'email',
+          value: email,
+        });
       }
     }
 
@@ -71,7 +67,7 @@ const updateProfile = async (req, res, next) => {
       if (!isSameUsername) {
         throw new ErrorResponse(
           409,
-          'Username already in use.',
+          'Username already in use',
           'ALREADY_EXISTS',
           {
             field: 'username',
@@ -84,7 +80,7 @@ const updateProfile = async (req, res, next) => {
     if (user.email !== email) {
       user.email = email;
       user.active = false;
-      // send email
+
       const token = user.generateToken(config.verificationTokenExpireTime);
       await token.save();
 
@@ -131,7 +127,7 @@ const updateProfile = async (req, res, next) => {
         console.log('cloudinary error', error);
         throw new ErrorResponse(
           500,
-          'Unable to upload image.',
+          'Unable to upload image',
           'INTERNAL_SERVER_ERROR',
           {
             field: 'username',
@@ -142,6 +138,7 @@ const updateProfile = async (req, res, next) => {
     }
 
     await user.save();
+
     res.send({ user, success: true });
   } catch (error) {
     next(error);
@@ -152,11 +149,13 @@ const verifyPassword = async (req, res, next) => {
   const { id } = req.params;
   const { user } = req;
   const { password } = req.body;
+
   console.log(`/${id}/verify`, user);
+
   const isAuthorized = id === user._id.toString();
 
   if (!isAuthorized) {
-    return res.status(401).send({ error: 'Please authenticate.' });
+    return res.status(401).send({ error: 'Please authenticate' });
   }
 
   try {
@@ -168,7 +167,6 @@ const verifyPassword = async (req, res, next) => {
       });
     }
 
-    console.log(`/${id}/verify`, req.body);
     res.send({ success: true });
   } catch (error) {
     next(error);
@@ -178,6 +176,7 @@ const verifyPassword = async (req, res, next) => {
 const deleteAccount = async (req, res, next) => {
   const { id } = req.params;
   const { user } = req;
+
   console.log(`/${id}/delete`);
 
   const isAuthorized = id === user._id.toString();

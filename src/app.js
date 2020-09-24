@@ -1,18 +1,18 @@
 const express = require('express');
-const session = require('express-session');
-const passport = require('passport');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const http = require('http');
-const socketio = require('socket.io');
 const cors = require('cors');
+const path = require('path');
+const http = require('http');
+const passport = require('passport');
+const socketio = require('socket.io');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 require('./db/mongoose');
 require('./services/passport/googleOath');
 
 const api = require('./routes');
-const { connectionEvent } = require('./chat/listeners');
+const connectionEvent = require('./chat/listeners');
 
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
@@ -49,30 +49,29 @@ app.use('/api/v1', api);
 
 connectionEvent(io);
 
-const test = async () => {
-  const User = require('./models/User');
-  const Token = require('./models/Token');
-  const Room = require('./models/Room');
-  const Message = require('./models/Message');
-
-  const user = await User.findById('5eca1ddb48c3141334633931');
-  const token = await Token.findById('5eca1ddb48c3141334633932');
-  const message = await Message.findById('5edf96f0bca4a01b1c804767');
-};
-
-test();
-
 app.use(notFound);
 app.use(errorHandler);
+// const test = async () => {
+//   const User = require('./models/User');
+//   const Token = require('./models/Token');
+//   const Room = require('./models/Room');
+//   const Message = require('./models/Message');
 
-(async () => {
-  const User = require('./models/User');
-  const user = await User.findById('5f365cff264ad02a0415cd3f');
-  // user.getRoomsNames();
-  const Room = require('./models/Room');
-  const room = await Room.findOne({ name: 'a' });
-  const lel = await room.getUsersInRoom();
-  // console.log(lel);
-})();
+//   const user = await User.findById('5eca1ddb48c3141334633931');
+//   const token = await Token.findById('5eca1ddb48c3141334633932');
+//   const message = await Message.findById('5edf96f0bca4a01b1c804767');
+// };
+
+// test();
+
+// (async () => {
+//   const User = require('./models/User');
+//   const user = await User.findById('5f365cff264ad02a0415cd3f');
+//   // user.getRoomsNames();
+//   const Room = require('./models/Room');
+//   const room = await Room.findOne({ name: 'a' });
+//   const lel = await room.getUsersInRoom();
+//   // console.log(lel);
+// })();
 
 module.exports = server;

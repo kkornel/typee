@@ -10,7 +10,7 @@ const {
   verifyPassword,
   deleteAccount,
 } = require('../controllers/profile');
-const { updateSchema } = require('../validators/profile');
+const { updateProfileSchema } = require('../validators/profile');
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router.get('/', getUser, users);
 router.post(
   '/:id',
   getUser,
-  checkSchema(updateSchema),
+  checkSchema(updateProfileSchema),
   upload.single('file'),
   updateProfile
 );

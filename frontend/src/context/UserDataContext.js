@@ -2,11 +2,6 @@ import React from 'react';
 
 const LAST_OPENED_ROOM_KEY = 'lastOpenedRoom';
 
-const ACTIONS = {
-  SET_ROOMS: 'SET_ROOMS',
-  UPDATE_ROOM: 'UPDATE_ROOM',
-};
-
 const initialState = {
   rooms: {},
 };
@@ -60,4 +55,4 @@ function useUserData() {
   };
 }
 
-export { ACTIONS, useUserData, UserDataProvider };
+export { useUserData, UserDataProvider };

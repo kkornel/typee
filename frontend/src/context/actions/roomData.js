@@ -1,0 +1,9 @@
+export const LEAVE_ROOM = 'LEAVE_ROOM';
+export const LOAD_MESSAGES = 'LOAD_MESSAGES';
+export const NEW_MESSAGE = 'NEW_MESSAGE';
+export const ROOM_DELETED = 'ROOM_DELETED';
+export const SET_CURRENT_ROOM = 'SET_CURRENT_ROOM';
+export const SET_ROOMS = 'SET_ROOMS';
+export const UPDATE_ROOM = 'UPDATE_ROOM';
+export const USER_LIST_CHANGED = 'USER_LIST_CHANGED';
+export const USER_STATUS_CHANGED = 'USER_STATUS_CHANGED';

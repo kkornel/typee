@@ -17,10 +17,8 @@ import HorizontalTextDivider from '../HorizontalTextDivider';
 import InteractiveNormalButton from '../buttons/InteractiveNormalButton';
 import ParticipantListItem from './ui/ParticipantListItem';
 
-import {
-  useRoomData,
-  ACTIONS as ROOM_DATA_ACTIONS,
-} from '../../../context/RoomDataContext';
+import { useRoomData } from '../../../context/RoomDataContext';
+import { UPDATE_ROOM } from '../../../context/actions/roomData';
 import { useAuth } from '../../../context/AuthContext';
 import { updateRoom } from '../../../utils/room-client';
 
@@ -67,7 +65,7 @@ export default function EditRoomDialog({
       setLoading(true);
       const updatedRoom = await updateRoom(room.name, data);
       roomDataDispatch({
-        type: ROOM_DATA_ACTIONS.UPDATE_ROOM,
+        type: UPDATE_ROOM,
         payload: updatedRoom,
       });
       onRoomUpdated(room.name, updatedRoom.name);
@@ -130,7 +128,7 @@ export default function EditRoomDialog({
 
   const removeUserCallback = ({ user, room, room2 }) => {
     console.log(user, room, room2);
-    roomDataDispatch({ type: ROOM_DATA_ACTIONS.UPDATE_ROOM, payload: room });
+    roomDataDispatch({ type: UPDATE_ROOM, payload: room });
   };
 
   return (

@@ -10,7 +10,7 @@ export default function PurpleButton(props) {
   return (
     <Button
       variant="contained"
-      className={classNames(classes.purpleButton, props.classes)}
+      className={classNames(classes.purpleButton, props.cls)}
       {...props}
     />
   );

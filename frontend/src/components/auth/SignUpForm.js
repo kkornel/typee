@@ -23,9 +23,22 @@ export default function SignUpForm({ onSignUp, isError, error }) {
 
   const forgotLinkRef = React.useRef();
 
+  // React.useEffect(() => {
+  //   showError();
+  // }, [isError]);
+
+  const showError = React.useCallback(() => {
+    if (isError) {
+      setError(error.details.field, error.status, error.message);
+      if (error.details.field === 'email') {
+        forgotLinkRef.current.hidden = false;
+      }
+    }
+  }, [error, isError, setError, forgotLinkRef]);
+
   React.useEffect(() => {
     showError();
-  }, [isError]);
+  }, [isError, showError]);
 
   const onSubmit = ({ email, username, password }) => {
     onSignUp({ email, username, password });
@@ -38,14 +51,14 @@ export default function SignUpForm({ onSignUp, isError, error }) {
     }
   };
 
-  const showError = () => {
-    if (isError) {
-      setError(error.details.field, error.status, error.message);
-      if (error.details.field === 'email') {
-        forgotLinkRef.current.hidden = false;
-      }
-    }
-  };
+  // const showError = () => {
+  //   if (isError) {
+  //     setError(error.details.field, error.status, error.message);
+  //     if (error.details.field === 'email') {
+  //       forgotLinkRef.current.hidden = false;
+  //     }
+  //   }
+  // };
 
   return (
     <React.Fragment>

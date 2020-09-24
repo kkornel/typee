@@ -4,17 +4,25 @@
 
 # TODO:
 
-1) Routes authenticated and not
-2) 404
-3) Dashborads
 4) room data context
-5) consts like STATUS and ACTIONS how to storem them
 
 1) Room validate schema both sides
 2) Navbar
 
 3) Hello in the console
 4) Test google oath
+
+5) test forms and if alright remove comments with not callbacks
+6) MessageInput.js - Line 41:6:  React Hook React.useEffect has a missing dependency: 'onEnterClicked'. Either include it or remove the dependency array
+7) sign in - alert isMounted
+
+
+8) getUser authenticate ???
+9) leave as a last one not deleting
+
+
+After updating user profile he gets disconnected and disconnect event is emitted, but connect is not
+so if he navigates to the room, he is listed as offline
 
 IDEAS
 1) private room for invitations only

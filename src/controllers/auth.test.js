@@ -28,6 +28,7 @@ afterEach(clearDatabase);
 
 describe('POST /api/v1/auth/register', () => {
   // Will never reach this, because of setting up express-validator.
+  // But leaving it as a reference/
   // it('should respond with 400 for missing required field', async () => {
   //   const response = await request(app)
   //     .post('/api/v1/auth/register')
@@ -52,7 +53,7 @@ describe('POST /api/v1/auth/register', () => {
 
     expect(response.body).toMatchObject({
       status: 'ALREADY_EXISTS',
-      message: 'Email already in use.',
+      message: 'Email already in use',
       details: {
         field: 'email',
         value: newUserEmailTaken.email,
@@ -64,6 +65,7 @@ describe('POST /api/v1/auth/register', () => {
       email: newUserEmailTaken.email,
       username: newUserEmailTaken.username,
     });
+
     expect(user).toBeNull();
   });
 
@@ -76,7 +78,7 @@ describe('POST /api/v1/auth/register', () => {
 
     expect(response.body).toMatchObject({
       status: 'ALREADY_EXISTS',
-      message: 'Username already in use.',
+      message: 'Username already in use',
       details: {
         field: 'username',
         value: newUserUsernameTaken.username,
@@ -87,6 +89,7 @@ describe('POST /api/v1/auth/register', () => {
       email: newUserUsernameTaken.email,
       username: newUserUsernameTaken.username,
     });
+
     expect(user).toBeNull();
   });
 
@@ -130,7 +133,7 @@ describe('POST /api/v1/auth/login', () => {
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: 'Missing required field(s).',
+      message: 'Missing required field(s)',
     });
   });
 
@@ -145,7 +148,7 @@ describe('POST /api/v1/auth/login', () => {
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: 'Unable to login.',
+      message: 'Unable to login',
     });
   });
 
@@ -164,7 +167,7 @@ describe('POST /api/v1/auth/login', () => {
 
     expect(response.body).toMatchObject({
       status: 'NOT_VERIFIED',
-      message: 'Account has not been verified.',
+      message: 'Account has not been verified',
     });
   });
 
@@ -176,6 +179,7 @@ describe('POST /api/v1/auth/login', () => {
       .expect(200);
 
     const user = await User.findById(userOneId);
+
     expect(response.body.user._id).toBe(user._id.toString());
     expect(response.body.token).toBe(user.jwtTokens[1].token);
   });
@@ -189,13 +193,14 @@ describe('POST /api/v1/auth/logout', () => {
       .expect(401);
 
     expect(response.body).toMatchObject({
-      message: 'Please authenticate.',
+      message: 'Please authenticate',
     });
   });
 
   it('should respond with 200 and logout user', async () => {
     let user = await User.findById(userOneId);
     const token = user.jwtTokens[0];
+
     expect(user.jwtTokens).toContain(token);
 
     const response = await request(app)
@@ -205,6 +210,7 @@ describe('POST /api/v1/auth/logout', () => {
       .expect(200);
 
     user = await User.findById(userOneId);
+
     expect(user.jwtTokens).not.toContain(token);
   });
 });
@@ -217,7 +223,7 @@ describe('POST /api/v1/auth/logout/all', () => {
       .expect(401);
 
     expect(response.body).toMatchObject({
-      message: 'Please authenticate.',
+      message: 'Please authenticate',
     });
   });
 
@@ -245,7 +251,7 @@ describe('POST /api/v1/auth/verify', () => {
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: 'Missing required field(s).',
+      message: 'Missing required field(s)',
     });
   });
 
@@ -262,7 +268,7 @@ describe('POST /api/v1/auth/verify', () => {
     expect(user).toBeNull();
 
     expect(response.body).toMatchObject({
-      message: `The email address ${nonExistingEmail} is not associated with any account.`,
+      message: `The email address ${nonExistingEmail} is not associated with any account`,
     });
   });
 
@@ -300,7 +306,7 @@ describe('POST /api/v1/auth/verify/:token', () => {
     expect(token).toBeNull();
 
     expect(response.body).toMatchObject({
-      message: 'Invalid token.',
+      message: 'Invalid token',
     });
   });
 
@@ -315,7 +321,7 @@ describe('POST /api/v1/auth/verify/:token', () => {
     expect(token).toBeNull();
 
     expect(response.body).toMatchObject({
-      message: 'Token expired.',
+      message: 'Token expired',
     });
   });
 
@@ -353,7 +359,7 @@ describe('POST /api/v1/auth/password/reset', () => {
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: 'Missing required field(s).',
+      message: 'Missing required field(s)',
     });
   });
 
@@ -370,7 +376,7 @@ describe('POST /api/v1/auth/password/reset', () => {
     expect(user).toBeNull();
 
     expect(response.body).toMatchObject({
-      message: `This email address is not associated with any account.`,
+      message: `This email address is not associated with any account`,
     });
   });
 
@@ -407,7 +413,7 @@ describe('POST /api/v1/auth/password/reset/:token', () => {
     expect(token).toBeNull();
 
     expect(response.body).toMatchObject({
-      message: 'Invalid token.',
+      message: 'Invalid token',
     });
   });
 
@@ -422,7 +428,7 @@ describe('POST /api/v1/auth/password/reset/:token', () => {
     expect(token).toBeNull();
 
     expect(response.body).toMatchObject({
-      message: 'Token expired.',
+      message: 'Token expired',
     });
   });
 
@@ -455,7 +461,7 @@ describe('POST /api/v1/auth/password/reset/new', () => {
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: 'Invalid token.',
+      message: 'Invalid token',
     });
   });
 
@@ -467,7 +473,7 @@ describe('POST /api/v1/auth/password/reset/new', () => {
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: 'Token expired.',
+      message: 'Token expired',
     });
   });
 
@@ -480,7 +486,7 @@ describe('POST /api/v1/auth/password/reset/new', () => {
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: 'Missing required field(s).',
+      message: 'Missing required field(s)',
     });
   });
 
@@ -506,7 +512,7 @@ describe('POST /api/v1/auth/password/reset/new', () => {
 
     expect(response.body).toMatchObject({
       success: true,
-      message: 'Password has been updated.',
+      message: 'Password has been updated',
     });
 
     // Expect to have cleared cookie

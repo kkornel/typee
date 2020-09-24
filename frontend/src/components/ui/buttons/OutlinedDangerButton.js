@@ -10,7 +10,7 @@ export default function OutlinedDangerButton(props) {
   return (
     <Button
       variant="outlined"
-      className={classNames(classes.outlinedDangerButton, props.classes)}
+      className={classNames(classes.outlinedDangerButton, props.cls)}
       {...props}
     />
   );

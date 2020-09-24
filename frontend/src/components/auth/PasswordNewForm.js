@@ -18,9 +18,19 @@ export default function PasswordResetForm({ onNewPassword, isError, error }) {
     validationSchema: passwordNewSchema,
   });
 
+  // React.useEffect(() => {
+  //   showError();
+  // }, [isError]);
+
+  const showError = React.useCallback(() => {
+    if (isError) {
+      setError('password', error.status, error.message);
+    }
+  }, [error, setError, isError]);
+
   React.useEffect(() => {
     showError();
-  }, [isError]);
+  }, [isError, showError]);
 
   const onSubmit = ({ password }) => {
     onNewPassword(password);
@@ -32,11 +42,11 @@ export default function PasswordResetForm({ onNewPassword, isError, error }) {
     }
   };
 
-  const showError = () => {
-    if (isError) {
-      setError('password', error.status, error.message);
-    }
-  };
+  // const showError = () => {
+  //   if (isError) {
+  //     setError('password', error.status, error.message);
+  //   }
+  // };
 
   return (
     <React.Fragment>

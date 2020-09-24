@@ -4,28 +4,21 @@
 // It is debatable that we really want two sets of pointers as they may get out of sync.
 // Instead we could skip populating and directly find() the [data] we are interested in.
 
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const validator = require('validator');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 
+const Room = require('./Room');
+const Token = require('./Token');
 const config = require('../config/config');
-const passwordValidator = require('../utils/passwordValidator');
 const ErrorResponse = require('../utils/ErrorResponse');
 const { sendEmailAsync } = require('../services/email');
+const { cloudinaryDelete } = require('../utils/cloudinary');
+const passwordValidator = require('../utils/passwordValidator');
 const verificationTemplate = require('../services/emailTemplates/verificationTemplate');
 const passwordResetTemplate = require('../services/emailTemplates/passwordResetTemplate');
-const Token = require('./Token');
-const Room = require('./Room');
-const { deleteCloudinary } = require('../utils/cloudinary');
-
-// Delete user tasks when user is removed
-// userSchema.pre('remove', async function (next) {
-//   const user = this;
-//   await Task.deleteMany({ author: user._id });
-//   next();
-// });
 
 const Schema = mongoose.Schema;
 
@@ -56,6 +49,8 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
+      // Because of Google Users it can't be required here,
+      // but is is still required in the express-validator.
       // required: true,
       // minlength: 8,
       trim: true,
@@ -154,6 +149,11 @@ const leaveRoom = async (roomName, userId) => {
     .populate([{ path: 'author' }, { path: 'users.user' }])
     .exec();
 
+  // TODO test it
+  const index = room.users.findIndex((user) => user.user.toString() === userId);
+  room.users.splice(index, 1);
+  await room.save();
+
   const users = room.users.filter((user) => !!user.user);
   room.users = users;
   await room.save();
@@ -166,7 +166,7 @@ userSchema.pre('remove', async function (next) {
 
   // 1. Delete avatar
   if (this.avatarUrl) {
-    const res = await deleteCloudinary('users', this._id);
+    const res = await cloudinaryDelete('users', this._id);
     console.log('preremove res', res);
   }
 
@@ -200,13 +200,13 @@ userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new ErrorResponse(400, 'Unable to login.');
+    throw new ErrorResponse(400, 'Unable to login');
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    throw new ErrorResponse(400, 'Unable to login.');
+    throw new ErrorResponse(400, 'Unable to login');
   }
 
   return user;
@@ -237,6 +237,7 @@ userSchema.methods.generateAuthToken = async function () {
   const token = jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET);
   this.jwtTokens.push({ token });
   await this.save();
+
   return token;
 };
 

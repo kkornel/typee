@@ -6,7 +6,7 @@ const getUserById = async (userId) => {
   const user = await User.findById(userId);
 
   if (!user) {
-    return { error: `Couldn't find user with id: ${userId}.` };
+    return { error: `Couldn't find user with id: ${userId}` };
   }
 
   return { user };
@@ -16,7 +16,7 @@ const getRoomByName = async (name) => {
   const room = await Room.findOne({ name });
 
   if (!room) {
-    return { error: `Room ${name} doesn't exist.` };
+    return { error: `Room ${name} doesn't exist` };
   }
 
   return { room };
@@ -29,7 +29,7 @@ const getRoomById = async (roomId) => {
   ]);
 
   if (!room) {
-    return { error: `Room with id ${roomId} doesn't exist.` };
+    return { error: `Room with id ${roomId} doesn't exist` };
   }
 
   return { room };
@@ -63,6 +63,7 @@ const getRoomWithoutUserSockets = async (room) => {
   // so it it necessary to create new one by copying.
   const roomWithUsers = JSON.parse(JSON.stringify(room));
   roomWithUsers.users = await room.getUsersInRoom();
+
   return roomWithUsers;
 };
 
@@ -76,7 +77,7 @@ const connectUser = async (userId, socketId) => {
   );
 
   if (!user) {
-    return { error: `Couldn't find user with id: ${userId}.` };
+    return { error: `Couldn't find user with id: ${userId}` };
   }
 
   return { user };
@@ -92,7 +93,7 @@ const disconnectUser = async (socketId) => {
   );
 
   if (!user) {
-    return { error: `Couldn't find user associated with socket: ${socketId}.` };
+    return { error: `Couldn't find user associated with socket: ${socketId}` };
   }
 
   return { user };
@@ -113,6 +114,7 @@ const getUserData = async (userId) => {
 const generateRoomData = async (roomId) => {
   const room = await Room.findById(roomId);
   const users = await room.getUsersInRoom();
+
   return { users };
 };
 
@@ -162,7 +164,7 @@ const createRoom = async (roomName, authorId, socketId) => {
   const alreadyExists = await Room.findOne({ name: roomName });
 
   if (alreadyExists) {
-    return { error: `Room ${roomName} already exists.` };
+    return { error: `Room ${roomName} already exists` };
   }
 
   const room = new Room({ name: roomName, author: authorId });
@@ -208,7 +210,6 @@ const joinRoom = async (roomName, userId, socketId) => {
 };
 
 const leaveRoom = async (roomName, userId) => {
-  console.log('leaveRoom', roomName, userId);
   const { error, room } = await getRoomByName(roomName);
 
   if (error) {

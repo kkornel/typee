@@ -11,7 +11,7 @@ export default function HomeFriendsList() {
       <Box className={classes.content}>
         <h1 className={classes.header}>
           <Box component="span" className={classes.span1}>
-            //
+            {'//'}
           </Box>
           <Box component="span" className={classes.span2}>
             SOON

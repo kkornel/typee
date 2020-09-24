@@ -12,11 +12,11 @@ const authenticate = async (req, res, next) => {
   }
 
   try {
-    // The user wasn't on the request, so probably he is using JWT.
+    // The user wasn't on the request, so probably he is using JWT
     console.log('Authenticating via JWT');
 
     if (!req.header('Authorization')) {
-      throw new ErrorResponse(401, 'Please authenticate.');
+      throw new ErrorResponse(401, 'Please authenticate');
     }
 
     const token = req.header('Authorization').replace('Bearer ', '');
@@ -24,7 +24,7 @@ const authenticate = async (req, res, next) => {
     const user = await User.findOne({ _id, 'jwtTokens.token': token });
 
     if (!user) {
-      throw new ErrorResponse(401, 'Please authenticate.');
+      throw new ErrorResponse(401, 'Please authenticate');
     }
 
     req.token = token;

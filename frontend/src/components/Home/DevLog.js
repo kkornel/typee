@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -72,7 +71,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     justifyContent: 'stretch',
   },
   box: {

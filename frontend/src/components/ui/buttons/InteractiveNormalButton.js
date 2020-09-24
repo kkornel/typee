@@ -9,7 +9,7 @@ export default function InteractiveNormalButton(props) {
 
   return (
     <Button
-      className={classNames(classes.interactiveNormalButton, props.classes)}
+      className={classNames(classes.interactiveNormalButton, props.cls)}
       {...props}
     />
   );

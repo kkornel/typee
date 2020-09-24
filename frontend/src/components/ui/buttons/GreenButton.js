@@ -10,7 +10,7 @@ export default function GreenButton(props) {
   return (
     <Button
       variant="contained"
-      className={classNames(classes.greenButton, props.classes)}
+      className={classNames(classes.greenButton, props.cls)}
       {...props}
     />
   );

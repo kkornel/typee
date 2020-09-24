@@ -11,7 +11,7 @@ export default function InteractiveDangerContainedButton(props) {
     <Button
       className={classNames(
         classes.interactiveDangerContainedButton,
-        props.classes
+        props.cls
       )}
       {...props}
     />

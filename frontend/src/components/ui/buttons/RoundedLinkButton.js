@@ -7,9 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 export default function RoundedLinkButton(props) {
   const classes = useStyles();
 
-  return (
-    <Link className={classNames(classes.button, props.classes)} {...props} />
-  );
+  return <Link className={classNames(classes.button, props.cls)} {...props} />;
 }
 
 const useStyles = makeStyles((theme) => ({

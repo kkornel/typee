@@ -2,7 +2,7 @@ const { validationResult } = require('express-validator');
 
 const Room = require('../models/Room');
 const ErrorResponse = require('../utils/ErrorResponse');
-const { errorFormatter } = require('../validators/room');
+const errorFormatter = require('../validators/errorFormatter');
 const { getResizedBuffer, getDataUri } = require('../utils/imageUtils');
 const { cloudinaryUpload, cloudinaryDelete } = require('../utils/cloudinary');
 
@@ -13,12 +13,13 @@ const update = async (req, res, next) => {
 
   const errors = validationResult(req).formatWith(errorFormatter);
   console.log(errors);
+
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() });
   }
 
   const { name } = req.params;
-  // const { newName, deleteCurrent } = req.body;
+
   // deleteCurrent was of type String, because of how FormData works
   // so now it is stringified on client side and parsed on server,
   // so deleteCurrent is boolean instead of String
@@ -39,6 +40,7 @@ const update = async (req, res, next) => {
       { path: 'author' },
       { path: 'users.user' },
     ]);
+
     await room.populate('messages').execPopulate();
     await room
       .populate('messages.author', '_id username subtext avatarUrl')
@@ -86,7 +88,7 @@ const update = async (req, res, next) => {
         console.log('cloudinary error', error);
         throw new ErrorResponse(
           500,
-          'Unable to upload image.',
+          'Unable to upload image',
           'INTERNAL_SERVER_ERROR'
         );
       }

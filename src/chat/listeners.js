@@ -2,9 +2,7 @@ const {
   getUserById,
   getRoomByName,
   getRoomById,
-  getUserRoomsWithSockets,
   getUserRoomsWithoutUserSockets,
-  getRoomWithoutUserSockets,
   connectUser,
   disconnectUser,
   getUserData,
@@ -248,4 +246,4 @@ const connectionEvent = (io) => {
   });
 };
 
-module.exports = { connectionEvent };
+module.exports = connectionEvent;

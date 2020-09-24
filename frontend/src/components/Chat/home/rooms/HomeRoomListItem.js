@@ -32,21 +32,21 @@ export default function HomeRoomListItem({
           <React.Fragment>
             <InteractiveNormalContainedButton
               onClick={() => onEditClick(room._id)}
-              classes={classes.interactiveNormalButton}
+              cls={classes.interactiveNormalButton}
             >
               Edit
             </InteractiveNormalContainedButton>
             <InteractiveDangerContainedButton
               onClick={() => onDeleteClick(room._id)}
-              classes={classes.interactiveDangerButton}
+              cls={classes.interactiveDangerButton}
             >
               Delete
             </InteractiveDangerContainedButton>
           </React.Fragment>
         ) : (
           <InteractiveNormalContainedButton
-            onClick={() => onLeaveClick(room._id)}
-            classes={classes.interactiveNormalButton}
+            onClick={() => onLeaveClick(room.name)}
+            cls={classes.interactiveNormalButton}
           >
             Leave
           </InteractiveNormalContainedButton>

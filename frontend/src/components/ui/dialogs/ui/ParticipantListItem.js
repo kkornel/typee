@@ -58,7 +58,7 @@ export default function ParticipantListItem({ user, onRemoveClick }) {
         </Box>
         <InteractiveDangerButton
           onClick={() => onRemoveClick(user._id)}
-          classes={classes.interactiveDangerButton}
+          cls={classes.interactiveDangerButton}
         >
           Remove
         </InteractiveDangerButton>

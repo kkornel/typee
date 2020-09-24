@@ -10,10 +10,8 @@ function Dashboard() {
   const socket = useSocket();
 
   React.useEffect(() => {
-    return () => {
-      socket.disconnet();
-    };
-  }, []);
+    return () => socket.disconnet();
+  }, [socket]);
 
   return <ChatDashboard socket={socket} user={user} />;
 }

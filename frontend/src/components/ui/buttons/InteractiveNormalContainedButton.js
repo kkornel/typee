@@ -11,7 +11,7 @@ export default function InteractiveNormalContainedButton(props) {
     <Button
       className={classNames(
         classes.interactiveNormalContainedButton,
-        props.classes
+        props.cls
       )}
       {...props}
     />

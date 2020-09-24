@@ -24,7 +24,7 @@ export default function About(props) {
             <img
               className={classes.image}
               src="https://i.imgur.com/r7PiYmK.gif"
-              alt="It is supposed to show very important image, but it doesn't :("
+              alt="It is supposed to show very important gif, but it doesn't :("
             />
           </Box>
           <Box className={classes.textBox}>
@@ -44,7 +44,7 @@ export default function About(props) {
       </Box>
 
       <Box id="A"></Box>
-      <Box id="B" class="wavy"></Box>
+      <Box id="B"></Box>
 
       <Box className={classes.boxRow}>
         <Container maxWidth="lg" className={classes.container}>
@@ -63,14 +63,14 @@ export default function About(props) {
             <img
               className={classes.image}
               src="https://i.imgur.com/ZnGXeMD.gif"
-              alt="It is supposed to show very important image, but it doesn't :("
+              alt="It is supposed to show very important gif, but it doesn't :("
             />
           </Box>
         </Container>
       </Box>
 
       <Box id="C"></Box>
-      <Box id="D" class="wavy"></Box>
+      <Box id="D"></Box>
 
       <Box className={classes.boxRow}>
         <Container maxWidth="lg" className={classes.container}>
@@ -78,7 +78,7 @@ export default function About(props) {
             <img
               className={classes.image}
               src="https://i.imgur.com/IICTl62.gif"
-              alt="It is supposed to show very important image, but it doesn't :("
+              alt="It is supposed to show very important gif, but it doesn't :("
             />
           </Box>
           <Box className={classes.textBox}>
@@ -91,14 +91,14 @@ export default function About(props) {
       </Box>
 
       <Box className={classes.signUp}>
-        <RoundedLinkButton to={'/sign-up'} classes={classes.buttonDark}>
+        <RoundedLinkButton to={'/sign-up'} cls={classes.buttonDark}>
           SIGN UP
         </RoundedLinkButton>
       </Box>
 
       <Box id="C"></Box>
-      <Box id="D" class="wavy">
-        <RoundedLinkButton to={'/dev-log'} classes={classes.buttonWhite}>
+      <Box id="D">
+        <RoundedLinkButton to={'/dev-log'} cls={classes.buttonWhite}>
           DEV LOG
         </RoundedLinkButton>
       </Box>
@@ -115,7 +115,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     justifyContent: 'stretch',
   },
   boxRow: {
@@ -162,8 +161,6 @@ const useStyles = makeStyles((theme) => ({
   buttonDark: {
     color: 'white',
     background: theme.palette.appBarBackground,
-    // background: theme.palette.purpleAlt3,
-    // color: theme.palette.appBarBackground,
     '&:hover': {
       background: theme.palette.backgroundPrimary,
       boxShadow: '0 2px 15px white',

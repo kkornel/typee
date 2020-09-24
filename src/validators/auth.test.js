@@ -13,13 +13,13 @@ describe('POST /api/v1/auth/register', () => {
     expect(response.body).toMatchObject({
       errors: {
         email: {
-          message: 'Required field.',
+          message: 'Required field',
         },
         username: {
-          message: 'Required field.',
+          message: 'Required field',
         },
         password: {
-          message: 'Required field.',
+          message: 'Required field',
         },
       },
     });
@@ -39,7 +39,7 @@ describe('POST /api/v1/auth/register', () => {
     expect(response.body).toMatchObject({
       errors: {
         email: {
-          message: 'Invalid email.',
+          message: 'Invalid email',
         },
       },
     });
@@ -59,7 +59,7 @@ describe('POST /api/v1/auth/register', () => {
     expect(response.body).toMatchObject({
       errors: {
         username: {
-          message: 'Only alphanumerics (letters and numbers).',
+          message: 'Only alphanumerics (letters and numbers)',
         },
       },
     });
@@ -77,7 +77,7 @@ describe('POST /api/v1/auth/register', () => {
     expect(response2.body).toMatchObject({
       errors: {
         username: {
-          message: 'Required min length of 4 and max of 18.',
+          message: 'Required min length of 4 and max of 18',
         },
       },
     });
@@ -98,7 +98,7 @@ describe('POST /api/v1/auth/register', () => {
       errors: {
         password: {
           message:
-            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number.',
+            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
         },
       },
     });
@@ -117,7 +117,7 @@ describe('POST /api/v1/auth/register', () => {
       errors: {
         password: {
           message:
-            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number.',
+            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
         },
       },
     });
@@ -136,7 +136,7 @@ describe('POST /api/v1/auth/register', () => {
       errors: {
         password: {
           message:
-            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number.',
+            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
         },
       },
     });
@@ -155,7 +155,7 @@ describe('POST /api/v1/auth/register', () => {
       errors: {
         password: {
           message:
-            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number.',
+            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
         },
       },
     });

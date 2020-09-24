@@ -1,6 +1,7 @@
 import React from 'react';
 import 'emoji-mart/css/emoji-mart.css';
-import Picker from 'react-giphy-picker';
+// import Picker from 'react-giphy-picker';
+import Picker from 'react-giphy-component';
 import { Picker as EmojiPicker } from 'emoji-mart';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,38 +33,69 @@ export default function MessageInput({ handleMessageSubmit }) {
   const [showEmojiPicker, setShowEmojisPicker] = React.useState(false);
   const [showGiphyPicker, setShowGiphyPicker] = React.useState(false);
 
+  const handleSubmit = React.useCallback(
+    (event) => {
+      if (event) {
+        event.preventDefault();
+      }
+
+      if (!inputValue) {
+        return;
+      }
+
+      handleMessageSubmit(inputValue);
+      setInputValue('');
+    },
+    [handleMessageSubmit, inputValue]
+  );
+
+  const onEnterClicked = React.useCallback(
+    (event) => {
+      if (!showEmojiPicker) {
+        return;
+      }
+
+      if (event.keyCode === 13) {
+        setShowEmojisPicker(false);
+        handleSubmit();
+        focusInput();
+      }
+    },
+    [handleSubmit, showEmojiPicker]
+  );
+
   React.useEffect(() => {
     document.addEventListener('keydown', onEnterClicked, false);
 
     return () => {
       document.removeEventListener('keydown', onEnterClicked, false);
     };
-  }, [inputValue]);
+  }, [inputValue, onEnterClicked]);
 
-  const handleSubmit = (event) => {
-    if (event) {
-      event.preventDefault();
-    }
+  // const onEnterClicked = (event) => {
+  //   if (!showEmojiPicker) {
+  //     return;
+  //   }
 
-    if (!inputValue) {
-      return;
-    }
+  //   if (event.keyCode === 13) {
+  //     setShowEmojisPicker(false);
+  //     handleSubmit();
+  //     focusInput();
+  //   }
+  // };
 
-    handleMessageSubmit(inputValue);
-    setInputValue('');
-  };
+  // const handleSubmit = (event) => {
+  //   if (event) {
+  //     event.preventDefault();
+  //   }
 
-  const onEnterClicked = (event) => {
-    if (!showEmojiPicker) {
-      return;
-    }
+  //   if (!inputValue) {
+  //     return;
+  //   }
 
-    if (event.keyCode === 13) {
-      setShowEmojisPicker(false);
-      handleSubmit();
-      focusInput();
-    }
-  };
+  //   handleMessageSubmit(inputValue);
+  //   setInputValue('');
+  // };
 
   const onChangeHandler = (event) => {
     setText(`${event.target.files[0].name}`);
@@ -101,12 +133,15 @@ export default function MessageInput({ handleMessageSubmit }) {
     if (showEmojiPicker) {
       setShowEmojisPicker(false);
     }
+
     setShowGiphyPicker(!showGiphyPicker);
   };
 
   const focusInput = () => {
     inputRef.current.children[0].focus();
   };
+
+  console.log('rerender');
 
   return (
     <Box className={classes.messagesCompose}>
