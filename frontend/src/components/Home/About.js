@@ -1,10 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
 
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 
+import RoundedButton from '../ui/buttons/RoundedButton';
 import RoundedLinkButton from '../ui/buttons/RoundedLinkButton';
 
 import '../../wave.css';
@@ -98,9 +102,12 @@ export default function About(props) {
 
       <Box id="C"></Box>
       <Box id="D">
-        <RoundedLinkButton to={'/dev-log'} cls={classes.buttonWhite}>
-          DEV LOG
-        </RoundedLinkButton>
+        <a href="https://github.com/" target="_blank">
+          <RoundedButton cls={classes.buttonWhite}>
+            <FontAwesomeIcon icon={faGithub} />
+            <Box className={classes.githubBox}>Github</Box>
+          </RoundedButton>
+        </a>
       </Box>
     </Box>
   );
@@ -169,5 +176,8 @@ const useStyles = makeStyles((theme) => ({
   signUp: {
     display: 'flex',
     justifyContent: 'center',
+  },
+  githubBox: {
+    marginLeft: '8px',
   },
 }));

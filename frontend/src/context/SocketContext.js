@@ -9,7 +9,7 @@ const SocketContext = React.createContext();
  * Every time I tried to create Context with socket, the new socket was created
  * (instead of using old one),
  * and server was receiving new connections with new socketId.
- * But still it is TODO
+ * But still it is TODO.
  */
 
 function SocketProvider(props) {

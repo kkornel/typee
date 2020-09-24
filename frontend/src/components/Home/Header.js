@@ -33,12 +33,12 @@ export default function Header() {
             <Link to="/about" className={classes.link}>
               About
             </Link>
-            <Link to="/password-reset" className={classes.link}>
+            {/* <Link to="/password-reset" className={classes.link}>
               Reset
             </Link>
             <Link to="/password-reset-new" className={classes.link}>
               New
-            </Link>
+            </Link> */}
           </Box>
         </Container>
       </Toolbar>

@@ -23,10 +23,8 @@ export default function SignUpForm({ onSignUp, isError, error }) {
 
   const forgotLinkRef = React.useRef();
 
-  // React.useEffect(() => {
-  //   showError();
-  // }, [isError]);
-
+  // If there will be some problem with showError
+  // remove useCallback from showError and remove showError from dependency array
   const showError = React.useCallback(() => {
     if (isError) {
       setError(error.details.field, error.status, error.message);
@@ -51,19 +49,13 @@ export default function SignUpForm({ onSignUp, isError, error }) {
     }
   };
 
-  // const showError = () => {
-  //   if (isError) {
-  //     setError(error.details.field, error.status, error.message);
-  //     if (error.details.field === 'email') {
-  //       forgotLinkRef.current.hidden = false;
-  //     }
-  //   }
-  // };
-
   return (
     <React.Fragment>
       <Typography component="h1" variant="h5" className={classes.title}>
         Create an account
+      </Typography>
+      <Typography variant="subtitle2" gutterBottom className={classes.subTitle}>
+        Start your journey right now
       </Typography>
       <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
         <DarkTextFieldStyled
@@ -150,6 +142,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     fontWeight: 600,
     color: theme.palette.headerPrimary,
+  },
+  subTitle: {
+    marginTop: '8px',
+    textAlign: 'center',
+    color: theme.palette.headerSecondary,
   },
   form: {
     marginTop: '8px',

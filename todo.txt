@@ -1,0 +1,10 @@
+# TODO:
+
+1) Hello in the console
+2) Comment console logs 
+3) getUser vs authenticate
+4) Display/store deleted user? Created rooms removed, but messages in other rooms?
+
+# Issues:
+
+1) After updating user profile he gets disconnected and disconnect event is emitted, but connect is not, so if he navigates to the room, he is listed as offline.

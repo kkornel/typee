@@ -34,11 +34,6 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const user = await User.findOne({ googleId: profile.id });
 
-      // console.log('accessToken', accessToken);
-      // console.log('refreshToken', refreshToken);
-      // console.log('Google profile', profile);
-      // console.log('user', user);
-
       if (user) {
         return done(null, user);
       }
@@ -47,7 +42,6 @@ passport.use(
         const newUser = await new User({
           googleId: profile.id,
           // TODO: What if there is already a name or email like that?
-
           // Probably I can't do much in this case, because I'm not making request to my express server,
           // but to the Google itself. So I have to use <a href=/api/v1/auth/google></a>
           // instead of auth-client. So in this case I can't catch response...

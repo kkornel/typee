@@ -10,7 +10,7 @@ import { processMessage } from '../../../utils/messageUtils';
 export default function ShortMessage({ message }) {
   const classes = useStyles();
 
-  // TODO extract to be reusable
+  // TODO: Extract to be reusable
   const changeColor = (event) => {
     const timeSpan = document.getElementById(message._id);
 

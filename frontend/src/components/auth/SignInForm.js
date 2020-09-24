@@ -40,10 +40,6 @@ export default function SignInForm({
 
   const resendRef = React.useRef();
 
-  // React.useEffect(() => {
-  //   showError();
-  // }, [isError]);
-
   const showError = React.useCallback(() => {
     if (isError) {
       setError('email', error.status, error.message);
@@ -75,17 +71,6 @@ export default function SignInForm({
       resendRef.current.hidden = true;
     }
   };
-
-  // const showError = () => {
-  //   if (isError) {
-  //     setError('email', error.status, error.message);
-  //     if (error.status === 'NOT_VERIFIED') {
-  //       resendRef.current.hidden = false;
-  //     } else {
-  //       setError('password', error.status, null);
-  //     }
-  //   }
-  // };
 
   return (
     <React.Fragment>

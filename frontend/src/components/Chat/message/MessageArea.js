@@ -40,7 +40,7 @@ export default function MessageArea({ messages, handleMessageSubmit }) {
   };
 
   const getMessage = (message, idx) => {
-    // TODO How to display deleted user?
+    // TODO: How to display deleted user?
     if (!message.author) {
       message.author = {
         _id: new Date().getTime().toString(),

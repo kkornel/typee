@@ -50,17 +50,16 @@ export default function ChatDashboard({ user, socket }) {
     console.log('useEffect');
 
     socket.connect(user._id, connectCallback);
-    // socket.requestUserData(user._id, requestUserDataCallback);
     socket.onNewMessage(onNewMessage);
     socket.onNewRoomData(onNewRoomData);
     socket.onRoomUpdated(onRoomUpdated);
     socket.onRoomDeleted(onRoomDeleted);
     socket.onUserStatusChanged(onUserStatusChanged);
+    // socket.requestUserData(user._id, requestUserDataCallback);
 
-    // TODO: is it necessary?
     const lastOpenedRoom = getLastOpenedRoom();
     if (lastOpenedRoom) {
-      // socket.joinRoom(user._id, lastOpenedRoom, joinRoomCallback);
+      socket.joinRoom(user._id, lastOpenedRoom, joinRoomCallback);
     }
   }, []);
 

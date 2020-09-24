@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 
 import About from './components/home/About';
-import DevLog from './components/home/DevLog';
 import FourOhFour from './components/404';
 import Home from './components/home/Home';
 import PasswordNew from './components/auth/PasswordNew';
@@ -15,8 +14,8 @@ import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 
 export default function UnauthenticatedApp() {
-  // const location = useLocation();
   const classes = useStyles();
+  // const location = useLocation();
 
   return (
     <Box className={classes.body}>
@@ -25,7 +24,6 @@ export default function UnauthenticatedApp() {
         <Route path="/sign-in" component={SignIn} />
         <Route path="/sign-up" component={SignUp} />
         <Route path="/about" component={About} />
-        <Route path="/dev-log" component={DevLog} />
         <Route path="/password-reset" component={PasswordReset} />
         <Route path="/password-reset-new" component={PasswordNew} />
         <Redirect to="/sign-in" from="/dashboard" />

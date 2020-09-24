@@ -87,9 +87,7 @@ const userSchema = new Schema(
     ],
     active: {
       type: Boolean,
-      // TODO uncomment
-      // default: false,
-      default: true,
+      default: false,
     },
     socketId: {
       type: String,
