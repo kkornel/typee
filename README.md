@@ -1,68 +1,96 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![alt text][logo]
 
-## Available Scripts
+Chat application created with :heart: for learning purposes only.
 
-In the project directory, you can run:
+# Philosophy
 
-### `npm start`
+Main purpose of this project was (and still is!) to expand my knowledge of JavaScript programming, by creating complex application, which would involve .
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Why chat application?
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Before creating this project I've had a lot of ideas beginning with Video Streaming Service, through Survey App, ending at Medical Appointment Organizer for local doctor's office. But they all were very similar to the projects I already worked on.
 
-### `npm test`
+At this point, I've realized that I've never worked with Web Sockets, so now the choice was simple - create Real Time Chat Application.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Inspiration
 
-### `npm run build`
+As my goal, I've decided to re-create one of the most popular chat application in the World - **Discord**.
+<!---I took a lot of inspiration from that app. The appearance of **typee** is very congenial to Discord's. I think it's modern, good looking and intuitive.-->
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Features
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Present version of **typee** has basic functionalities, which provide stable communication and allow users to chat with other in real time. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Typee offers:
 
-### `npm run eject`
+* Email and password authentication
+* Google Oath authentication
+* Creating, managing and customizing separate rooms for conversations
+* Sending messages, emotes and gifs 
+* Customizing profile by setting up unique username and profile picture
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Incoming update will provide:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Adding friends
+* Sending private messages to the friends
+* Sharing files in rooms
+* Creating private rooms for invitation only
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Planned for a distant future:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+* Room bots that will listen for commands
+* Room permissions and privileges (e.g. moderator)
+* Channels inside rooms (e.g. general, offtopic, homework)
 
-## Learn More
+# Tech stack
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Here is the list of the most important technologies and libraries that were used in development.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Frontend
 
-### Code Splitting
+* React - main framework
+* Material UI - design library 
+* Redux - storing app state (at the beggining I was using Redux libary to store application state, but after a while I saw it's downsides and completly switched to the new built-in React Context system)
+* axios - HTTP client
+* Jest - testing framework
+* Docker - app containerization
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Backend
 
-### Analyzing the Bundle Size
+* Node.js - runtime environment
+* Express - web application framework
+* MongoDB - NoSQL database
+* Mongoose - MongoDB modeling tool
+* socket.io - library for realtime web applications
+* Passport - strategy for authenticating
+* Jest - testing framework
+* Docker - app containerization
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## External services
+* MongoDB Atlas - database host
+* Sendgrid - email delivery platform
+* Clodinary - image management service
+* TravisCI - testing, building and deploying application
+* AWS Elastic Beanstalk - hosting the application
 
-### Making a Progressive Web App
+# Development and production flow
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+In development stage I run project locally on development branch. This setup does not involve Docker, because it's faster to implement and test features without containerization, but requires some additional proxy and CORS configuration - hence for example ```setupProxy.js```.
 
-### Advanced Configuration
+#### Deploying applications works as follow:
+1. Create Docker files for:
+    * Frontend application,
+    * Backend server,
+    * Nginx server (which is responsible for proxying between containers).
+2. Create config file for TravisCI, which tells Travis how to:
+    * build containers based on included Dockerfiles,
+    * run all tests in project,
+    * deploy application to the AWS Elastic Beanstalk if all test suites are passed.
+3. Push code to the Github Master branch.
+4. Configure TravisCI to automatically pull code from repository.
+5. If everything went correctly the application is now hosted on the AWS servers and available for others.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### Soooo. See you at :point_right: [typee](typee.com)!
+### :punch:
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+[logo]: https://i.imgur.com/1FxTQuN.png "Logo"

@@ -14,7 +14,23 @@ export default function DevLog(props) {
   return (
     <Box className={classes.body}>
       <Container maxWidth="lg" className={classes.container}>
-        <Box className={classes.box}>
+        <Box
+          style={{
+            textAlign: 'center',
+            fontFamily: 'Montserrat',
+            letterSpacing: '0.1rem',
+            fontWeight: 700,
+            // width: '100%',
+            // marginLeft: 'auto',
+            // marginRight: 'auto',
+            position: 'relative',
+            margin: '400px',
+            fontSize: '128px',
+          }}
+        >
+          typee
+        </Box>
+        <Box className={classes.box} style={{ marginTop: '500px' }}>
           <p>typee is chat application created only for learning purposes. </p>{' '}
           <br />
           <p>
