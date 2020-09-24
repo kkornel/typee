@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container';
 
 import RoundedLinkButton from '../ui/buttons/RoundedLinkButton';
 
-import '../../wave.css';
+import '../../css/wave.css';
 
 export default function FourOhFour() {
   const classes = useStyles();

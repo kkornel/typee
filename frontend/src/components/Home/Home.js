@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 
 import RoundedLinkButton from '../ui/buttons/RoundedLinkButton';
 
-import '../../home.css';
+import '../../css/home.css';
 
 export default function Home() {
   const classes = useStyles();

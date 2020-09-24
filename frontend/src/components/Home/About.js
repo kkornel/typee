@@ -11,7 +11,7 @@ import Container from '@material-ui/core/Container';
 import RoundedButton from '../ui/buttons/RoundedButton';
 import RoundedLinkButton from '../ui/buttons/RoundedLinkButton';
 
-import '../../wave.css';
+import '../../css/wave.css';
 
 export default function About(props) {
   const classes = useStyles();
