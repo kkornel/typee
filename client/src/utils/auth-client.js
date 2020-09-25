@@ -93,7 +93,7 @@ async function deleteAccount(userId) {
 
 async function updateProfile(userId, data) {
   // Can't send files with fetch, so using axios...
-  const token = localStorage.getItem(localStorageKey);
+  const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
   const response = await axios.post(`/api/v1/users/${userId}`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
