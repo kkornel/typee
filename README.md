@@ -78,19 +78,25 @@ Here is the list of the most important technologies and libraries that were used
 In development stage I run project locally on development branch. This setup does not involve Docker, because it's faster to implement and test features without containerization, but requires some additional proxy and CORS configuration - hence for example ```setupProxy.js```.
 
 #### Deploying applications works as follow:
-1. Create Docker files for:
+1. Create ```Dockerfiles``` for:
     * Frontend application,
     * Backend server,
     * Nginx server (which is responsible for proxying between containers).
-2. Create config file for TravisCI, which tells Travis how to:
+2. Create ```.travis.yml``` config file, which tells Travis how to:
     * build containers based on included Dockerfiles,
     * run all tests in project,
     * deploy application to the AWS Elastic Beanstalk if all test suites are passed.
-3. Push code to the Github Master branch.
-4. Configure TravisCI to automatically pull code from repository.
-5. If everything went correctly the application is now hosted on the AWS servers and available for others.
+3. Create ```Dockerrun.aws.json``` config file, which contains containers definitions for AWS Elastic BeansTalk.
+4. Push code to the Github Master branch.
+5. Configure TravisCI to automatically pull code from repository.
+7. TravisCI runs all steps included in ```.travis.yml```
+6. If everything went correctly the application is now hosted on the AWS servers and available for others.
+
+
+##### Long story short:
+* Code -> Test -> Docker -> Merge -> Push -> Travis -> More Tests -> Deploy -> AWS -> TYPE!
 
 ### Soooo. See you at :point_right: [typee](typee.com)!
-### :punch:
+## :punch:
 
 [logo]: https://i.imgur.com/1FxTQuN.png "Logo"

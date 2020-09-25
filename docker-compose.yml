@@ -1,0 +1,39 @@
+version: '3'
+services:
+  nginx:
+    depends_on: # prod
+      - client  # prod
+      - api     # prod
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports: 
+      - '3050:80' # dev
+      # - '80:80' # prod
+  client:
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    volumes: 
+      - /app/node_modules
+      - ./client:/app      # dev
+    # restart: on-failure    # prod
+    container_name: client # prod
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    volumes: 
+      - /app/node_modules
+      - ./server:/app   # dev
+    # restart: on-failure # prod 
+    container_name: api # prod
+    env_file: 
+      - ./server/.env
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    
