@@ -133,7 +133,7 @@ function AuthProvider(props) {
   }
 
   if (isError) {
-    console.log('AuthContext Error', error);
+    // console.log('AuthContext Error', error);
     return <div>{error.message}</div>;
   }
 

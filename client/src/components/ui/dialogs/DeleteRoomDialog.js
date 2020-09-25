@@ -48,13 +48,14 @@ export default function DeleteRoomDialog({
 
   const deleteRoomCallback = ({ error, room }) => {
     if (error) {
-      console.log('deleteRoomCallback', error);
+      // console.log('deleteRoomCallback', error);
+      return;
     }
 
     onSuccessfulDelete(room);
     roomDataDispatch({ type: ROOM_DELETED, payload: room });
     handleRoomDeleted(room.name);
-    console.log(`The room ${room.name} has been deleted.`);
+    // console.log(`The room ${room.name} has been deleted.`);
   };
 
   const onExit = () => {

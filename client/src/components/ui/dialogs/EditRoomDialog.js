@@ -73,7 +73,7 @@ export default function EditRoomDialog({
       onSuccessfulUpdate();
     } catch (error) {
       setLoading(false);
-      console.log('Edit Room ERROR', error.response.data);
+      // console.log('Edit Room ERROR', error.response.data);
       setError(error.response.data.message);
     }
   };
@@ -84,10 +84,11 @@ export default function EditRoomDialog({
 
   const roomUpdatedCallback = ({ error }) => {
     if (error) {
-      return console.log('roomUpdatedCallback', error);
+      // console.log('roomUpdatedCallback', error);
+      return;
     }
 
-    console.log('Room updated successfully.');
+    // console.log('Room updated successfully.');
   };
 
   const resetError = () => {
@@ -127,7 +128,6 @@ export default function EditRoomDialog({
   };
 
   const removeUserCallback = ({ user, room, room2 }) => {
-    console.log(user, room, room2);
     roomDataDispatch({ type: UPDATE_ROOM, payload: room });
   };
 

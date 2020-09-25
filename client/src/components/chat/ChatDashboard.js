@@ -47,7 +47,7 @@ export default function ChatDashboard({ user, socket }) {
   }, [currentRoom]);
 
   React.useEffect(() => {
-    console.log('useEffect');
+    // console.log('useEffect');
 
     socket.connect(user._id, connectCallback);
     socket.onNewMessage(onNewMessage);
@@ -89,12 +89,13 @@ export default function ChatDashboard({ user, socket }) {
 
   const connectCallback = ({ error, user, rooms }) => {
     if (error) {
-      return console.log('connectCallback ERROR', error);
+      // console.log('connectCallback ERROR', error);
+      return;
     }
 
     roomDataDispatch({ type: SET_ROOMS, payload: rooms });
 
-    console.log('Successfully connected to the server.');
+    // console.log('Successfully connected to the server.');
   };
 
   // const requestUserDataCallback = ({ error, user, rooms }) => {
@@ -108,15 +109,16 @@ export default function ChatDashboard({ user, socket }) {
 
   const submitCallback = ({ error }) => {
     if (error) {
-      return console.log('submitCallback ERROR', error);
+      // console.log('submitCallback ERROR', error);
+      return;
     }
 
-    console.log('Message delivered successfully.');
+    // console.log('Message delivered successfully.');
   };
 
   const createRoomCallback = ({ error, room, rooms }) => {
     if (error) {
-      console.log('createRoomCallback ERROR', error);
+      // console.log('createRoomCallback ERROR', error);
       return setDialogData((prevState) => {
         return { ...prevState, error };
       });
@@ -135,12 +137,12 @@ export default function ChatDashboard({ user, socket }) {
     });
     handleDialogClose();
 
-    console.log('Room created successfully.');
+    // console.log('Room created successfully.');
   };
 
   const joinRoomCallback = ({ error, room, rooms }) => {
     if (error) {
-      console.log('joinRoomCallback ERROR', error);
+      // console.log('joinRoomCallback ERROR', error);
       return setDialogData((prevState) => {
         return { ...prevState, error };
       });
@@ -160,20 +162,22 @@ export default function ChatDashboard({ user, socket }) {
     }
 
     handleDialogClose();
-    console.log('Joined to room successfully.');
+    // console.log('Joined to room successfully.');
   };
 
   const roomUpdatedCallback = ({ error }) => {
     if (error) {
-      return console.log('roomUpdatedCallback', error);
+      // console.log('roomUpdatedCallback', error);
+      return;
     }
 
-    console.log('Room updated successfully.');
+    // console.log('Room updated successfully.');
   };
 
   const leaveRoomCallback = ({ error, room }) => {
     if (error) {
-      return console.log('leaveRoomCallback ERROR', error);
+      // console.log('leaveRoomCallback ERROR', error);
+      return;
     }
 
     roomDataDispatch({ type: LEAVE_ROOM, payload: room });
@@ -184,12 +188,13 @@ export default function ChatDashboard({ user, socket }) {
       autoHideDuration: 2000,
     });
 
-    console.log(`Left ${room.name} successfully.`);
+    // console.log(`Left ${room.name} successfully.`);
   };
 
   const deleteRoomCallback = ({ error, room }) => {
     if (error) {
-      console.log('handleDeleteRoomCallback', error);
+      // console.log('handleDeleteRoomCallback', error);
+      return;
     }
 
     roomDataDispatch({ type: ROOM_DELETED, payload: room });
@@ -200,7 +205,7 @@ export default function ChatDashboard({ user, socket }) {
       autoHideDuration: 2000,
     });
 
-    console.log(`The room ${room.name} has been deleted.`);
+    // console.log(`The room ${room.name} has been deleted.`);
   };
 
   //#region callbacks
@@ -256,7 +261,7 @@ export default function ChatDashboard({ user, socket }) {
 
   //#endregion
 
-  console.log('ChatDashboard RE-RENDER');
+  // console.log('ChatDashboard RE-RENDER');
 
   const handleHomeClick = () => {
     roomDataDispatch({

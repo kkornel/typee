@@ -73,7 +73,6 @@ export default function ManageRoomDialog({
 
     try {
       setLoading(true);
-      console.log('dasda', data);
       const updatedRoom = await updateRoom(room.name, data);
       setLoading(false);
 
@@ -85,7 +84,7 @@ export default function ManageRoomDialog({
       onSuccessfulUpdate();
     } catch (error) {
       setLoading(false);
-      console.log('Edit Room ERROR', error.response.data);
+      // console.log('Edit Room ERROR', error.response.data);
       setError(error.response.data.message);
     }
   };
@@ -127,7 +126,7 @@ export default function ManageRoomDialog({
   };
 
   const removeUserCallback = ({ room, user }) => {
-    console.log('removeUserCallback', room, user);
+    // console.log('removeUserCallback', room, user);
     roomDataDispatch({ type: UPDATE_ROOM, payload: room });
   };
 

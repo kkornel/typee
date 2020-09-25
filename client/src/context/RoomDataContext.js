@@ -21,7 +21,7 @@ const initialState = {
 const RoomDataContext = React.createContext();
 
 function roomDataReducer(state, action) {
-  console.log(`roomDataReducer old state`, state);
+  // console.log(`roomDataReducer old state`, state);
   // console.log(`roomDataReducer ${action.type}`, action.payload);
   switch (action.type) {
     case LEAVE_ROOM: {
@@ -34,7 +34,7 @@ function roomDataReducer(state, action) {
         currentRoom: undefined,
       };
 
-      console.log('newState LEAVE_ROOM', newState);
+      // console.log('newState LEAVE_ROOM', newState);
       return newState;
     }
     case LOAD_MESSAGES: {
@@ -46,7 +46,7 @@ function roomDataReducer(state, action) {
         },
       };
 
-      console.log('newState LOAD_MESSAGES', newState);
+      // console.log('newState LOAD_MESSAGES', newState);
       return newState;
     }
     case NEW_MESSAGE: {
@@ -71,7 +71,7 @@ function roomDataReducer(state, action) {
         currentRoom,
       };
 
-      console.log('newState NEW_MESSAGE', newState);
+      // console.log('newState NEW_MESSAGE', newState);
       return newState;
     }
     case ROOM_DELETED: {
@@ -92,13 +92,13 @@ function roomDataReducer(state, action) {
         currentRoom,
       };
 
-      console.log('newState ROOM_DELETED', newState);
+      // console.log('newState ROOM_DELETED', newState);
       return newState;
     }
     case SET_CURRENT_ROOM: {
       const newState = { ...state, currentRoom: action.payload };
 
-      console.log('newState SET_CURRENT_ROOM', newState);
+      // console.log('newState SET_CURRENT_ROOM', newState);
       return newState;
     }
     case SET_ROOMS: {
@@ -106,7 +106,7 @@ function roomDataReducer(state, action) {
 
       const newState = { ...state, rooms };
 
-      console.log('newState SET_ROOMS', newState);
+      // console.log('newState SET_ROOMS', newState);
       return newState;
     }
     case UPDATE_ROOM: {
@@ -123,7 +123,7 @@ function roomDataReducer(state, action) {
         currentRoom,
       };
 
-      console.log('newState UPDATE_ROOM', newState);
+      // console.log('newState UPDATE_ROOM', newState);
       return newState;
     }
     case USER_LIST_CHANGED: {
@@ -139,7 +139,7 @@ function roomDataReducer(state, action) {
         currentRoom,
       };
 
-      console.log('newState USER_LIST_CHANGED', newState);
+      // console.log('newState USER_LIST_CHANGED', newState);
       return newState;
     }
     case USER_STATUS_CHANGED: {
@@ -163,7 +163,7 @@ function roomDataReducer(state, action) {
         currentRoom,
       };
 
-      console.log('newState USER_STATUS_CHANGED', newState);
+      // console.log('newState USER_STATUS_CHANGED', newState);
       return newState;
     }
     default: {

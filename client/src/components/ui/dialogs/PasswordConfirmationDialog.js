@@ -36,7 +36,7 @@ export default function PasswordConfirmationDialog({
 
   const onDeleteClick = async () => {
     const response = await execute(verifyPassword(user._id, password));
-    console.log('onDeleteClick response ', response);
+    // console.log('onDeleteClick response ', response);
 
     if (response.success) {
       await execute(deleteAccount(user._id, deleteAccountCallback));
@@ -49,7 +49,7 @@ export default function PasswordConfirmationDialog({
   };
 
   const deleteAccountCallback = (createdRooms) => {
-    console.log('deleteAccountCallback', createdRooms);
+    // console.log('deleteAccountCallback', createdRooms);
     createdRooms.forEach((room) => {
       deleteRoom(room);
     });
@@ -61,10 +61,11 @@ export default function PasswordConfirmationDialog({
 
   const deleteRoomCallback = ({ error, room }) => {
     if (error) {
-      console.log('handleDeleteRoomCallback', error);
+      // console.log('handleDeleteRoomCallback', error);
+      return;
     }
     setLastOpenedRoom(null);
-    console.log(`The room ${room.name} has been deleted.`);
+    // console.log(`The room ${room.name} has been deleted.`);
   };
 
   return (

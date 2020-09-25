@@ -141,8 +141,6 @@ export default function MessageInput({ handleMessageSubmit }) {
     inputRef.current.children[0].focus();
   };
 
-  console.log('rerender');
-
   return (
     <Box className={classes.messagesCompose}>
       <Box className={classes.messagesComposeForm}>

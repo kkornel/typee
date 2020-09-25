@@ -69,7 +69,8 @@ export default function HomeRoomList({ socket }) {
 
   const leaveRoomCallback = ({ error, room }) => {
     if (error) {
-      return console.log('leaveRoomCallback ERROR', error);
+      // console.log('leaveRoomCallback ERROR', error);
+      return;
     }
 
     roomDataDispatch({ type: LEAVE_ROOM, payload: room });
@@ -80,7 +81,7 @@ export default function HomeRoomList({ socket }) {
       autoHideDuration: 2000,
     });
 
-    console.log(`Left ${room.name} successfully.`);
+    // console.log(`Left ${room.name} successfully.`);
   };
 
   const onDialogClose = () => {
@@ -122,7 +123,7 @@ export default function HomeRoomList({ socket }) {
   };
 
   const onLeaveClick = (room) => {
-    console.log('onLeaveClick', room);
+    // console.log('onLeaveClick', room);
     setConfirmationDialogData({
       ...confirmationDialogData,
       open: true,

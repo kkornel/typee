@@ -102,7 +102,11 @@ export default function About(props) {
 
       <Box id="C"></Box>
       <Box id="D">
-        <a href="https://github.com/" target="_blank">
+        <a
+          href="https://github.com/kkornel/typee"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <RoundedButton cls={classes.buttonWhite}>
             <FontAwesomeIcon icon={faGithub} />
             <Box className={classes.githubBox}>Github</Box>

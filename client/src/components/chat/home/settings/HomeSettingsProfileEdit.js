@@ -37,7 +37,6 @@ export default function HomeSettingsProfileEdit({
   const showRemoveButton = file || (user.avatarUrl && !deleteAvatar);
 
   const onChangeHandler = (event) => {
-    console.log(event.target.files[0]);
     setFile(event.target.files[0]);
   };
 
@@ -56,14 +55,15 @@ export default function HomeSettingsProfileEdit({
 
     try {
       setLoading(true);
-      const response = await updateProfile(user._id, data);
-      console.log('onSubmit response', response);
+      await updateProfile(user._id, data);
+      // const response = await updateProfile(user._id, data);
+      // console.log('onSubmit response', response);
       setLoading(false);
       onSuccessfulUpdate();
     } catch (error) {
       setLoading(false);
       const { details, status, message } = error.response.data;
-      console.log('onSubmit error', error.response.data);
+      // console.log('onSubmit error', error.response.data);
       setError(details.field, status, message);
     }
   };
