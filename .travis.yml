@@ -1,0 +1,22 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t korneldev/client-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true korneldev/client-test npm run test
+
+after_success:
+  - docker build -t korneldev/typee-server ./server
+  - docker build -t korneldev/typee-client ./client
+  - docker build -t korneldev/typee-nginx ./nginx
+  # Log in the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push korneldev/typee-server
+  - docker push korneldev/typee-client
+  - docker push korneldev/typee-nginx
