@@ -1,7 +1,0 @@
-# TODO:
-
-1) Display/store deleted user? Created rooms are removed, but messages in other rooms?
-
-# Issues:
-
-1) After updating user profile he gets disconnected and disconnect event is emitted, but connect is not, so if he navigates to the room, he is listed as offline.
