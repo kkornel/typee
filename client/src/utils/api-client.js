@@ -1,9 +1,9 @@
-// import { logout } from './auth-client';
+const LOCAL_STORAGE_TOKEN_KEY = '__type_token__';
 
-const localStorageKey = '__backend_frontend_token__';
+const API_URL = '/api/v1';
 
 async function client(endpoint, { body } = {}) {
-  const token = localStorage.getItem(localStorageKey);
+  const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
   const headers = { 'content-type': 'application/json' };
 
   if (token) {
@@ -26,10 +26,7 @@ async function client(endpoint, { body } = {}) {
     config.body = JSON.stringify(body);
   }
 
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/${endpoint}`,
-    config
-  );
+  const response = await fetch(`${API_URL}/${endpoint}`, config);
 
   const data = await response.json();
 
@@ -40,4 +37,4 @@ async function client(endpoint, { body } = {}) {
   return data;
 }
 
-export { client, localStorageKey };
+export { client, LOCAL_STORAGE_TOKEN_KEY };

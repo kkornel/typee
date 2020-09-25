@@ -1,21 +1,21 @@
-import { client, localStorageKey } from './api-client';
+import { client, LOCAL_STORAGE_TOKEN_KEY } from './api-client';
 
 import axios from 'axios';
 
 function handleLoginResponse({ user, token }) {
   if (token) {
-    localStorage.setItem(localStorageKey, token);
+    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token);
   }
 
   return user;
 }
 
 function getToken() {
-  return localStorage.getItem(localStorageKey);
+  return localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
 }
 
 function removeToken() {
-  localStorage.removeItem(localStorageKey);
+  localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
 }
 
 function isLoggedIn() {
