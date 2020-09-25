@@ -4,6 +4,8 @@
 
 .env*
 
+todo.txt
+
 # dependencies
 node_modules
 
