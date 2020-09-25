@@ -1,7 +1,11 @@
 import { getUser } from './auth-client';
 
+import logImportantData from './logImportantData';
+
 async function loadAppData() {
   let appData = { user: null };
+
+  logImportantData();
 
   // When using only JWT this was the way to check if the token is saved
   // in the memory and if it is, then grab that token and get user's profile.
