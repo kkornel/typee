@@ -20,3 +20,16 @@ after_success:
   - docker push korneldev/typee-server
   - docker push korneldev/typee-client
   - docker push korneldev/typee-nginx
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: us-west-2
+  app: typee
+  env: Typee-env
+  bucket_name: elasticbeanstalk-us-west-2-794098738962
+  bucket_path: typee
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
