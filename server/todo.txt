@@ -3,7 +3,7 @@
 1) Hello in the console
 2) Comment console logs 
 3) getUser vs authenticate
-4) Display/store deleted user? Created rooms removed, but messages in other rooms?
+4) Display/store deleted user? Created rooms are removed, but messages in other rooms?
 
 # Issues:
 
