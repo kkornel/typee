@@ -4,11 +4,13 @@ Chat application created with :heart: for learning purposes only.
 
 # Philosophy
 
-Main purpose of this project was (and still is!) to expand my knowledge of JavaScript programming, by creating complex application, which would involve .
+Main purpose of this project was (and still is!) to expand my knowledge of JavaScript programming, by creating complex application, which would involve frontend and backend communicating which each other.
 
 ### Why chat application?
 
-Before creating this project I've had a lot of ideas beginning with Video Streaming Service, through Survey App, ending at Medical Appointment Organizer for local doctor's office. But they all were very similar to the projects I already worked on.
+<!-- Before creating this project I've had a lot of ideas beginning with Video Streaming Service, through Survey App, ending at Medical Appointment Organizer for local doctor's office. But they all were very similar to the projects I already worked on. -->
+
+Before creating this project I've had a lot of ideas, but they all were very similar to the projects I already worked on.
 
 At this point, I've realized that I've never worked with Web Sockets, so now the choice was simple - create Real Time Chat Application.
 
@@ -89,12 +91,11 @@ In development stage I run project locally on development branch. This setup doe
 3. Create ```Dockerrun.aws.json``` config file, which contains containers definitions for AWS Elastic BeansTalk.
 4. Push code to the Github Master branch.
 5. Configure TravisCI to automatically pull code from repository.
-7. TravisCI runs all steps included in ```.travis.yml```
+7. Now TravisCI runs all steps included in ```.travis.yml```
 6. If everything went correctly the application is now hosted on the AWS servers and available for others.
 
 
-##### Long story short:
-* Code -> Test -> Docker -> Merge -> Push -> Travis -> More Tests -> Deploy -> AWS -> TYPE!
+
 
 ### Soooo. See you at :point_right: [typee](typee.com)!
 ## :punch:
