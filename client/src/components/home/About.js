@@ -120,7 +120,10 @@ export default function About(props) {
 const useStyles = makeStyles((theme) => ({
   body: {
     background: 'white',
-    overflowX: 'hidden',
+    // overflowX: 'hidden',
+    overflow: 'hidden auto',
+    scrollbarWidth: 'thin',
+    scrollbarColor: `${theme.palette.scrollbarThinThumb} ${theme.palette.scrollbarThinTrack}`,
     height: 'calc(100vh - 48px)',
   },
   container: {
@@ -138,6 +141,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     color: theme.palette.appBarBackground,
+    maxWidth: '50%',
   },
   textHeader: {
     fontSize: '48px',
@@ -149,7 +153,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '32px',
   },
   textBoxRow2: {
-    width: '100%',
+    maxWidth: '50%',
     height: '423px',
     background: theme.palette.purpleAlt3,
     borderTopLeftRadius: '30px',
@@ -158,8 +162,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '20px',
   },
   image: {
-    // width: '650px',
     height: '440px',
+    maxWidth: '100%',
   },
   buttonWhite: {
     background: 'white',
@@ -185,3 +189,77 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '8px',
   },
 }));
+
+// Another approach
+// const useStyles = makeStyles((theme) => ({
+//   body: {
+//     background: 'white',
+//     overflowX: 'hidden',
+//     height: 'calc(100vh - 48px)',
+//   },
+//   container: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     justifyContent: 'stretch',
+//     flexWrap: 'wrap',
+//   },
+//   boxRow: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//   },
+//   textBox: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     justifyContent: 'center',
+//     color: theme.palette.appBarBackground,
+//     maxWidth: '50%',
+//     // flexBasis: '5%',
+//   },
+//   textHeader: {
+//     fontSize: '48px',
+//     fontWeight: 700,
+//   },
+//   textContent: {
+//     marginTop: '24px',
+//     fontSize: '20px',
+//     lineHeight: '32px',
+//   },
+//   textBoxRow2: {
+//     // maxWidth: '100%',
+//     maxWidth: '50%',
+//     height: '423px',
+//     background: theme.palette.purpleAlt3,
+//     borderTopLeftRadius: '30px',
+//     borderBottomLeftRadius: '30px',
+//     borderBottom: '1px solid #f6f6f6',
+//     paddingLeft: '20px',
+//   },
+//   image: {
+//     // width: '650px',
+//     height: '440px',
+//   },
+//   buttonWhite: {
+//     background: 'white',
+//     color: theme.palette.appBarBackground,
+//     '&:hover': {
+//       color: theme.palette.purple,
+//       boxShadow: `0 2px 15px ${theme.palette.purple}`,
+//     },
+//   },
+//   buttonDark: {
+//     color: 'white',
+//     background: theme.palette.appBarBackground,
+//     '&:hover': {
+//       background: theme.palette.backgroundPrimary,
+//       boxShadow: '0 2px 15px white',
+//     },
+//   },
+//   signUp: {
+//     display: 'flex',
+//     justifyContent: 'center',
+//   },
+//   githubBox: {
+//     marginLeft: '8px',
+//   },
+// }));
