@@ -5,33 +5,31 @@ services:
   - docker
 
 before_install:
-  # - docker build -t korneldev/client-test -f ./client/Dockerfile.dev ./client
-  - docker build -t korneldev/server-test -f ./server/Dockerfile.dev ./server
+  - docker build -t korneldev/client-test -f ./client/Dockerfile.dev ./client
 
 script:
-  # - docker run -e CI=true korneldev/client-test npm run test
-  - docker run -e CI=true korneldev/server-test npm run test
+  - docker run -e CI=true korneldev/client-test npm run test
 
-# after_success:
-#   - docker build -t korneldev/typee-server ./server
-#   - docker build -t korneldev/typee-client ./client
-#   - docker build -t korneldev/typee-nginx ./nginx
+after_success:
+  - docker build -t korneldev/typee-server ./server
+  - docker build -t korneldev/typee-client ./client
+  - docker build -t korneldev/typee-nginx ./nginx
   # Log in the docker CLI
-  # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  # - docker push korneldev/typee-server
-  # - docker push korneldev/typee-client
-  # - docker push korneldev/typee-nginx
+  - docker push korneldev/typee-server
+  - docker push korneldev/typee-client
+  - docker push korneldev/typee-nginx
 
-# deploy:
-#   edge: true
-#   provider: elasticbeanstalk
-#   region: us-west-2
-#   app: typee
-#   env: Typee-env
-#   bucket_name: elasticbeanstalk-us-west-2-794098738962
-#   bucket_path: typee
-#   on:
-#     branch: master
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key: $AWS_SECRET_KEY
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: us-west-2
+  app: typee
+  env: Typee-env
+  bucket_name: elasticbeanstalk-us-west-2-794098738962
+  bucket_path: typee
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY

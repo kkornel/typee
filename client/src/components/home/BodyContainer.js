@@ -17,6 +17,7 @@ export default function BodyContainer(props) {
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: '32px',
+    paddingBottom: '32px',
   },
   mainBox: {
     display: 'flex',

@@ -46,5 +46,8 @@ const useStyles = makeStyles((theme) => ({
   body: {
     height: 'calc(100vh - 48px)',
     background: theme.palette.backgroundSecondary,
+    overflow: 'hidden auto',
+    scrollbarWidth: 'thin',
+    scrollbarColor: `${theme.palette.scrollbarThinThumb} ${theme.palette.scrollbarThinTrack}`,
   },
 }));

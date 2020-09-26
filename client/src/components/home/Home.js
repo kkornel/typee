@@ -102,11 +102,9 @@ export default function Home() {
           <Box className={classes.boxLighterBlue}></Box>
           <Box className={classes.boxDarkerBlue}></Box>
         </Box>
-        <Box className={classes.imageBox}>
+        <Box>
           <img
             className={classes.image}
-            width="650"
-            height="400"
             src="https://i.imgur.com/g7HnVSh.gif"
             alt="It is supposed to show very important gif, but it doesn't :("
           />
@@ -117,16 +115,18 @@ export default function Home() {
         </Box>
       </Box>
 
-      <Box component="p">
-        <Box component="span" className="typed-title">
-          {title}
-        </Box>
-        <Box component="span" className="typed-content">
-          {content}
-        </Box>
-        <Box component="span" className="typed-text" ref={typedSpan}></Box>
-        <Box component="span" className="cursor" ref={cursorSpan}>
-          &nbsp;
+      <Box>
+        <Box component="p">
+          <Box component="span" className="typed-title">
+            {title}
+          </Box>
+          <Box component="span" className="typed-content">
+            {content}
+          </Box>
+          <Box component="span" className="typed-text" ref={typedSpan}></Box>
+          <Box component="span" className="cursor" ref={cursorSpan}>
+            &nbsp;
+          </Box>
         </Box>
       </Box>
 
@@ -151,20 +151,20 @@ const useStyles = makeStyles((theme) => ({
   boxColumn: {
     display: 'flex',
     flexDirection: 'column',
-    width: '100%',
+    flex: '1 1 auto',
   },
   boxLighterBlue: {
     background: theme.palette.blueLight,
-    height: '324px',
+    flex: '1 1 auto',
   },
   boxDarkerBlue: {
     background: theme.palette.blueDark,
-    height: '76px',
+    maxHeight: '76px',
+    flex: '1 1 auto',
   },
   buttons: {
-    marginTop: '148px',
-    display: 'flex',
-    marginBottom: '100px',
+    marginTop: '100px',
+    paddingBottom: '100px',
   },
   buttonWhite: {
     background: 'white',
@@ -183,27 +183,20 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: '0 2px 15px white',
     },
   },
-  banner: {
-    background: theme.palette.blueLight,
-    width: '100%',
-  },
+  // For position fixed solution
+  // banner: {
+  //   background: theme.palette.blueLight,
+  //   width: '100%',
+  // },
   image: {
     // For position fixed solution
+    maxWidth: '100%',
     // position: 'absolute',
     // marginLeft: 'auto',
+    // minWidth: '100px',
 
     // For flex boxes solution
     display: 'flex',
-    maxWidth: '100%',
-    minWidth: '455px',
-  },
-  imageBox: {
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '400px',
-    zIndex: 2,
+    maxHeight: '400px',
   },
 }));
