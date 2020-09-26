@@ -10,7 +10,7 @@ before_install:
 
 script:
   # - docker run -e CI=true korneldev/client-test npm run test
-  - docker run -e korneldev/server-test npm run test
+  - docker run -e CI=true korneldev/server-test npm run test
 
 # after_success:
 #   - docker build -t korneldev/typee-server ./server
