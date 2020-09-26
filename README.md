@@ -94,11 +94,7 @@ In development stage I run project locally on development branch. This setup doe
 7. Now TravisCI runs all steps included in ```.travis.yml```
 6. If everything went correctly the application is now hosted on the AWS servers and available for others.
 
-
-<a href="http://typee.us-west-2.elasticbeanstalk.com" target="_blank" rel="noopener noreferrer">typee</a>
-
-<!-- ### Soooo. See you at :point_right: [typee](http://typee.us-west-2.elasticbeanstalk.com)!  -->
-### Soooo. See you at :point_right: <a href="http://typee.us-west-2.elasticbeanstalk.com" target="_blank" rel="noopener noreferrer">typee</a>! 
+### Soooo. See you at :point_right: [typee](http://typee.us-west-2.elasticbeanstalk.com){:target="_blank"}! 
 ## :punch:
 
 [logo]: https://i.imgur.com/1FxTQuN.png "Logo"
