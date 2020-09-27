@@ -44,6 +44,10 @@ Present version of **typee** has basic functionalities, which provide stable com
 * Room permissions and privileges (e.g. moderator)
 * Channels inside rooms (e.g. general, offtopic, homework)
 
+## Screenshot
+
+<img src="https://i.imgur.com/ICayESs.png"/>
+
 # Tech stack
 
 Here is the list of the most important technologies and libraries that were used in development.
