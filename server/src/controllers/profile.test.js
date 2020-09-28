@@ -54,9 +54,7 @@ describe('POST /api/v1/users/:id', () => {
       .expect('Content-Type', /json/)
       .expect(401);
 
-    expect(response.body).toMatchObject({
-      message: 'Please authenticate',
-    });
+    expect(response.body).toMatchObject({ message: 'Please authenticate' });
   });
 
   it('should respond with 422 for missing required field', async () => {
@@ -187,7 +185,6 @@ describe('POST /api/v1/users/:id', () => {
 
     expect(updatedUserOne.email).not.toBe(user.email);
     expect(updatedUserOneTokens.length).toBe(userOneTokens.length + 1);
-
     expect(response.body.success).toBe(true);
     expect(response.body.user.email).toBe(updatedUserOne.email);
   });
@@ -213,7 +210,6 @@ describe('POST /api/v1/users/:id', () => {
 
     expect(updatedUserOne.username).not.toBe(user.username);
     expect(updatedUserOne.username).toBe(newUsername);
-
     expect(response.body.success).toBe(true);
     expect(response.body.user.username).toBe(updatedUserOne.username);
   });
@@ -238,7 +234,6 @@ describe('POST /api/v1/users/:id', () => {
 
     expect(updatedUserOne.avatar).toBe(undefined);
     expect(updatedUserOne.avatarUrl).toBe(undefined);
-
     expect(response.body.success).toBe(true);
     expect(response.body.user.avatarUrl).toBe(undefined);
   });
