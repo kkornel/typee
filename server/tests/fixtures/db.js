@@ -8,6 +8,7 @@ const crypto = require('crypto');
 
 const User = require('../../src/models/User');
 const Token = require('../../src/models/Token');
+const Room = require('../../src/models/Room');
 
 const newUserFormValues = {
   email: 'newUser@mail.com',
@@ -16,6 +17,7 @@ const newUserFormValues = {
 };
 
 const userOneId = new mongoose.Types.ObjectId();
+const userOnePassword = 'Strong123!';
 const userOne = {
   _id: userOneId,
   email: 'userone@mail.com',
@@ -75,32 +77,105 @@ const userTwo = {
   password: 'Strong123!',
 };
 
+const userThreeId = new mongoose.Types.ObjectId();
+const userThree = {
+  _id: userTwoId,
+  email: 'userthree@mail.com',
+  username: 'userTwo',
+  password: 'Strong123!',
+};
+
+const userAvatarId = new mongoose.Types.ObjectId();
+const userAvatarPassword = 'Strong123!';
+const userAvatar = {
+  _id: userAvatarId,
+  email: 'useravatar@mail.com',
+  username: 'userAvatar',
+  password: userAvatarPassword,
+  avatarUrl: 'www.avatar.pl',
+  active: true,
+  jwtTokens: [
+    {
+      token: jwt.sign({ _id: userAvatarId }, process.env.JWT_SECRET),
+    },
+  ],
+};
+
+const roomOneId = new mongoose.Types.ObjectId();
+const roomOne = {
+  _id: roomOneId,
+  author: userOneId,
+  name: 'Room One',
+  users: [
+    {
+      _id: new mongoose.Types.ObjectId(),
+      user: userOneId,
+      socketId: 'SocketOneId',
+    },
+  ],
+};
+
+const roomTwoId = new mongoose.Types.ObjectId();
+const roomTwo = {
+  _id: roomTwoId,
+  author: userAvatarId,
+  name: 'Room Two',
+  users: [
+    {
+      _id: new mongoose.Types.ObjectId(),
+      user: userOneId,
+      socketId: 'SocketOneId',
+    },
+    {
+      _id: new mongoose.Types.ObjectId(),
+      user: userAvatarId,
+      socketId: 'SocketAvatarId',
+    },
+  ],
+};
+
 const setupDatabase = async () => {
   await User.deleteMany();
   await Token.deleteMany();
+  await Room.deleteMany();
   await new User(userOne).save();
+  await new User(userThree).save();
+  await new User(userAvatar).save();
   await new User(userNotVerified).save();
   await new Token(expiredToken).save();
   await new Token(validToken).save();
+  await new Room(roomOne).save();
+  await new Room(roomTwo).save();
 };
 
 const clearDatabase = async () => {
   await User.deleteMany();
   await Token.deleteMany();
+  await Room.deleteMany();
 };
 
 module.exports = {
   userOneId,
   userOne,
+  userOnePassword,
   userNotVerifiedId,
   userNotVerified,
   userTwoId,
   userTwo,
+  userThreeId,
+  userThree,
+  userAvatarId,
+  userAvatar,
+  userAvatarPassword,
   newUserFormValues,
   newUserEmailTaken,
   newUserUsernameTaken,
   expiredToken,
   validToken,
+  roomOneId,
+  roomOne,
+  roomTwoId,
+  roomTwo,
   setupDatabase,
   clearDatabase,
 };

@@ -182,7 +182,7 @@ const deleteAccount = async (req, res, next) => {
   const isAuthorized = id === user._id.toString();
 
   if (!isAuthorized) {
-    return res.status(401).send({ error: 'Please authenticate.' });
+    return res.status(401).send({ error: 'Please authenticate' });
   }
 
   try {
