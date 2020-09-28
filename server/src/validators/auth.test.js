@@ -2,7 +2,7 @@ const request = require('supertest');
 
 const app = require('../app');
 
-describe('POST /api/v1/auth/register', () => {
+describe('auth validator', () => {
   it('should respond with 422 for empty fields', async () => {
     const response = await request(app)
       .post('/api/v1/auth/register')
@@ -10,19 +10,19 @@ describe('POST /api/v1/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(response.body).toMatchObject({
-      errors: {
-        email: {
-          message: 'Required field',
-        },
-        username: {
-          message: 'Required field',
-        },
-        password: {
-          message: 'Required field',
-        },
+    const errors = {
+      email: {
+        message: 'Required field',
       },
-    });
+      username: {
+        message: 'Required field',
+      },
+      password: {
+        message: 'Required field',
+      },
+    };
+
+    expect(response.body).toMatchObject({ errors });
   });
 
   it('should respond with 422 for invalid email', async () => {
@@ -36,13 +36,13 @@ describe('POST /api/v1/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(response.body).toMatchObject({
-      errors: {
-        email: {
-          message: 'Invalid email',
-        },
+    const errors = {
+      email: {
+        message: 'Invalid email',
       },
-    });
+    };
+
+    expect(response.body).toMatchObject({ errors });
   });
 
   it('should respond with 422 for invalid username', async () => {
@@ -56,13 +56,13 @@ describe('POST /api/v1/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(response.body).toMatchObject({
-      errors: {
-        username: {
-          message: 'Only alphanumerics (letters and numbers)',
-        },
+    const errors = {
+      username: {
+        message: 'Only alphanumerics (letters and numbers)',
       },
-    });
+    };
+
+    expect(response.body).toMatchObject({ errors });
 
     const response2 = await request(app)
       .post('/api/v1/auth/register')
@@ -74,13 +74,13 @@ describe('POST /api/v1/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(response2.body).toMatchObject({
-      errors: {
-        username: {
-          message: 'Required min length of 4 and max of 18',
-        },
+    const errors2 = {
+      username: {
+        message: 'Required min length of 4 and max of 18',
       },
-    });
+    };
+
+    expect(response2.body).toMatchObject({ errors: errors2 });
   });
 
   it('should respond with 422 for invalid password', async () => {
@@ -94,14 +94,14 @@ describe('POST /api/v1/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(response.body).toMatchObject({
-      errors: {
-        password: {
-          message:
-            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
-        },
+    const errors = {
+      password: {
+        message:
+          'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
       },
-    });
+    };
+
+    expect(response.body).toMatchObject({ errors });
 
     const response2 = await request(app)
       .post('/api/v1/auth/register')
@@ -113,14 +113,7 @@ describe('POST /api/v1/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(response2.body).toMatchObject({
-      errors: {
-        password: {
-          message:
-            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
-        },
-      },
-    });
+    expect(response2.body).toMatchObject({ errors });
 
     const response3 = await request(app)
       .post('/api/v1/auth/register')
@@ -132,14 +125,7 @@ describe('POST /api/v1/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(response3.body).toMatchObject({
-      errors: {
-        password: {
-          message:
-            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
-        },
-      },
-    });
+    expect(response3.body).toMatchObject({ errors });
 
     const response4 = await request(app)
       .post('/api/v1/auth/register')
@@ -151,13 +137,6 @@ describe('POST /api/v1/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(response4.body).toMatchObject({
-      errors: {
-        password: {
-          message:
-            'Must contain at least 8 Characters, 1 Uppercase, 1 Lowercase and 1 Number',
-        },
-      },
-    });
+    expect(response4.body).toMatchObject({ errors });
   });
 });
