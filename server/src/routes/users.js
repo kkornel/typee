@@ -17,7 +17,8 @@ const router = express.Router();
 router.get('/', getUser, users);
 router.post(
   '/:id',
-  getUser,
+  // getUser,
+  authenticate,
   checkSchema(updateProfileSchema),
   upload.single('file'),
   updateProfile
