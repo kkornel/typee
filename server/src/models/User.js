@@ -148,7 +148,12 @@ const leaveRoom = async (roomName, userId) => {
     .exec();
 
   // TODO test it
-  const index = room.users.findIndex((user) => user.user.toString() === userId);
+  // const index = room.users.findIndex((user) => user.user.toString() === userId);
+  const index = room.users.findIndex((user) => {
+    if (user.user) {
+      user.user.toString() === userId;
+    }
+  });
   room.users.splice(index, 1);
   await room.save();
 
