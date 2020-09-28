@@ -102,10 +102,12 @@ const userAvatar = {
 };
 
 const roomOneId = new mongoose.Types.ObjectId();
+const roomOneName = 'Room One';
 const roomOne = {
   _id: roomOneId,
   author: userOneId,
-  name: 'Room One',
+  name: roomOneName,
+  avatarUrl: 'www.avatar.pl',
   users: [
     {
       _id: new mongoose.Types.ObjectId(),
@@ -116,10 +118,12 @@ const roomOne = {
 };
 
 const roomTwoId = new mongoose.Types.ObjectId();
+const roomTwoName = 'Room Two';
 const roomTwo = {
   _id: roomTwoId,
   author: userAvatarId,
-  name: 'Room Two',
+  name: roomTwoName,
+  avatarUrl: 'www.avatar.pl',
   users: [
     {
       _id: new mongoose.Types.ObjectId(),
@@ -173,8 +177,10 @@ module.exports = {
   expiredToken,
   validToken,
   roomOneId,
+  roomOneName,
   roomOne,
   roomTwoId,
+  roomTwoName,
   roomTwo,
   setupDatabase,
   clearDatabase,
