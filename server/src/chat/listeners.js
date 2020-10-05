@@ -16,14 +16,31 @@ const {
   removeUser,
 } = require('./users');
 
+const {
+  CONNECTION,
+  CONNECT_USER,
+  DISCONNECT,
+  USER_DATA_REQUEST,
+  MESSAGE,
+  CREATE_ROOM,
+  JOIN_ROOM,
+  LEAVE_ROOM,
+  DELETE_ROOM,
+  ROOM_UPDATED,
+  REMOVE_USER,
+  ROOM_DATA,
+  USER_STATUS_CHANGED,
+  ROOM_DELETED,
+} = require('./events');
+
 const connectionEvent = (io) => {
-  io.on('connection', (socket) => {
+  io.on(CONNECTION, (socket) => {
     console.log('==============================');
     console.log('New connection', socket.id);
     console.log('==============================');
 
-    socket.on('connectUser', async ({ userId }, callback) => {
-      console.log('connectUser', userId, socket.id);
+    socket.on(CONNECT_USER, async ({ userId }, callback) => {
+      console.log(CONNECT_USER, userId, socket.id);
 
       const { error, user } = await connectUser(userId, socket.id);
       const { rooms } = await getUserRoomsWithoutUserSockets(userId);
@@ -31,47 +48,47 @@ const connectionEvent = (io) => {
       callback({ error, user, rooms });
 
       if (error) {
-        console.log('connectUser ERROR', error);
+        console.log(`${CONNECT_USER} ERROR`, error);
         return;
       }
 
       rooms.forEach(async ({ name }) => {
         await joinRoom(name, userId, socket.id);
         socket.join(name);
-        io.to(name).emit('userStatusChanged', user);
+        io.to(name).emit(USER_STATUS_CHANGED, user);
       });
     });
 
-    socket.on('disconnect', async () => {
+    socket.on(DISCONNECT, async () => {
       const { error, user } = await disconnectUser(socket.id);
 
-      console.log('disconnect', user._id, socket.id);
+      console.log(DISCONNECT, user._id, socket.id);
 
       if (error) {
-        console.log('disconnect ERROR', error);
+        console.log(`${DISCONNECT} ERROR`, error);
         return;
       }
 
       const rooms = await user.getRoomsNames();
       rooms.forEach((room) => {
-        io.to(room).emit('userStatusChanged', user);
+        io.to(room).emit(USER_STATUS_CHANGED, user);
       });
     });
 
-    socket.on('userDataRequest', async ({ userId }, callback) => {
-      console.log('userDataRequest', userId);
+    socket.on(USER_DATA_REQUEST, async ({ userId }, callback) => {
+      console.log(USER_DATA_REQUEST, userId);
 
       const { error, user, rooms } = await getUserData(userId);
 
       callback({ error, user, rooms });
 
       if (error) {
-        console.log('userDataRequest ERROR', error);
+        console.log(`${USER_DATA_REQUEST} ERROR`, error);
       }
     });
 
-    socket.on('message', async ({ text, roomId, authorId }, callback) => {
-      console.log('message', text, roomId, authorId);
+    socket.on(MESSAGE, async ({ text, roomId, authorId }, callback) => {
+      console.log(MESSAGE, text, roomId, authorId);
 
       const { error, room, message } = await createMessage(
         text,
@@ -80,21 +97,21 @@ const connectionEvent = (io) => {
       );
 
       if (error) {
-        console.log('message ERROR', error);
+        console.log(`${MESSAGE} ERROR`, error);
         return callback({ error });
       }
 
-      io.to(room.name).emit('message', message);
+      io.to(room.name).emit(MESSAGE, message);
       callback({ error });
     });
 
-    socket.on('create', async ({ roomName, authorId }, callback) => {
-      console.log('create', roomName, authorId);
+    socket.on(CREATE_ROOM, async ({ roomName, authorId }, callback) => {
+      console.log(CREATE_ROOM, roomName, authorId);
 
       const { error, room } = await createRoom(roomName, authorId, socket.id);
 
       if (error) {
-        console.log('create ERROR', error);
+        console.log(`${CREATE_ROOM} ERROR`, error);
         return callback({ error });
       }
 
@@ -105,8 +122,8 @@ const connectionEvent = (io) => {
       socket.join(room.name);
     });
 
-    socket.on('join', async ({ roomName, userId }, callback) => {
-      console.log('join', roomName, userId);
+    socket.on(JOIN_ROOM, async ({ roomName, userId }, callback) => {
+      console.log(JOIN_ROOM, roomName, userId);
 
       const { error, room, alreadyIsInRoom } = await joinRoom(
         roomName,
@@ -115,7 +132,7 @@ const connectionEvent = (io) => {
       );
 
       if (error) {
-        console.log('join ERROR', error);
+        console.log(`${JOIN_ROOM} ERROR`, error);
         return callback({ error });
       }
 
@@ -134,26 +151,26 @@ const connectionEvent = (io) => {
         );
 
         if (error) {
-          console.log('join ERROR', error);
+          console.log(`${JOIN_ROOM} ERROR`, error);
           return callback({ error });
         }
 
-        io.to(room.name).emit('message', message);
+        io.to(room.name).emit(MESSAGE, message);
 
         // Generate room data to the others
         socket.broadcast
           .to(room.name)
-          .emit('roomData', await generateRoomData(room._id));
+          .emit(ROOM_DATA, await generateRoomData(room._id));
       }
     });
 
-    socket.on('roomUpdated', async ({ oldName, roomName }, callback) => {
-      console.log('roomUpdated', roomName);
+    socket.on(ROOM_UPDATED, async ({ oldName, roomName }, callback) => {
+      console.log(ROOM_UPDATED, roomName);
 
       const { error, room } = await getRoomByName(roomName);
 
       if (error) {
-        console.log('roomUpdated ERROR', error);
+        console.log(`${ROOM_UPDATED} ERROR`, error);
         return callback({ error });
       }
 
@@ -173,23 +190,23 @@ const connectionEvent = (io) => {
         );
 
         if (error) {
-          console.log('roomUpdated ERROR', error);
+          console.log(`${ROOM_UPDATED} ERROR`, error);
           return callback({ error });
         }
 
-        io.to(room.name).emit('message', message);
+        io.to(room.name).emit(MESSAGE, message);
       }
 
-      socket.broadcast.to(roomName).emit('roomUpdated', room);
+      socket.broadcast.to(roomName).emit(ROOM_UPDATED, room);
     });
 
-    socket.on('removeUser', async ({ roomId, userId }, callback) => {
+    socket.on(REMOVE_USER, async ({ roomId, userId }, callback) => {
       const { room, user } = await removeUser(roomId, userId);
 
       callback({ room, user });
 
       if (user.socketId) {
-        io.sockets.sockets[user.socketId].emit('roomDeleted', room);
+        io.sockets.sockets[user.socketId].emit(ROOM_DELETED, room);
       }
 
       const { room: roomWithUserSockets } = await getRoomById(roomId);
@@ -201,18 +218,18 @@ const connectionEvent = (io) => {
           user.socketId !== socket.id &&
           io.sockets.sockets[user.socketId]
         ) {
-          io.sockets.sockets[user.socketId].emit('roomUpdated', room);
+          io.sockets.sockets[user.socketId].emit(ROOM_UPDATED, room);
         }
       });
     });
 
-    socket.on('leave', async ({ roomName, userId }, callback) => {
-      console.log('leave', roomName, userId);
+    socket.on(LEAVE_ROOM, async ({ roomName, userId }, callback) => {
+      console.log(LEAVE_ROOM, roomName, userId);
 
       const { error, room } = await leaveRoom(roomName, userId);
 
       if (error) {
-        console.log('leave ERROR', error);
+        console.log(`${LEAVE_ROOM} ERROR`, error);
         return callback({ error });
       }
 
@@ -225,23 +242,23 @@ const connectionEvent = (io) => {
         roomName
       );
 
-      socket.broadcast.to(roomName).emit('message', message);
+      socket.broadcast.to(roomName).emit(MESSAGE, message);
       socket.broadcast
         .to(roomName)
-        .emit('roomData', await generateRoomData(room._id));
+        .emit(ROOM_DATA, await generateRoomData(room._id));
     });
 
-    socket.on('deleteRoom', async ({ roomName }, callback) => {
-      console.log('deleteRoom', roomName);
+    socket.on(DELETE_ROOM, async ({ roomName }, callback) => {
+      console.log(DELETE_ROOM, roomName);
 
       const { error, room } = await deleteRoom(roomName);
 
       if (error) {
-        console.log('deleteRoom ERROR', error);
+        console.log(`${DELETE_ROOM} ERROR`, error);
         return callback({ error });
       }
 
-      socket.broadcast.to(room.name).emit('roomDeleted', room);
+      socket.broadcast.to(room.name).emit(ROOM_DELETED, room);
 
       callback({ room });
     });
