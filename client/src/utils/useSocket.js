@@ -2,6 +2,21 @@
 
 import io from 'socket.io-client';
 
+import {
+  CONNECT_USER,
+  USER_DATA_REQUEST,
+  MESSAGE,
+  CREATE_ROOM,
+  JOIN_ROOM,
+  LEAVE_ROOM,
+  DELETE_ROOM,
+  ROOM_UPDATED,
+  REMOVE_USER,
+  ROOM_DATA,
+  USER_STATUS_CHANGED,
+  ROOM_DELETED,
+} from './consts/events';
+
 const ENDPOINT = 'http://localhost:5000';
 
 function useSocket(endpoint = ENDPOINT) {
@@ -21,7 +36,7 @@ function useSocket(endpoint = ENDPOINT) {
   // }
 
   function connect(userId, callback) {
-    socket.emit('connectUser', { userId }, callback);
+    socket.emit(CONNECT_USER, { userId }, callback);
   }
 
   function disconnet() {
@@ -29,55 +44,55 @@ function useSocket(endpoint = ENDPOINT) {
   }
 
   function requestUserData(userId, callback) {
-    socket.emit('userDataRequest', { userId }, callback);
+    socket.emit(USER_DATA_REQUEST, { userId }, callback);
   }
 
   function sendMessage(text, roomId, authorId, callback) {
-    socket.emit('message', { text, roomId, authorId }, callback);
+    socket.emit(MESSAGE, { text, roomId, authorId }, callback);
   }
 
   function createRoom(authorId, roomName, callback) {
-    socket.emit('create', { roomName, authorId }, callback);
+    socket.emit(CREATE_ROOM, { roomName, authorId }, callback);
   }
 
   function joinRoom(userId, roomName, callback) {
-    socket.emit('join', { roomName, userId }, callback);
+    socket.emit(JOIN_ROOM, { roomName, userId }, callback);
   }
 
   function roomUpdated(oldName, roomName, callback) {
-    socket.emit('roomUpdated', { oldName, roomName }, callback);
+    socket.emit(ROOM_UPDATED, { oldName, roomName }, callback);
   }
 
   function leaveRoom(userId, roomName, callback) {
-    socket.emit('leave', { roomName, userId }, callback);
+    socket.emit(LEAVE_ROOM, { roomName, userId }, callback);
   }
 
   function deleteRoom(roomName, callback) {
-    socket.emit('deleteRoom', { roomName }, callback);
+    socket.emit(DELETE_ROOM, { roomName }, callback);
   }
 
   function removeUser(roomId, userId, callback) {
-    socket.emit('removeUser', { roomId, userId }, callback);
+    socket.emit(REMOVE_USER, { roomId, userId }, callback);
   }
 
   function onRoomUpdated(callback) {
-    socket.on('roomUpdated', callback);
+    socket.on(ROOM_UPDATED, callback);
   }
 
   function onNewMessage(callback) {
-    socket.on('message', callback);
+    socket.on(MESSAGE, callback);
   }
 
   function onNewRoomData(callback) {
-    socket.on('roomData', callback);
+    socket.on(ROOM_DATA, callback);
   }
 
   function onUserStatusChanged(callback) {
-    socket.on('userStatusChanged', callback);
+    socket.on(USER_STATUS_CHANGED, callback);
   }
 
   function onRoomDeleted(callback) {
-    socket.on('roomDeleted', callback);
+    socket.on(ROOM_DELETED, callback);
   }
 
   return {
